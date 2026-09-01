@@ -11,7 +11,7 @@ class Organization(models.Model):
         return self.name
 
     # Green Eagles Crew model
-    class Crew(models.Model):
+class Crew(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='crews')
     name = models.CharField(max_length=100, default="Green Eagles Crew")
     motto = models.CharField(max_length=255, blank=True)
@@ -28,7 +28,7 @@ class Patrol(models.Model):
     def __str__(self):
         return self.name
 
-    class ScoutProfile(models.Model):
+class ScoutProfile(models.Model):
     ROLE_CHOICES = [
         ('SCOUT', 'Scout'),
         ('PATROL_LEADER', 'Patrol Leader'),

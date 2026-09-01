@@ -17,3 +17,9 @@ def services(request):
 def faq(request):
     return render(request, 'green_eagles/faq.html')
 
+def green_eagles_crew(request):
+    return render(request, 'green_eagles/green_eagles_crew.html')
+
+def messengers_of_peace(request):
+    return render(request, 'green_eagles/messengers_of_peace.html')
+
