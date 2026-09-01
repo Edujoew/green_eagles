@@ -3,31 +3,102 @@
 {% block title %}FAQ | PLASTOUT{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <h2 class="fw-bold mb-4">Frequently Asked Questions</h2>
-    <div class="accordion" id="faqAccordion">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
-                    What is the Green Eagles Crew?
-                </button>
-            </h2>
-            <div id="q1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                    The Green Eagles Crew is the scouting branch operating under the PLASTOUT organization.
+<div class="bg-success text-white py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="fw-bold display-4">Frequently Asked Questions</h1>
+        <p class="lead mb-0">Got questions about PLASTOUT, our operational wings, or clean-up events? Find answers below.</p>
+    </div>
+</div>
+
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="accordion shadow-sm" id="faqAccordion">
+                
+                <!-- Question 1 -->
+                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true" aria-controls="q1">
+                            What is PLASTOUT Kericho County?
+                        </button>
+                    </h2>
+                    <div id="q1" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            PLASTOUT is an umbrella organization based in Kericho County dedicated to combating plastic pollution, driving recycling and environmental education, and fostering youth leadership for sustainable climate action.
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="accordion-item mt-2">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
-                    How can I join a patrol?
-                </button>
-            </h2>
-            <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                    You can register through the contact form or connect with a Patrol Leader during regular sessions.
+
+                <!-- Question 2 -->
+                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">
+                            What is the Green Eagles Crew?
+                        </button>
+                    </h2>
+                    <div id="q2" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            The Green Eagles Crew is an operational branch under PLASTOUT focused on scouting discipline, outdoor survival skills, patrol structures, and environmental stewardship in the field.
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Question 3 -->
+                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">
+                            What is the Messengers of Peace wing?
+                        </button>
+                    </h2>
+                    <div id="q3" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Messengers of Peace is a dedicated wing of PLASTOUT that leads community outreach, peace-building, conflict resolution, and social service projects alongside our environmental initiatives.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q4" aria-expanded="false" aria-controls="q4">
+                            How can I join a patrol or volunteer with PLASTOUT?
+                        </button>
+                    </h2>
+                    <div id="q4" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            You can sign up through our <a href="{% url 'green_eagles:contact' %}" class="text-success fw-bold text-decoration-none">Contact Page</a> or speak directly with a Patrol Leader during our regular clean-up exercises and scouting sessions.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q5" aria-expanded="false" aria-controls="q5">
+                            How does PLASTOUT handle collected plastic waste?
+                        </button>
+                    </h2>
+                    <div id="q5" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Collected plastics are sorted following our clean-up drives. Reusable items are repurposed, while recyclable plastics are processed through local recycling partners to ensure they stay out of Kericho's waterways and environment.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="accordion-item border-0 shadow-sm rounded-3 overflow-hidden">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q6" aria-expanded="false" aria-controls="q6">
+                            Can schools or local organizations partner with PLASTOUT?
+                        </button>
+                    </h2>
+                    <div id="q6" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Yes! We regularly partner with primary and secondary schools, community groups, government bodies, and environmental NGOs to host educational workshops, tree planting, and clean-up campaigns.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
