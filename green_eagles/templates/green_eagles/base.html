@@ -94,6 +94,12 @@
         </li>
     </ul>
 </li>
+<li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" 
+       href="{% url 'green_eagles:gallery' %}">
+        Gallery
+    </a>
+</li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'green_eagles:faq' %}">FAQ</a>
