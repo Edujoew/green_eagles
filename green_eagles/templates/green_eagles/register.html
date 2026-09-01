@@ -1,0 +1,110 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block content %}
+<div class="join-wrap py-5">
+    <div class="container" style="max-width: 500px;">
+        <div class="text-center mb-4">
+            <p class="join-eyebrow">A WING AWAITS YOU</p>
+            <h2 class="join-title">Join PLASTOUT</h2>
+            <p class="join-sub">One form. Two wings. Endless clean-ups ahead.</p>
+        </div>
+
+        <div class="card join-card border-0">
+            <div class="card-body p-4 p-md-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {{ form.as_p }}
+
+                    <div class="mb-3">
+                        <label for="wing" class="form-label">Select Operational Wing</label>
+                        <select name="wing" id="wing" class="form-select join-input">
+                            <option value="GE">Green Eagles Crew</option>
+                            <option value="MOP">Messengers of Peace</option>
+                            <option value="BOTH">Both Wings</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="text" name="phone" id="phone" class="form-control join-input" placeholder="+254 700 000000">
+                    </div>
+
+                    <button type="submit" class="btn join-btn w-100 mt-3">Register</button>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="small mb-0">Already have an account? <a href="{% url 'green_eagles:login' %}" class="join-link">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.join-wrap{
+    background-color:#f4f8f5;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(20,83,45,0.05) 0, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(212,175,55,0.06) 0, transparent 40%);
+}
+.join-eyebrow{
+    letter-spacing:3px;
+    font-size:0.72rem;
+    font-weight:800;
+    color:#d4af37;
+    text-transform:uppercase;
+    margin-bottom:8px;
+}
+.join-title{
+    font-weight:900;
+    color:#14532d;
+    font-size:2rem;
+}
+.join-sub{
+    color:#5c6b63;
+    font-size:0.95rem;
+}
+.join-card{
+    border-radius:16px;
+    box-shadow:0 16px 40px rgba(20,83,45,0.12);
+    border-top:5px solid #14532d;
+}
+.join-card .form-label{
+    font-weight:700;
+    color:#14532d;
+    font-size:0.85rem;
+    letter-spacing:0.2px;
+    margin-bottom:6px;
+}
+.join-input, .join-card input, .join-card select, .join-card textarea{
+    border:1px solid #d8e3da;
+    border-radius:8px;
+    padding:11px 14px;
+}
+.join-input:focus, .join-card input:focus, .join-card select:focus, .join-card textarea:focus{
+    border-color:#14532d;
+    box-shadow:0 0 0 3px rgba(20,83,45,0.12);
+}
+.join-btn{
+    background:#14532d;
+    color:#fff;
+    font-weight:800;
+    border-radius:8px;
+    padding:12px;
+    letter-spacing:0.3px;
+    transition:background .2s ease;
+}
+.join-btn:hover{
+    background:#0f3f22;
+    color:#fff;
+}
+.join-link{
+    color:#14532d;
+    font-weight:700;
+    text-decoration:none;
+}
+.join-link:hover{
+    color:#d4af37;
+}
+</style>
+{% endblock %}

@@ -174,8 +174,8 @@
     <nav class="navbar navbar-expand-lg main-nav sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'green_eagles:home' %}">
-    <img src="{% static 'green_eagles/images/logo.jpeg' %}" alt="PLASTOUT Logo" class="d-inline-block">
-</a>
+                <img src="{% static 'green_eagles/images/logo.jpeg' %}" alt="PLASTOUT Logo" class="d-inline-block">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -185,13 +185,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                 <ul class="navbar-nav nav-pills-custom mb-2 mb-lg-0 align-items-lg-center me-lg-3">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'green_eagles:home' %}">Home</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'green_eagles:home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'green_eagles:about' %}">About</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'green_eagles:about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'green_eagles:services' %}">Activities</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'green_eagles:services' %}">Activities</a>
                     </li>
 
                     <!-- Wings / Branches dropdown -->
@@ -229,10 +229,70 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'green_eagles:faq' %}">FAQ</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'faq' %}active{% endif %}" href="{% url 'green_eagles:faq' %}">FAQ</a>
                     </li>
+
+                    <!-- Member Auth Links & Tasks Menu -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="#" id="memberTasksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="memberTasksDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'green_eagles:dashboard' %}">
+                                        <span class="wing-icon"><i class="bi bi-speedometer2"></i></span>
+                                        <span>
+                                            <span class="wing-name d-block">Dashboard</span>
+                                            <span class="wing-desc">Overview & updates</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="wing-icon"><i class="bi bi-journal-plus"></i></span>
+                                        <span>
+                                            <span class="wing-name d-block">Activity Reports</span>
+                                            <span class="wing-desc">Submit & view cleanup logs</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="wing-icon"><i class="bi bi-people-fill"></i></span>
+                                        <span>
+                                            <span class="wing-name d-block">Patrol Roster</span>
+                                            <span class="wing-desc">Check wing assignments</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'green_eagles:logout' %}">
+                                        <span class="wing-icon text-danger" style="background: #fef2f2;"><i class="bi bi-box-arrow-right"></i></span>
+                                        <span>
+                                            <span class="wing-name d-block text-danger">Logout</span>
+                                            <span class="wing-desc">Exit portal</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'green_eagles:login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'green_eagles:register' %}">Register</a>
+                        </li>
+                    {% endif %}
                 </ul>
-                <a href="{% url 'green_eagles:contact' %}" class="cta-btn">Get Involved</a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'green_eagles:dashboard' %}" class="cta-btn">Member Hub</a>
+                {% else %}
+                    <a href="{% url 'green_eagles:contact' %}" class="cta-btn">Get Involved</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -287,7 +347,7 @@
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>Contact</h6>
-                    <a href="mailto:info@plastout.org"><i class="bi bi-envelope me-1"></i>info@plastout.org</a>
+                    <a href="mailto:plastout.org@gmail.com"><i class="bi bi-envelope me-1"></i>plastout.org@gmail.com</a>
                     <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone me-1"></i>+254791245090</a>
                     <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone me-1"></i>+254 740 170338</a>
                     <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone me-1"></i>+254 722 318000</a>

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 # (PLASTOUT)
 class Organization(models.Model):
@@ -57,3 +58,26 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"    
+
+class MemberProfile(models.Model):
+    WING_CHOICES = [
+        ('GE', 'Green Eagles Crew'),
+        ('MOP', 'Messengers of Peace'),
+        ('BOTH', 'Both Wings'),
+    ]
+
+    ROLE_CHOICES = [
+        ('MEMBER', 'Volunteer / Scout Member'),
+        ('PATROL_LEADER', 'Patrol Leader'),
+        ('COORDINATOR', 'Wing Coordinator'),
+        ('EXEC', 'Executive Admin'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone = models.CharField(max_length=15, blank=True)
+    wing = models.CharField(max_length=10, choices=WING_CHOICES, default='GE')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='MEMBER')
+    patrol_name = models.CharField(max_length=50, blank=True, help_text="e.g. Rhino Patrol, Eagle Patrol")
+
+    def __str__(self):
+        return f"{self.user.get_full_name() or self.user.username} - {self.get_wing_display()}"

@@ -1,0 +1,24 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 450px;">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header text-white text-center py-3" style="background-color: #14532d;">
+            <h3 class="mb-0">Member Login</h3>
+            <small>PLASTOUT Portal</small>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+
+                <button type="submit" class="btn text-white w-100 py-2 mt-3" style="background-color: #14532d;">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <p class="small">Don't have an account? <a href="{% url 'green_eagles:register' %}" style="color: #14532d;">Register here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
