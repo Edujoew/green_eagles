@@ -1,0 +1,35 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block title %}FAQ | PLASTOUT{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">Frequently Asked Questions</h2>
+    <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+                    What is the Green Eagles Crew?
+                </button>
+            </h2>
+            <div id="q1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    The Green Eagles Crew is the scouting branch operating under the PLASTOUT organization.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item mt-2">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+                    How can I join a patrol?
+                </button>
+            </h2>
+            <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    You can register through the contact form or connect with a Patrol Leader during regular sessions.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

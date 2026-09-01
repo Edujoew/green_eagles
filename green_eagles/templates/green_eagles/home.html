@@ -1,0 +1,48 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block title %}Home | PLASTOUT - Green Eagles Crew{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-success text-white text-center py-5">
+    <div class="container py-4">
+        <h1 class="display-4 fw-bold">Welcome to PLASTOUT</h1>
+        <p class="lead">Empowering youth, fostering leadership, and serving the community through the Green Eagles Crew.</p>
+        <a href="{% url 'green_eagles:about' %}" class="btn btn-light btn-lg mt-3 me-2">Learn More</a>
+        <a href="{% url 'green_eagles:contact' %}" class="btn btn-outline-light btn-lg mt-3">Get in Touch</a>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="fa-solid me-2 fa-campground fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Leadership & Outdoor</h5>
+                    <p class="card-text">Building character and team strength through outdoor challenges, fieldcraft, and discipline.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="fa-solid me-2 fa-hands-holding-child fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Community Service</h5>
+                    <p class="card-text">Engaging in impactful local projects and environmental conservation initiatives.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="fa-solid me-2 fa-network-wired fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Patrol Systems</h5>
+                    <p class="card-text">Organized patrol structures ensuring mentorship and specialized skill training.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
