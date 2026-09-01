@@ -13,55 +13,48 @@
 
 <style>
 .eagles-hero{
-    position:relative;
-    background-color:#14532d;
+    position:relative; background-color:#14532d;
     background-image:
         linear-gradient(135deg, rgba(15,50,32,0.94), rgba(20,83,45,0.9)),
         repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
         repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
     border-bottom:4px solid #d4af37;
 }
-.hero-eyebrow{
-    letter-spacing:3px;
-    font-size:0.78rem;
-    font-weight:700;
-    color:#d4af37;
-    margin-bottom:16px;
-    text-transform:uppercase;
+.hero-eyebrow{ letter-spacing:3px; font-size:0.78rem; font-weight:700; color:#d4af37; margin-bottom:16px; text-transform:uppercase; }
+.eagles-title{ font-size:2.7rem; font-weight:900; line-height:1.18; margin-bottom:18px; text-shadow:0 3px 14px rgba(0,0,0,0.25); }
+.hero-lead{ max-width:640px; font-size:1.1rem; color:#e7f0e9; }
+@media (max-width:576px){ .eagles-title{ font-size:1.9rem; } }
+
+.eagles-body h3{ font-weight:800; color:#14532d; }
+.eagles-body h4{ font-weight:800; color:#0f3f22; }
+.eagles-body p{ color:#3c4a42; line-height:1.75; }
+
+.wing-panel{
+    background:linear-gradient(160deg, #14532d, #0f3f22);
+    color:#fff; border-radius:14px; padding:1.8rem;
+    box-shadow:0 10px 28px rgba(20,83,45,0.15);
 }
-.eagles-title{
-    font-size:2.7rem;
-    font-weight:900;
-    line-height:1.18;
-    margin-bottom:18px;
-    text-shadow:0 3px 14px rgba(0,0,0,0.25);
-}
-.hero-lead{
-    max-width:640px;
-    font-size:1.1rem;
-    color:#e7f0e9;
-}
-@media (max-width:576px){
-    .eagles-title{ font-size:1.9rem; }
-}
+.wing-panel h5{ color:#d4af37; font-weight:800; text-transform:uppercase; font-size:0.9rem; letter-spacing:1px; margin-bottom:1.1rem; }
+.wing-panel li{ display:flex; align-items:center; gap:10px; margin-bottom:0.7rem; font-size:0.94rem; }
+.wing-panel li i{ color:#d4af37; }
 </style>
 
-<div class="container py-3">
+<div class="container py-3 eagles-body">
     <div class="row g-4">
         <div class="col-lg-8">
-            <h3 class="fw-bold text-success mb-3">About the Crew</h3>
+            <h3 class="mb-3">About the Crew</h3>
             <p>The Green Eagles Crew focuses on building discipline, fieldcraft skills, environmental stewardship, and youth leadership through organized patrol systems and outdoor expeditions.</p>
             
-            <h4 class="fw-bold mt-4 mb-3">Patrol Structure</h4>
+            <h4 class="mt-4 mb-3">Patrol Structure</h4>
             <p>Our members operate within small, highly coordinated patrols designed to develop peer leadership, practical survival skills, and sportsmanship.</p>
         </div>
         <div class="col-lg-4">
-            <div class="card shadow-sm border-0 bg-light p-3">
-                <h5 class="fw-bold">Wing Highlights</h5>
+            <div class="wing-panel">
+                <h5>Wing Highlights</h5>
                 <ul class="list-unstyled mb-0">
-                    <li class="py-1"><i class="bi bi-check-circle-fill text-success me-2"></i> Outdoor Camping &amp; Survival</li>
-                    <li class="py-1"><i class="bi bi-check-circle-fill text-success me-2"></i> Patrol Leadership System</li>
-                    <li class="py-1"><i class="bi bi-check-circle-fill text-success me-2"></i> Environmental Conservation</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Outdoor Camping &amp; Survival</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Patrol Leadership System</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Environmental Conservation</li>
                 </ul>
             </div>
         </div>

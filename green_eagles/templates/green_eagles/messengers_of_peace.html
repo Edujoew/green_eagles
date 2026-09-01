@@ -3,29 +3,58 @@
 {% block title %}Messengers of Peace | PLASTOUT Wing{% endblock %}
 
 {% block content %}
-<div class="bg-success text-white py-5 mb-5">
+<div class="mop-hero text-white py-5 mb-5">
     <div class="container text-center">
-        <h1 class="fw-bold display-4">Messengers of Peace</h1>
-        <p class="lead mb-0">Promoting peace building, community service, and conflict resolution.</p>
+        <p class="hero-eyebrow">A WING OF PLASTOUT</p>
+        <h1 class="mop-title">WE DON'T WAIT FOR PEACE.<br>WE BUILD IT.</h1>
+        <p class="lead hero-lead mx-auto mb-0">Messengers of Peace turns young people into first responders for their own communities — leading dialogue where there's conflict, and service where there's need.</p>
     </div>
 </div>
 
-<div class="container py-3">
+<style>
+.mop-hero{
+    position:relative; background-color:#155e63;
+    background-image:
+        linear-gradient(135deg, rgba(12,60,64,0.94), rgba(21,94,99,0.9)),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
+    border-bottom:4px solid #d4af37;
+}
+.hero-eyebrow{ letter-spacing:3px; font-size:0.78rem; font-weight:700; color:#d4af37; margin-bottom:16px; text-transform:uppercase; }
+.mop-title{ font-size:2.7rem; font-weight:900; line-height:1.18; margin-bottom:18px; text-shadow:0 3px 14px rgba(0,0,0,0.25); }
+.hero-lead{ max-width:640px; font-size:1.1rem; color:#e8f4f4; }
+@media (max-width:576px){ .mop-title{ font-size:1.9rem; } }
+
+.mop-body h3{ font-weight:800; color:#155e63; }
+.mop-body h4{ font-weight:800; color:#0e484c; }
+.mop-body p{ color:#3c4a42; line-height:1.75; }
+
+.wing-panel-mop{
+    background:linear-gradient(160deg, #155e63, #0e484c);
+    color:#fff; border-radius:14px; padding:1.8rem;
+    box-shadow:0 10px 28px rgba(21,94,99,0.15);
+}
+.wing-panel-mop h5{ color:#d4af37; font-weight:800; text-transform:uppercase; font-size:0.9rem; letter-spacing:1px; margin-bottom:1.1rem; }
+.wing-panel-mop li{ display:flex; align-items:center; gap:10px; margin-bottom:0.7rem; font-size:0.94rem; }
+.wing-panel-mop li i{ color:#d4af37; }
+</style>
+
+<div class="container py-3 mop-body">
     <div class="row g-4">
         <div class="col-lg-8">
-            <h3 class="fw-bold text-success mb-3">Our Mission</h3>
+            <h3 class="mb-3">Our Mission</h3>
             <p>The Messengers of Peace initiative inspires youth to lead service projects that foster harmony, active citizenship, and positive social change in their local communities.</p>
             
-            <h4 class="fw-bold mt-4 mb-3">Core Focus Areas</h4>
+            <h4 class="mt-4 mb-3">Core Focus Areas</h4>
             <p>From organizing peace rallies and conflict resolution workshops to leading local humanitarian efforts, MoP empowers scouts to make a tangible impact.</p>
         </div>
         <div class="col-lg-4">
-            <div class="card shadow-sm border-0 bg-light p-3">
-                <h5 class="fw-bold">Wing Highlights</h5>
+            <div class="wing-panel-mop">
+                <h5>Wing Highlights</h5>
                 <ul class="list-unstyled mb-0">
-                    <li class="py-1"><i class="bi bi-check-circle-fill text-success me-2"></i> Peace Building &amp; Advocacy</li>
-                    <li class="py-1"><i class="bi bi-check-circle-fill text-success me-2"></i> Community Outreach Projects</li>
-                    <li class="py-1"><i class="bi bi-check-circle-fill text-success me-2"></i> Social Impact Initiatives</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Peace Building &amp; Advocacy</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Community Outreach Projects</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Social Impact Initiatives</li>
                 </ul>
             </div>
         </div>

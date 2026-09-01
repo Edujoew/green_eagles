@@ -3,37 +3,67 @@
 {% block title %}About Us | PLASTOUT{% endblock %}
 
 {% block content %}
-<div class="bg-success text-white py-5 mb-5">
+<div class="plastout-hero text-white py-5 mb-5">
     <div class="container text-center">
-        <h1 class="fw-bold display-4">About PLASTOUT</h1>
-        <p class="lead mb-0">Uniting youth, community, and climate action for a plastic-free Kericho County.</p>
+        <p class="hero-eyebrow">THE STORY SO FAR</p>
+        <h1 class="plastout-title">STARTED WITH ONE CLEAN-UP.<br>NOW IT'S A MOVEMENT.</h1>
+        <p class="lead hero-lead mx-auto mb-0">PLASTOUT unites youth, community, and climate action into one mission: a plastic-free Kericho County, built one drive at a time.</p>
     </div>
 </div>
 
-<div class="container py-3">
+<style>
+.plastout-hero{
+    position:relative; background-color:#14532d;
+    background-image:
+        linear-gradient(135deg, rgba(15,50,32,0.94), rgba(20,83,45,0.9)),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
+    border-bottom:4px solid #d4af37;
+}
+.hero-eyebrow{ letter-spacing:3px; font-size:0.78rem; font-weight:700; color:#d4af37; margin-bottom:16px; text-transform:uppercase; }
+.plastout-title{ font-size:2.7rem; font-weight:900; line-height:1.18; margin-bottom:18px; text-shadow:0 3px 14px rgba(0,0,0,0.25); }
+.hero-lead{ max-width:640px; font-size:1.1rem; color:#e7f0e9; }
+@media (max-width:576px){ .plastout-title{ font-size:1.9rem; } }
+
+.about-body h2{ font-weight:800; color:#14532d; }
+.about-body h4{ font-weight:800; color:#0f3f22; }
+.about-body p{ color:#3c4a42; line-height:1.75; }
+.about-body .lead{ color:#243a2c; }
+
+.wings-panel{
+    background:linear-gradient(160deg, #14532d, #0f3f22);
+    color:#fff; border-radius:14px; padding:2rem;
+    box-shadow:0 10px 28px rgba(20,83,45,0.15);
+}
+.wings-panel h4{ color:#d4af37 !important; font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:1.3rem; }
+.wing-entry{ border-left:3px solid #d4af37; padding-left:14px; margin-bottom:1.3rem; }
+.wing-entry:last-child{ margin-bottom:0; }
+.wing-entry strong{ display:block; margin-bottom:2px; font-size:1rem; }
+.wing-entry .desc{ color:#dce9df; font-size:0.88rem; }
+</style>
+
+<div class="container py-3 about-body">
     <div class="row g-5">
         <div class="col-lg-7">
-            <h2 class="fw-bold text-success mb-3">Who We Are</h2>
+            <h2 class="mb-3">Who We Are</h2>
             <p class="lead">PLASTOUT is an umbrella organization dedicated to environmental conservation, structural youth growth, and community empowerment across Kericho County.</p>
             <p>We exist to fight plastic pollution at the source — through clean-ups, recycling, education, and active youth leadership. Under our umbrella, specialized wings carry out our mission on the ground.</p>
             
-            <h4 class="fw-bold mt-4 mb-2 text-dark">Our Vision</h4>
+            <h4 class="mt-4 mb-2">Our Vision</h4>
             <p>To cultivate disciplined, active, and innovative leaders prepared to positively transform their communities and spearhead sustainable climate action.</p>
         </div>
 
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm bg-light p-4">
-                <h4 class="fw-bold text-success mb-3"><i class="bi bi-shield-check me-2"></i>Our Operational Wings</h4>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-3">
-                        <strong>Green Eagles Crew:</strong>
-                        <div class="text-muted small">Focuses on outdoor survival, patrol structures, scout discipline, and environmental stewardship.</div>
-                    </li>
-                    <li>
-                        <strong>Messengers of Peace:</strong>
-                        <div class="text-muted small">Drives community outreach, conflict resolution, peace building, and humanitarian service initiatives.</div>
-                    </li>
-                </ul>
+            <div class="wings-panel">
+                <h4><i class="bi bi-shield-check me-2"></i>Our Operational Wings</h4>
+                <div class="wing-entry">
+                    <strong>Green Eagles Crew</strong>
+                    <div class="desc">Focuses on outdoor survival, patrol structures, scout discipline, and environmental stewardship.</div>
+                </div>
+                <div class="wing-entry">
+                    <strong>Messengers of Peace</strong>
+                    <div class="desc">Drives community outreach, conflict resolution, peace building, and humanitarian service initiatives.</div>
+                </div>
             </div>
         </div>
     </div>

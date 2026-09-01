@@ -3,97 +3,145 @@
 {% block title %}FAQ | PLASTOUT{% endblock %}
 
 {% block content %}
-<div class="bg-success text-white py-5 mb-5">
+<div class="plastout-hero text-white py-5 mb-5">
     <div class="container text-center">
-        <h1 class="fw-bold display-4">Frequently Asked Questions</h1>
-        <p class="lead mb-0">Got questions about PLASTOUT, our operational wings, or clean-up events? Find answers below.</p>
+        <p class="hero-eyebrow">STILL WONDERING?</p>
+        <h1 class="plastout-title">QUESTIONS ABOUT PLASTOUT,<br>ANSWERED.</h1>
+        <p class="lead hero-lead mx-auto mb-0">Got questions about PLASTOUT, our operational wings, or clean-up events? Find answers below.</p>
     </div>
 </div>
+
+<style>
+.plastout-hero{
+    position:relative;
+    background-color:#14532d;
+    background-image:
+        linear-gradient(135deg, rgba(15,50,32,0.94), rgba(20,83,45,0.9)),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
+    border-bottom:4px solid #d4af37;
+}
+.hero-eyebrow{ letter-spacing:3px; font-size:0.78rem; font-weight:700; color:#d4af37; margin-bottom:16px; text-transform:uppercase; }
+.plastout-title{ font-size:2.6rem; font-weight:900; line-height:1.18; margin-bottom:16px; text-shadow:0 3px 14px rgba(0,0,0,0.25); }
+.hero-lead{ max-width:600px; font-size:1.08rem; color:#e7f0e9; }
+@media (max-width:576px){ .plastout-title{ font-size:1.9rem; } }
+
+/* Accordion */
+#faqAccordion .accordion-item{
+    border:none;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(20,83,45,0.07);
+}
+#faqAccordion .accordion-button{
+    font-weight:700;
+    color:#14532d;
+    background:#ffffff;
+    padding:1.1rem 1.4rem;
+    border-radius:12px !important;
+}
+#faqAccordion .accordion-button:not(.collapsed){
+    background:#14532d;
+    color:#ffffff;
+    box-shadow:none;
+}
+#faqAccordion .accordion-button:not(.collapsed)::after{
+    filter: brightness(0) invert(1);
+}
+#faqAccordion .accordion-button:focus{
+    box-shadow:0 0 0 3px rgba(20,83,45,0.15);
+}
+#faqAccordion .accordion-body{
+    padding:1.2rem 1.4rem;
+    color:#5c6b63;
+    line-height:1.7;
+    background:#fbfdfb;
+}
+</style>
 
 <div class="container py-3">
     <div class="row justify-content-center">
         <div class="col-lg-9">
-            <div class="accordion shadow-sm" id="faqAccordion">
+            <div class="accordion" id="faqAccordion">
                 
                 <!-- Question 1 -->
-                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                <div class="accordion-item mb-3 overflow-hidden">
                     <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true" aria-controls="q1">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true" aria-controls="q1">
                             What is PLASTOUT Kericho County?
                         </button>
                     </h2>
                     <div id="q1" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
+                        <div class="accordion-body">
                             PLASTOUT is an umbrella organization based in Kericho County dedicated to combating plastic pollution, driving recycling and environmental education, and fostering youth leadership for sustainable climate action.
                         </div>
                     </div>
                 </div>
 
                 <!-- Question 2 -->
-                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                <div class="accordion-item mb-3 overflow-hidden">
                     <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">
                             What is the Green Eagles Crew?
                         </button>
                     </h2>
                     <div id="q2" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
+                        <div class="accordion-body">
                             The Green Eagles Crew is an operational branch under PLASTOUT focused on scouting discipline, outdoor survival skills, patrol structures, and environmental stewardship in the field.
                         </div>
                     </div>
                 </div>
 
                 <!-- Question 3 -->
-                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                <div class="accordion-item mb-3 overflow-hidden">
                     <h2 class="accordion-header" id="headingThree">
-                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">
                             What is the Messengers of Peace wing?
                         </button>
                     </h2>
                     <div id="q3" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
+                        <div class="accordion-body">
                             Messengers of Peace is a dedicated wing of PLASTOUT that leads community outreach, peace-building, conflict resolution, and social service projects alongside our environmental initiatives.
                         </div>
                     </div>
                 </div>
 
                 <!-- Question 4 -->
-                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                <div class="accordion-item mb-3 overflow-hidden">
                     <h2 class="accordion-header" id="headingFour">
-                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q4" aria-expanded="false" aria-controls="q4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q4" aria-expanded="false" aria-controls="q4">
                             How can I join a patrol or volunteer with PLASTOUT?
                         </button>
                     </h2>
                     <div id="q4" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
-                            You can sign up through our <a href="{% url 'green_eagles:contact' %}" class="text-success fw-bold text-decoration-none">Contact Page</a> or speak directly with a Patrol Leader during our regular clean-up exercises and scouting sessions.
+                        <div class="accordion-body">
+                            You can sign up through our <a href="{% url 'green_eagles:contact' %}" class="fw-bold text-decoration-none" style="color:#14532d;">Contact Page</a> or speak directly with a Patrol Leader during our regular clean-up exercises and scouting sessions.
                         </div>
                     </div>
                 </div>
 
                 <!-- Question 5 -->
-                <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                <div class="accordion-item mb-3 overflow-hidden">
                     <h2 class="accordion-header" id="headingFive">
-                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q5" aria-expanded="false" aria-controls="q5">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q5" aria-expanded="false" aria-controls="q5">
                             How does PLASTOUT handle collected plastic waste?
                         </button>
                     </h2>
                     <div id="q5" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
+                        <div class="accordion-body">
                             Collected plastics are sorted following our clean-up drives. Reusable items are repurposed, while recyclable plastics are processed through local recycling partners to ensure they stay out of Kericho's waterways and environment.
                         </div>
                     </div>
                 </div>
 
                 <!-- Question 6 -->
-                <div class="accordion-item border-0 shadow-sm rounded-3 overflow-hidden">
+                <div class="accordion-item overflow-hidden">
                     <h2 class="accordion-header" id="headingSix">
-                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#q6" aria-expanded="false" aria-controls="q6">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q6" aria-expanded="false" aria-controls="q6">
                             Can schools or local organizations partner with PLASTOUT?
                         </button>
                     </h2>
                     <div id="q6" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
+                        <div class="accordion-body">
                             Yes! We regularly partner with primary and secondary schools, community groups, government bodies, and environmental NGOs to host educational workshops, tree planting, and clean-up campaigns.
                         </div>
                     </div>
