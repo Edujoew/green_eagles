@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ContactForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 def home(request):
@@ -31,12 +33,31 @@ def gallery(request):
 # Contact form view
 def contact(request):
     if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Thank you! Your message has been sent successfully to PLASTOUT.')
-            return redirect('green_eagles:contact')
-    else:
-        form = ContactForm()
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
 
-    return render(request, 'green_eagles/contact.html', {'form': form})
+        full_message = f"You received a new message from the PLASTOUT contact form:\n\n" \
+                       f"Name: {name}\n" \
+                       f"Email: {email}\n" \
+                       f"Subject: {subject}\n\n" \
+                       f"Message:\n{message}"
+
+        recipient_list = ['plastout.org@gmail.com']
+
+        try:
+            send_mail(
+                subject=f"PLASTOUT Contact: {subject}",
+                message=full_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=recipient_list,
+                fail_silently=False,
+            )
+            messages.success(request, 'Thank you! Your message has been sent successfully to PLASTOUT.')
+        except Exception as e:
+            messages.error(request, 'There was an issue sending your message. Please try again later.')
+
+        return redirect('green_eagles:contact')
+
+    return render(request, 'green_eagles/contact.html')
