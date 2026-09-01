@@ -23,3 +23,5 @@ def green_eagles_crew(request):
 def messengers_of_peace(request):
     return render(request, 'green_eagles/messengers_of_peace.html')
 
+def gallery(request):
+    return render(request, 'green_eagles/gallery.html')

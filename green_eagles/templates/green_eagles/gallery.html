@@ -1,0 +1,99 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+
+{% block title %}Gallery | PLASTOUT Kericho County{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<div class="bg-success text-white py-5 mb-5" style="background-color: #14532d !important;">
+    <div class="container text-center">
+        <h1 class="fw-bold display-4">Our Media Gallery</h1>
+        <p class="lead mb-0">Moments from our clean-up drives, scout expeditions, and community peace initiatives.</p>
+    </div>
+</div>
+
+<div class="container py-3">
+    <!-- Gallery Filter Buttons -->
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-4">
+        <button class="btn btn-outline-success active fw-bold px-4" type="button">All Photos</button>
+        <button class="btn btn-outline-success fw-bold px-4" type="button">Clean-ups</button>
+        <button class="btn btn-outline-success fw-bold px-4" type="button">Green Eagles Crew</button>
+        <button class="btn btn-outline-success fw-bold px-4" type="button">Messengers of Peace</button>
+    </div>
+
+    <!-- Image Grid -->
+    <div class="row g-4">
+        <!-- Item 1: Clean-up Drive -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <img src="{% static 'green_eagles/images/cleanup-1.jpg' %}" class="card-img-top" alt="Plastic Collection Drive" style="height: 240px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Clean-up</span>
+                    <h5 class="card-title fw-bold">Kericho Town Plastic Collection</h5>
+                    <p class="card-text text-muted small">Volunteers gathering waste plastic along main drainage and public areas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2: Green Eagles Crew -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <img src="{% static 'green_eagles/images/scout-camp.jpg' %}" class="card-img-top" alt="Green Eagles Patrol" style="height: 240px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Green Eagles Crew</span>
+                    <h5 class="card-title fw-bold">Patrol Training &amp; Fieldcraft</h5>
+                    <p class="card-text text-muted small">Scouts carrying out outdoor leadership drills and field activities.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3: Messengers of Peace -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <img src="{% static 'green_eagles/images/community-outreach.jpg' %}" class="card-img-top" alt="Community Outreach" style="height: 240px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Messengers of Peace</span>
+                    <h5 class="card-title fw-bold">Community Peace &amp; Climate Forum</h5>
+                    <p class="card-text text-muted small">Interacting with local communities on peace building and waste recycling.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 4: Recycling Solutions -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <img src="{% static 'green_eagles/images/recycling-sort.jpg' %}" class="card-img-top" alt="Plastic Sorting" style="height: 240px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Recycling</span>
+                    <h5 class="card-title fw-bold">Plastic Waste Sorting</h5>
+                    <p class="card-text text-muted small">Sorting plastics for recycling partners and re-use programs.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 5: School Partnerships -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <img src="{% static 'green_eagles/images/school-talk.jpg' %}" class="card-img-top" alt="School Environmental Education" style="height: 240px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Education</span>
+                    <h5 class="card-title fw-bold">School Conservation Sensitization</h5>
+                    <p class="card-text text-muted small">Teaching students about plastic pollution dangers and sustainable habits.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 6: River Clean-up -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                <img src="{% static 'green_eagles/images/river-cleanup.jpg' %}" class="card-img-top" alt="River Bank Clean-up" style="height: 240px; object-fit: cover;">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Clean-up</span>
+                    <h5 class="card-title fw-bold">Riverbank Restoration Drive</h5>
+                    <p class="card-text text-muted small">Clearing plastic waste from local riverbanks to keep water channels clean.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -10,5 +10,6 @@ urlpatterns = [
     path('services/', views.services, name='services'),
     path('faq/', views.faq, name='faq'),
     path('wings/green-eagles-crew/', views.green_eagles_crew, name='green_eagles_crew'),
-    path('wings/messengers-of-peace/', views.messengers_of_peace, name='messengers_of_peace'),             
+    path('wings/messengers-of-peace/', views.messengers_of_peace, name='messengers_of_peace'), 
+    path('gallery/', views.gallery, name='gallery'),            
 ]
