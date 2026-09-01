@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Organization, Crew, Patrol, ScoutProfile
+from .models import ContactMessage
 
 # Register your models here.
 @admin.register(Organization)
@@ -18,3 +19,9 @@ class PatrolAdmin(admin.ModelAdmin):
 class ScoutProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'role', 'crew', 'patrol')
     list_filter = ('role', 'crew')
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'created_at')
+    search_fields = ('name', 'email', 'subject', 'message')
+    readonly_fields = ('created_at',)
