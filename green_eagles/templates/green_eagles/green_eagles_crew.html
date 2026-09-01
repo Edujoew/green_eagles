@@ -3,12 +3,48 @@
 {% block title %}Green Eagles Crew | PLASTOUT Wing{% endblock %}
 
 {% block content %}
-<div class="bg-success text-white py-5 mb-5">
+<div class="eagles-hero text-white py-5 mb-5">
     <div class="container text-center">
-        <h1 class="fw-bold display-4">Green Eagles Crew</h1>
-        <p class="lead mb-0">The scouting and outdoor leadership branch under PLASTOUT.</p>
+        <p class="hero-eyebrow">A WING OF PLASTOUT</p>
+        <h1 class="eagles-title">FIRST KNOT. FIRST BADGE.<br>FIRST STEP INTO LEADERSHIP.</h1>
+        <p class="lead hero-lead mx-auto mb-0">Green Eagles Crew is where discipline is built at the campfire, not the classroom — patrol by patrol, badge by badge, expedition by expedition.</p>
     </div>
 </div>
+
+<style>
+.eagles-hero{
+    position:relative;
+    background-color:#14532d;
+    background-image:
+        linear-gradient(135deg, rgba(15,50,32,0.94), rgba(20,83,45,0.9)),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
+    border-bottom:4px solid #d4af37;
+}
+.hero-eyebrow{
+    letter-spacing:3px;
+    font-size:0.78rem;
+    font-weight:700;
+    color:#d4af37;
+    margin-bottom:16px;
+    text-transform:uppercase;
+}
+.eagles-title{
+    font-size:2.7rem;
+    font-weight:900;
+    line-height:1.18;
+    margin-bottom:18px;
+    text-shadow:0 3px 14px rgba(0,0,0,0.25);
+}
+.hero-lead{
+    max-width:640px;
+    font-size:1.1rem;
+    color:#e7f0e9;
+}
+@media (max-width:576px){
+    .eagles-title{ font-size:1.9rem; }
+}
+</style>
 
 <div class="container py-3">
     <div class="row g-4">

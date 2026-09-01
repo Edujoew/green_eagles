@@ -4,14 +4,54 @@
 
 {% block content %}
 <!-- Hero Section -->
-<div class="bg-success text-white text-center py-5">
-    <div class="container py-4">
-        <h1 class="display-4 fw-bold">Welcome to PLASTOUT</h1>
-        <p class="lead">Empowering youth, fostering leadership, and serving the community through the Green Eagles Crew.</p>
-        <a href="{% url 'green_eagles:about' %}" class="btn btn-light btn-lg mt-3 me-2">Learn More</a>
-        <a href="{% url 'green_eagles:contact' %}" class="btn btn-outline-light btn-lg mt-3">Get in Touch</a>
+<div class="plastout-hero text-white text-center">
+    <div class="container py-5">
+        <p class="hero-eyebrow">PLASTOUT KERICHO COUNTY &nbsp;·&nbsp; PLASTIC-FREE SINCE THE FIRST CLEAN-UP</p>
+        <h1 class="plastout-title">EVERY BAG WE PICK UP<br>IS ONE LESS IN THE RIVER.</h1>
+        <p class="lead hero-lead mx-auto">PLASTOUT exists to fight plastic pollution at the source — through clean-ups, recycling, education, and the young people willing to do the work. Green Eagles Crew and Messengers of Peace are our boots on the ground.</p>
+        <div class="mt-4">
+            <a href="{% url 'green_eagles:about' %}" class="btn btn-light btn-lg mt-3 me-2 fw-bold">Our Mission</a>
+            <a href="{% url 'green_eagles:contact' %}" class="btn btn-outline-light btn-lg mt-3 fw-bold">Get Involved</a>
+        </div>
     </div>
 </div>
+
+<style>
+.plastout-hero{
+    position:relative;
+    background-color:#14532d;
+    background-image:
+        linear-gradient(135deg, rgba(15,50,32,0.94), rgba(20,83,45,0.9)),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
+        repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
+    padding:76px 20px 66px;
+    border-bottom:4px solid #d4af37;
+}
+.hero-eyebrow{
+    letter-spacing:3px;
+    font-size:0.78rem;
+    font-weight:700;
+    color:#d4af37;
+    margin-bottom:16px;
+    text-transform:uppercase;
+}
+.plastout-title{
+    font-size:2.9rem;
+    font-weight:900;
+    line-height:1.15;
+    letter-spacing:0.5px;
+    margin-bottom:20px;
+    text-shadow:0 3px 14px rgba(0,0,0,0.25);
+}
+.hero-lead{
+    max-width:660px;
+    font-size:1.12rem;
+    color:#e7f0e9;
+}
+@media (max-width:576px){
+    .plastout-title{ font-size:2rem; }
+}
+</style>
 
 <!-- Features Section -->
 <div class="container py-5">
@@ -19,27 +59,27 @@
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <i class="fa-solid me-2 fa-campground fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Leadership & Outdoor</h5>
-                    <p class="card-text">Building character and team strength through outdoor challenges, fieldcraft, and discipline.</p>
+                    <i class="fa-solid me-2 fa-recycle fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Collect & Recycle</h5>
+                    <p class="card-text">Organized clean-up exercises across Kericho County, turning collected plastic into re-use and recycling opportunities instead of pollution.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <i class="fa-solid me-2 fa-hands-holding-child fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Community Service</h5>
-                    <p class="card-text">Engaging in impactful local projects and environmental conservation initiatives.</p>
+                    <i class="fa-solid me-2 fa-people-group fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Educate & Partner</h5>
+                    <p class="card-text">Working with schools, government agencies and environmental organizations to teach communities the dangers of plastic pollution and build lasting solutions.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-0">
                 <div class="card-body">
-                    <i class="fa-solid me-2 fa-network-wired fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Patrol Systems</h5>
-                    <p class="card-text">Organized patrol structures ensuring mentorship and specialized skill training.</p>
+                    <i class="fa-solid me-2 fa-seedling fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Lead & Serve</h5>
+                    <p class="card-text">Growing teamwork, leadership and volunteerism among young people — through Green Eagles Crew and Messengers of Peace — for climate action that lasts.</p>
                 </div>
             </div>
         </div>
