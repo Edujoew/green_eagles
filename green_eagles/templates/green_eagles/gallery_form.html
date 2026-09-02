@@ -1,0 +1,67 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} | PLASTOUT Kericho County{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 650px;">
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="p-4 text-white text-center" style="background-color: #14532d; border-bottom: 4px solid #d4af37;">
+            <h3 class="fw-bold mb-1">{{ title }}</h3>
+            <p class="small text-light mb-0">Upload or update media assets for the PLASTOUT gallery</p>
+        </div>
+        
+        <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="{{ form.title.id_for_label }}" class="form-label fw-bold" style="color: #14532d;">Picture Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="form-label fw-bold" style="color: #14532d;">Description</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-danger small mt-1">{{ form.description.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.image.id_for_label }}" class="form-label fw-bold" style="color: #14532d;">Select Image File</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <div class="text-danger small mt-1">{{ form.image.errors }}</div>
+                    {% endif %}
+                </div>
+
+                {% if photo and photo.image %}
+                    <div class="mb-4 p-3 bg-light rounded text-center">
+                        <p class="small text-muted fw-bold mb-2">Current Image Preview:</p>
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow-sm" style="max-height: 180px; object-fit: cover;">
+                    </div>
+                {% endif %}
+
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn text-white fw-bold w-100 rounded-pill py-2" style="background-color: #14532d;">
+                        Save Photo
+                    </button>
+                    <a href="{% url 'green_eagles:gallery' %}" class="btn btn-outline-secondary fw-bold w-100 rounded-pill py-2">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

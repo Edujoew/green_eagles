@@ -81,3 +81,12 @@ class MemberProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name() or self.user.username} - {self.get_wing_display()}"
+    
+class GalleryItem(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='gallery_photos/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

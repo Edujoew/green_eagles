@@ -37,141 +37,164 @@
     font-size:0.85rem;
     transition:all .2s ease;
 }
-.gallery-filters .btn:hover{
-    background:#14532d;
-    color:#fff;
-}
+.gallery-filters .btn:hover{ background:#14532d; color:#fff; }
 .gallery-filters .btn.active{
     background:#14532d;
     color:#fff;
     box-shadow:0 4px 12px rgba(20,83,45,0.25);
 }
 
-/* Cards */
-.gallery-card{
-    border:none;
+/* Masonry-style grid */
+.masonry-grid{
+    column-count:3;
+    column-gap:1.1rem;
+}
+@media (max-width:991px){ .masonry-grid{ column-count:2; } }
+@media (max-width:575px){ .masonry-grid{ column-count:1; } }
+
+.gallery-item{
+    break-inside:avoid;
+    margin-bottom:1.1rem;
+}
+.photo-tile{
+    position:relative;
     border-radius:14px;
     overflow:hidden;
-    box-shadow:0 8px 24px rgba(20,83,45,0.09);
-    transition:transform .25s ease, box-shadow .25s ease;
+    box-shadow:0 8px 22px rgba(20,83,45,0.1);
 }
-.gallery-card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 16px 32px rgba(20,83,45,0.16);
+.photo-tile img{
+    width:100%;
+    display:block;
+    transition:transform .4s ease;
 }
-.gallery-card img{
-    transition:transform .35s ease;
+.photo-tile:hover img{
+    transform:scale(1.06);
 }
-.gallery-card:hover img{
-    transform:scale(1.05);
+.photo-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(12,58,31,0.92) 0%, rgba(12,58,31,0.35) 45%, transparent 75%);
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:1.1rem;
+    opacity:0;
+    transition:opacity .3s ease;
 }
-.gallery-card .card-body{
-    padding:1.3rem;
-}
-.gallery-badge{
+.photo-tile:hover .photo-overlay{ opacity:1; }
+.photo-badge{
     display:inline-block;
-    background:#14532d;
-    color:#fff;
-    font-weight:700;
-    font-size:0.7rem;
+    background:#d4af37;
+    color:#14532d;
+    font-weight:800;
+    font-size:0.65rem;
     letter-spacing:0.5px;
     text-transform:uppercase;
-    padding:0.3rem 0.8rem;
+    padding:0.25rem 0.7rem;
     border-radius:50px;
+    margin-bottom:0.5rem;
+    width:fit-content;
+}
+.photo-overlay h5{
+    color:#fff;
+    font-weight:800;
+    font-size:0.98rem;
+    margin-bottom:0.3rem;
+}
+.photo-overlay p{
+    color:#dce9df;
+    font-size:0.82rem;
     margin-bottom:0.7rem;
 }
-.gallery-card h5{
-    font-weight:800;
-    color:#14532d;
-    font-size:1.02rem;
+.photo-actions{
+    display:flex;
+    gap:0.5rem;
 }
-.gallery-card p{
-    color:#5c6b63;
+.photo-actions .btn{
+    font-size:0.75rem;
+    padding:0.3rem 0.8rem;
+    font-weight:700;
 }
+.photo-actions .btn-outline-light{
+    border-color:rgba(255,255,255,0.6);
+    color:#fff;
+}
+.photo-actions .btn-outline-light:hover{ background:#fff; color:#14532d; }
+.photo-actions .btn-outline-danger{ border-color:#e07a7a; color:#f3b6b6; }
+.photo-actions .btn-outline-danger:hover{ background:#c0392b; color:#fff; border-color:#c0392b; }
 </style>
 
 <div class="container py-3">
-    <!-- Gallery Filter Buttons -->
-    <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 gallery-filters">
-        <button class="btn active px-4" type="button">All Photos</button>
-        <button class="btn px-4" type="button">Clean-ups</button>
-        <button class="btn px-4" type="button">Green Eagles Crew</button>
-        <button class="btn px-4" type="button">Messengers of Peace</button>
+    <!-- CRUD Action Header & Filter Buttons -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div class="d-flex flex-wrap gap-2 gallery-filters">
+            <button class="btn filter-btn active px-4" data-filter="all" type="button">All Photos</button>
+            <button class="btn filter-btn px-4" data-filter="Clean-ups" type="button">Clean-ups</button>
+            <button class="btn filter-btn px-4" data-filter="Green Eagles Crew" type="button">Green Eagles Crew</button>
+            <button class="btn filter-btn px-4" data-filter="Messengers of Peace" type="button">Messengers of Peace</button>
+        </div>
+        <!-- Add Picture Button with green_eagles namespace -->
+        <a href="{% url 'green_eagles:gallery_create' %}" class="btn btn-success rounded-pill px-4 fw-bold">
+            + Add Picture
+        </a>
     </div>
 
-    <!-- Image Grid -->
-    <div class="row g-4">
-        <!-- Item 1: Clean-up Drive -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card gallery-card h-100">
-                <img src="{% static 'green_eagles/images/cleanup-1.jpeg' %}" class="card-img-top" alt="Plastic Collection Drive" style="height: 240px; object-fit: cover;">
-                <div class="card-body">
-                    <span class="gallery-badge">Clean-up</span>
-                    <h5 class="card-title">Kericho Town Plastic Collection</h5>
-                    <p class="card-text small mb-0">Volunteers gathering waste plastic along main drainage and public areas.</p>
+    <!-- Dynamic Masonry Grid -->
+    <div class="masonry-grid" id="gallery-grid">
+        {% for photo in photos %}
+            <div class="gallery-item" data-category="{{ photo.category|default:'Gallery' }}">
+                <div class="photo-tile">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
+                    <div class="photo-overlay">
+                        {% if photo.category %}
+                            <span class="photo-badge">{{ photo.category }}</span>
+                        {% else %}
+                            <span class="photo-badge">Gallery</span>
+                        {% endif %}
+                        <h5>{{ photo.title }}</h5>
+                        <p>{{ photo.description|default:"" }}</p>
+                        <!-- CRUD Controls with green_eagles namespace -->
+                        <div class="photo-actions">
+                            <a href="{% url 'green_eagles:gallery_update' photo.pk %}" class="btn btn-sm btn-outline-light rounded-pill">Edit</a>
+                            <a href="{% url 'green_eagles:gallery_delete' photo.pk %}" class="btn btn-sm btn-outline-danger rounded-pill">Delete</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Item 2: Green Eagles Crew -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card gallery-card h-100">
-                <img src="{% static 'green_eagles/images/scout-camp.jpeg' %}" class="card-img-top" alt="Green Eagles Patrol" style="height: 240px; object-fit: cover;">
-                <div class="card-body">
-                    <span class="gallery-badge">Green Eagles Crew</span>
-                    <h5 class="card-title">Patrol Training &amp; Fieldcraft</h5>
-                    <p class="card-text small mb-0">Scouts carrying out outdoor leadership drills and field activities.</p>
-                </div>
+        {% empty %}
+            <div class="text-center py-5" style="column-span: all;">
+                <p class="text-muted fs-5 mb-3">No photos in the gallery yet.</p>
+                <a href="{% url 'green_eagles:gallery_create' %}" class="btn btn-success rounded-pill px-4 fw-bold">
+                    Upload First Photo
+                </a>
             </div>
-        </div>
-
-        <!-- Item 3: Messengers of Peace -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card gallery-card h-100">
-                <img src="{% static 'green_eagles/images/community-outreach.jpg' %}" class="card-img-top" alt="Community Outreach" style="height: 240px; object-fit: cover;">
-                <div class="card-body">
-                    <span class="gallery-badge">Messengers of Peace</span>
-                    <h5 class="card-title">Community Peace &amp; Climate Forum</h5>
-                    <p class="card-text small mb-0">Interacting with local communities on peace building and waste recycling.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Item 4: Recycling Solutions -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card gallery-card h-100">
-                <img src="{% static 'green_eagles/images/recycling-sort.jpg' %}" class="card-img-top" alt="Plastic Sorting" style="height: 240px; object-fit: cover;">
-                <div class="card-body">
-                    <span class="gallery-badge">Recycling</span>
-                    <h5 class="card-title">Plastic Waste Sorting</h5>
-                    <p class="card-text small mb-0">Sorting plastics for recycling partners and re-use programs.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Item 5: School Partnerships -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card gallery-card h-100">
-                <img src="{% static 'green_eagles/images/school-talk.jpg' %}" class="card-img-top" alt="School Environmental Education" style="height: 240px; object-fit: cover;">
-                <div class="card-body">
-                    <span class="gallery-badge">Education</span>
-                    <h5 class="card-title">School Conservation Sensitization</h5>
-                    <p class="card-text small mb-0">Teaching students about plastic pollution dangers and sustainable habits.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Item 6: River Clean-up -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card gallery-card h-100">
-                <img src="{% static 'green_eagles/images/river-cleanup.jpg' %}" class="card-img-top" alt="River Bank Clean-up" style="height: 240px; object-fit: cover;">
-                <div class="card-body">
-                    <span class="gallery-badge">Clean-up</span>
-                    <h5 class="card-title">Riverbank Restoration Drive</h5>
-                    <p class="card-text small mb-0">Clearing plastic waste from local riverbanks to keep water channels clean.</p>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
+
+<!-- JavaScript to power filtering -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const galleryItems = document.querySelectorAll(".gallery-item");
+
+    filterButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            filterButtons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            const filterValue = this.getAttribute("data-filter").toLowerCase();
+
+            galleryItems.forEach(item => {
+                const itemCategory = (item.getAttribute("data-category") || "").toLowerCase();
+                if (filterValue === "all" || itemCategory.includes(filterValue)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    });
+});
+</script>
 {% endblock %}
