@@ -1,69 +1,85 @@
 {% extends 'green_eagles/base.html' %}
-
-{% block title %}About Us | PLASTOUT{% endblock %}
+{% load static %}
 
 {% block content %}
-<div class="plastout-hero text-white py-5 mb-5">
-    <div class="container text-center">
-        <p class="hero-eyebrow">THE STORY SO FAR</p>
-        <h1 class="plastout-title">STARTED WITH ONE CLEAN-UP.<br>NOW IT'S A MOVEMENT.</h1>
-        <p class="lead hero-lead mx-auto mb-0">PLASTOUT unites youth, community, and climate action into one mission: a plastic-free Kericho County, built one drive at a time.</p>
-    </div>
-</div>
-
-<style>
-.plastout-hero{
-    position:relative; background-color:#14532d;
-    background-image:
-        linear-gradient(135deg, rgba(15,50,32,0.94), rgba(20,83,45,0.9)),
-        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px),
-        repeating-linear-gradient(25deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 46px);
-    border-bottom:4px solid #d4af37;
-}
-.hero-eyebrow{ letter-spacing:3px; font-size:0.78rem; font-weight:700; color:#d4af37; margin-bottom:16px; text-transform:uppercase; }
-.plastout-title{ font-size:2.7rem; font-weight:900; line-height:1.18; margin-bottom:18px; text-shadow:0 3px 14px rgba(0,0,0,0.25); }
-.hero-lead{ max-width:640px; font-size:1.1rem; color:#e7f0e9; }
-@media (max-width:576px){ .plastout-title{ font-size:1.9rem; } }
-
-.about-body h2{ font-weight:800; color:#14532d; }
-.about-body h4{ font-weight:800; color:#0f3f22; }
-.about-body p{ color:#3c4a42; line-height:1.75; }
-.about-body .lead{ color:#243a2c; }
-
-.wings-panel{
-    background:linear-gradient(160deg, #14532d, #0f3f22);
-    color:#fff; border-radius:14px; padding:2rem;
-    box-shadow:0 10px 28px rgba(20,83,45,0.15);
-}
-.wings-panel h4{ color:#d4af37 !important; font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:1.3rem; }
-.wing-entry{ border-left:3px solid #d4af37; padding-left:14px; margin-bottom:1.3rem; }
-.wing-entry:last-child{ margin-bottom:0; }
-.wing-entry strong{ display:block; margin-bottom:2px; font-size:1rem; }
-.wing-entry .desc{ color:#dce9df; font-size:0.88rem; }
-</style>
-
-<div class="container py-3 about-body">
-    <div class="row g-5">
-        <div class="col-lg-7">
-            <h2 class="mb-3">Who We Are</h2>
-            <p class="lead">PLASTOUT is an umbrella organization dedicated to environmental conservation, structural youth growth, and community empowerment across Kericho County.</p>
-            <p>We exist to fight plastic pollution at the source — through clean-ups, recycling, education, and active youth leadership. Under our umbrella, specialized wings carry out our mission on the ground.</p>
-            
-            <h4 class="mt-4 mb-2">Our Vision</h4>
-            <p>To cultivate disciplined, active, and innovative leaders prepared to positively transform their communities and spearhead sustainable climate action.</p>
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-bold text-success mb-3">About Plastout</h1>
+            <p class="lead text-muted">
+                Empowering communities, driving sustainable initiatives, and building an ecosystem of leadership, action, and digital growth.
+            </p>
+            <hr class="w-25 mx-auto border-success border-2">
         </div>
+    </div>
 
-        <div class="col-lg-5">
-            <div class="wings-panel">
-                <h4><i class="bi bi-shield-check me-2"></i>Our Operational Wings</h4>
-                <div class="wing-entry">
-                    <strong>Green Eagles Crew</strong>
-                    <div class="desc">Focuses on outdoor survival, patrol structures, scout discipline, and environmental stewardship.</div>
+    <!-- Who We Are Section -->
+    <div class="row align-items-center mb-5 gy-4">
+        <div class="col-lg-6">
+            <h2 class="h3 fw-bold text-dark mb-3">Who We Are</h2>
+            <p class="text-secondary">
+                Plastout is a dynamic platform designed to centralize organization management, community engagement, and resource tracking. Built with scalability and ease-of-use in mind, our system unites various operational wings under a single, cohesive digital roof.
+            </p>
+            <p class="text-secondary">
+                Whether managing member rosters, tracking equipment bookings, or organizing events, Plastout streamlines workflow efficiency for modern groups looking to make a lasting impact.
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <div class="p-4 bg-light rounded-4 border-start border-success border-5 shadow-sm">
+                <h3 class="h5 fw-bold text-success mb-2"><i class="bi bi-bullseye me-2"></i> Our Core Mission</h3>
+                <p class="text-muted mb-0">
+                    To deliver reliable digital infrastructure and streamlined organization tools that foster seamless collaboration, transparency, and growth across all participating wings and community networks.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Pillars Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3 text-center rounded-4">
+                <div class="card-body">
+                    <div class="fs-1 text-success mb-3"><i class="bi bi-people-fill"></i></div>
+                    <h3 class="h5 fw-bold">Community-Driven</h3>
+                    <p class="text-muted small">
+                        Built by developers and leaders who understand the unique organizational needs of active campus and community groups.
+                    </p>
                 </div>
-                <div class="wing-entry">
-                    <strong>Messengers of Peace</strong>
-                    <div class="desc">Drives community outreach, conflict resolution, peace building, and humanitarian service initiatives.</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3 text-center rounded-4">
+                <div class="card-body">
+                    <div class="fs-1 text-success mb-3"><i class="bi bi-shield-check"></i></div>
+                    <h3 class="h5 fw-bold">Structured Workflow</h3>
+                    <p class="text-muted small">
+                        Organized wings, dedicated galleries, active event boards, and secure member dashboards to keep operations running smoothly.
+                    </p>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3 text-center rounded-4">
+                <div class="card-body">
+                    <div class="fs-1 text-success mb-3"><i class="bi bi-lightning-charge-fill"></i></div>
+                    <h3 class="h5 fw-bold">Modern Tech Stack</h3>
+                    <p class="text-muted small">
+                        Powered by robust backend architecture and responsive design standards to ensure speed, security, and a fluid user experience.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Footer -->
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-7 p-5 bg-dark text-white rounded-4 shadow">
+            <h3 class="fw-bold mb-3">Ready to Be Part of the Movement?</h3>
+            <p class="text-light mb-4">Join our platform, explore our specialized wings, and stay updated with our latest activities.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'green_eagles:register' %}" class="btn btn-success fw-bold px-4 py-2 rounded-pill">Get Started</a>
+                <a href="{% url 'green_eagles:contact' %}" class="btn btn-outline-light fw-bold px-4 py-2 rounded-pill">Contact Us</a>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
-    # Green Eagles Crew model
+# Green Eagles Crew model
 class Crew(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='crews')
     name = models.CharField(max_length=100, default="Green Eagles Crew")
@@ -21,7 +21,7 @@ class Crew(models.Model):
     def __str__(self):
         return f"{self.name} ({self.organization.name})"
 
-    # Patrols inside the Crew
+# Patrols inside the Crew
 class Patrol(models.Model):
     crew = models.ForeignKey(Crew, on_delete=models.CASCADE, related_name='patrols')
     name = models.CharField(max_length=50) # e.g. Cobra Patrol, Hawk Patrol
@@ -90,3 +90,32 @@ class GalleryItem(models.Model):
 
     def __str__(self):
         return self.title
+
+class Announcement(models.Model):
+    CATEGORY_CHOICES = [
+        ('GENERAL', 'General Update'),
+        ('MEETING', 'Meeting Notice'),
+        ('URGENT', 'Urgent Circular'),
+        ('EVENT', 'Event Announcement'),
+    ]
+
+    TARGET_WING_CHOICES = [
+        ('ALL', 'All Wings (Central)'),
+        ('GE', 'Green Eagles Crew Only'),
+        ('MOP', 'Messengers of Peace Only'),
+    ]
+
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='GENERAL')
+    target_wing = models.CharField(max_length=10, choices=TARGET_WING_CHOICES, default='ALL')
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_pinned = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-is_pinned', '-created_at']
+
+    def __str__(self):
+        return f"[{self.get_target_wing_display()}] {self.title}"
+

@@ -1,110 +1,182 @@
 {% extends 'green_eagles/base.html' %}
 
 {% block content %}
-<div class="join-wrap py-5">
-    <div class="container" style="max-width: 500px;">
-        <div class="text-center mb-4">
-            <p class="join-eyebrow">A WING AWAITS YOU</p>
-            <h2 class="join-title">Join PLASTOUT</h2>
-            <p class="join-sub">One form. Two wings. Endless clean-ups ahead.</p>
-        </div>
+<div class="join-wrap">
+    <div class="join-orbs">
+        <span class="orb o1"></span>
+        <span class="orb o2"></span>
+        <span class="orb o3"></span>
+    </div>
 
-        <div class="card join-card border-0">
-            <div class="card-body p-4 p-md-5">
-                <form method="POST">
-                    {% csrf_token %}
-                    
-                    {{ form.as_p }}
-
-                    <div class="mb-3">
-                        <label for="wing" class="form-label">Select Operational Wing</label>
-                        <select name="wing" id="wing" class="form-select join-input">
-                            <option value="GE">Green Eagles Crew</option>
-                            <option value="MOP">Messengers of Peace</option>
-                            <option value="BOTH">Both Wings</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone Number</label>
-                        <input type="text" name="phone" id="phone" class="form-control join-input" placeholder="+254 700 000000">
-                    </div>
-
-                    <button type="submit" class="btn join-btn w-100 mt-3">Register</button>
-                </form>
-                <div class="text-center mt-4">
-                    <p class="small mb-0">Already have an account? <a href="{% url 'green_eagles:login' %}" class="join-link">Login here</a></p>
-                </div>
+    <div class="container" style="max-width: 460px;">
+        <div class="join-card">
+            <div class="join-icon">
+                <i class="bi bi-recycle"></i>
             </div>
+            <h2 class="join-title">Join PLASTOUT</h2>
+
+            <form method="POST" class="join-form">
+                {% csrf_token %}
+                
+                {{ form.as_p }}
+
+                <div class="mb-3">
+                    <label for="wing" class="form-label">Wing</label>
+                    <select name="wing" id="wing" class="form-select join-input">
+                        <option value="GE">Green Eagles Crew</option>
+                        <option value="MOP">Messengers of Peace</option>
+                        <option value="BOTH">Both Wings</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" name="phone" id="phone" class="form-control join-input" placeholder="+254 700 000000">
+                </div>
+
+                <button type="submit" class="join-btn w-100">Register</button>
+            </form>
+
+            <p class="join-footer">Already a member? <a href="{% url 'green_eagles:login' %}" class="join-link">Login</a></p>
         </div>
     </div>
 </div>
 
 <style>
 .join-wrap{
-    background-color:#f4f8f5;
-    background-image:
-        radial-gradient(circle at 15% 20%, rgba(20,83,45,0.05) 0, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(212,175,55,0.06) 0, transparent 40%);
+    position:relative;
+    overflow:hidden;
+    min-height:calc(100vh - 200px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f4f8f5;
+    padding:3rem 1rem;
 }
-.join-eyebrow{
-    letter-spacing:3px;
-    font-size:0.72rem;
-    font-weight:800;
+
+.join-orbs{
+    position:absolute;
+    inset:0;
+    z-index:0;
+}
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(40px);
+    opacity:0.5;
+    animation:drift 16s ease-in-out infinite;
+}
+.o1{
+    width:280px; height:280px;
+    background:rgba(20,83,45,0.18);
+    top:-60px; left:-60px;
+    animation-delay:0s;
+}
+.o2{
+    width:220px; height:220px;
+    background:rgba(212,175,55,0.18);
+    bottom:-40px; right:-40px;
+    animation-delay:4s;
+}
+.o3{
+    width:160px; height:160px;
+    background:rgba(20,83,45,0.12);
+    top:40%; right:10%;
+    animation-delay:8s;
+}
+@keyframes drift{
+    0%, 100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(30px,-30px) scale(1.15); }
+}
+
+.join-card{
+    position:relative;
+    z-index:1;
+    background:#ffffff;
+    border-radius:18px;
+    padding:2.6rem 2.2rem;
+    box-shadow:0 20px 50px rgba(20,83,45,0.12);
+    text-align:center;
+    animation:riseIn .6s ease both;
+}
+@keyframes riseIn{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+.join-icon{
+    width:60px; height:60px;
+    margin:0 auto 1rem;
+    border-radius:50%;
+    background:linear-gradient(160deg,#14532d,#0c3a1f);
     color:#d4af37;
-    text-transform:uppercase;
-    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.5rem;
+    animation:pulse 2.4s ease-in-out infinite;
 }
+@keyframes pulse{
+    0%, 100%{ box-shadow:0 0 0 0 rgba(212,175,55,0.35); }
+    50%{ box-shadow:0 0 0 12px rgba(212,175,55,0); }
+}
+
 .join-title{
     font-weight:900;
     color:#14532d;
-    font-size:2rem;
+    font-size:1.6rem;
+    margin-bottom:1.6rem;
 }
-.join-sub{
-    color:#5c6b63;
-    font-size:0.95rem;
-}
-.join-card{
-    border-radius:16px;
-    box-shadow:0 16px 40px rgba(20,83,45,0.12);
-    border-top:5px solid #14532d;
-}
-.join-card .form-label{
+
+.join-form{ text-align:left; }
+.join-form p{ margin-bottom:1rem; }
+.join-form label, .join-form .form-label{
+    display:block;
     font-weight:700;
+    font-size:0.82rem;
     color:#14532d;
-    font-size:0.85rem;
-    letter-spacing:0.2px;
     margin-bottom:6px;
 }
-.join-input, .join-card input, .join-card select, .join-card textarea{
-    border:1px solid #d8e3da;
-    border-radius:8px;
+.join-input, .join-form input, .join-form select, .join-form textarea{
+    width:100%;
+    border:1.5px solid #e0e6e2;
+    border-radius:9px;
     padding:11px 14px;
+    font-size:0.95rem;
+    transition:border-color .2s ease, box-shadow .2s ease;
 }
-.join-input:focus, .join-card input:focus, .join-card select:focus, .join-card textarea:focus{
+.join-input:focus, .join-form input:focus, .join-form select:focus, .join-form textarea:focus{
+    outline:none;
     border-color:#14532d;
-    box-shadow:0 0 0 3px rgba(20,83,45,0.12);
+    box-shadow:0 0 0 4px rgba(20,83,45,0.1);
 }
+
 .join-btn{
     background:#14532d;
     color:#fff;
+    border:none;
     font-weight:800;
-    border-radius:8px;
+    border-radius:9px;
     padding:12px;
-    letter-spacing:0.3px;
-    transition:background .2s ease;
+    margin-top:0.4rem;
+    transition:background .2s ease, transform .2s ease;
 }
 .join-btn:hover{
-    background:#0f3f22;
+    background:#0c3a1f;
+    transform:translateY(-2px);
     color:#fff;
+}
+
+.join-footer{
+    margin-top:1.5rem;
+    font-size:0.88rem;
+    color:#6b7a70;
 }
 .join-link{
     color:#14532d;
     font-weight:700;
     text-decoration:none;
 }
-.join-link:hover{
-    color:#d4af37;
-}
+.join-link:hover{ color:#d4af37; }
 </style>
 {% endblock %}

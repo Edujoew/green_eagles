@@ -1,0 +1,127 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+
+{% block navbar %}
+<!-- COMPLETELY CUSTOM NAVBAR FOR MESSENGERS OF PEACE -->
+<nav class="navbar navbar-expand-lg sticky-top mop-navbar">
+    <div class="container">
+        <!-- MOP Brand -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:messengers_of_peace' %}">
+            <img src="{% static 'green_eagles/images/mop_logo.jpeg' %}" alt="MOP Logo" class="mop-logo-img">
+            <span class="mop-brand-text">PEACE NETWORK</span>
+        </a>
+
+        <button class="navbar-toggler mop-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mopPortalNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="mopPortalNav">
+            <ul class="navbar-nav align-items-lg-center gap-1 mb-2 mb-lg-0 me-3">
+                <li class="nav-item">
+                    <a class="nav-link mop-nav-link" href="{% url 'green_eagles:home' %}"><i class="bi bi-house-door me-1"></i> Main Plastout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mop-nav-link mop-nav-active" href="{% url 'green_eagles:messengers_of_peace' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_activities' %}">Activities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_gallery' %}">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_faq' %}">FAQ</a>
+                </li>
+            </ul>
+            <a href="{% url 'green_eagles:mop_dashboard' %}" class="mop-dashboard-btn">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+</nav>
+
+<style>
+.mop-navbar{
+    background-color:#0e484c;
+    background-image:
+        linear-gradient(150deg, #155e63 0%, #0e484c 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 30px);
+    border-bottom:3px solid #38bdf8;
+    padding:0.7rem 0;
+    box-shadow:0 6px 20px rgba(0,0,0,0.18);
+}
+
+.mop-logo-img{
+    height:42px;
+    border-radius:8px;
+    box-shadow:0 0 0 2px rgba(56,189,248,0.4);
+}
+
+.mop-brand-text{
+    color:#e0f2fe;
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:1.1rem;
+    letter-spacing:0.5px;
+}
+
+.mop-toggler{
+    background:rgba(255,255,255,0.9);
+    border:none;
+}
+
+.mop-nav-link{
+    color:#e7f4f4 !important;
+    font-weight:700;
+    font-size:0.88rem;
+    padding:0.55rem 0.9rem !important;
+    position:relative;
+    transition:color .2s ease;
+}
+.mop-nav-link::after{
+    content:"";
+    position:absolute;
+    left:0.9rem;
+    right:0.9rem;
+    bottom:0.3rem;
+    height:2px;
+    background:#38bdf8;
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .25s ease;
+}
+.mop-nav-link:hover{
+    color:#ffffff !important;
+}
+.mop-nav-link:hover::after{
+    transform:scaleX(1);
+}
+.mop-nav-active{
+    color:#38bdf8 !important;
+}
+.mop-nav-active::after{
+    transform:scaleX(1);
+}
+
+.mop-dashboard-btn{
+    display:inline-flex;
+    align-items:center;
+    background:#38bdf8;
+    color:#0e484c;
+    font-weight:800;
+    font-size:0.85rem;
+    padding:0.5rem 1.2rem;
+    border-radius:50px;
+    text-decoration:none;
+    transition:background .2s ease, transform .2s ease;
+}
+.mop-dashboard-btn:hover{
+    background:#0ea5e9;
+    color:#ffffff;
+    transform:translateY(-2px);
+}
+</style>
+{% endblock %}

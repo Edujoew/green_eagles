@@ -1,0 +1,167 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+{% block title %}Messengers of Peace - FAQ{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-expand-lg sticky-top mop-navbar">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:messengers_of_peace' %}">
+            <img src="{% static 'green_eagles/images/mop_logo.jpeg' %}" alt="MOP Logo" class="mop-logo-img">
+            <span class="mop-brand-text">PEACE NETWORK</span>
+        </a>
+        <button class="navbar-toggler mop-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mopNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="mopNav">
+            <ul class="navbar-nav align-items-lg-center gap-1 mb-2 mb-lg-0 me-3">
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:home' %}">Main Plastout</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:messengers_of_peace' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_activities' %}">Activities</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_gallery' %}">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link mop-nav-active" href="{% url 'green_eagles:mop_faq' %}">FAQ</a></li>
+            </ul>
+            <a href="{% url 'green_eagles:mop_dashboard' %}" class="mop-dashboard-btn">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+</nav>
+
+<style>
+.mop-navbar{ background-color:#0e484c; background-image:linear-gradient(150deg,#155e63 0%,#0e484c 100%),repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 30px); border-bottom:3px solid #38bdf8; padding:0.7rem 0; box-shadow:0 6px 20px rgba(0,0,0,0.18); }
+.mop-logo-img{ height:42px; border-radius:8px; box-shadow:0 0 0 2px rgba(56,189,248,0.4); }
+.mop-brand-text{ color:#e0f2fe; font-family:'Sora',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:0.5px; }
+.mop-toggler{ background:rgba(255,255,255,0.9); border:none; }
+.mop-nav-link{ color:#e7f4f4 !important; font-weight:700; font-size:0.88rem; padding:0.55rem 0.9rem !important; position:relative; transition:color .2s ease; }
+.mop-nav-link::after{ content:""; position:absolute; left:0.9rem; right:0.9rem; bottom:0.3rem; height:2px; background:#38bdf8; transform:scaleX(0); transform-origin:left; transition:transform .25s ease; }
+.mop-nav-link:hover{ color:#ffffff !important; }
+.mop-nav-link:hover::after{ transform:scaleX(1); }
+.mop-nav-active{ color:#38bdf8 !important; }
+.mop-nav-active::after{ transform:scaleX(1); }
+.mop-dashboard-btn{ display:inline-flex; align-items:center; background:#38bdf8; color:#0e484c; font-weight:800; font-size:0.85rem; padding:0.5rem 1.2rem; border-radius:50px; text-decoration:none; transition:background .2s ease, transform .2s ease; }
+.mop-dashboard-btn:hover{ background:#0ea5e9; color:#0e484c; transform:translateY(-2px); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mop-faq-hero">
+    <div class="container">
+        <p class="mop-faq-eyebrow">MOP KNOWLEDGE BASE</p>
+        <h1 class="mop-faq-title">Frequently Asked Questions</h1>
+        <p class="mop-faq-lead">Answers regarding participation in peace-building programs, community initiatives, and network protocols.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="accordion" id="mopFaqAccordion">
+                
+                <!-- Q1 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="mopHeadingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#mopCollapseOne">
+                            How do I become a registered Messenger of Peace?
+                        </button>
+                    </h2>
+                    <div id="mopCollapseOne" class="accordion-collapse collapse show" data-bs-parent="#mopFaqAccordion">
+                        <div class="accordion-body">
+                            Sign up through the main registration portal and specify Messengers of Peace as your preferred wing choice to join local advocacy teams and gain active member dashboard permissions.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="mopHeadingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mopCollapseTwo">
+                            Can I propose a peace-building workshop in my region?
+                        </button>
+                    </h2>
+                    <div id="mopCollapseTwo" class="accordion-collapse collapse" data-bs-parent="#mopFaqAccordion">
+                        <div class="accordion-body">
+                            Yes! Active members can submit proposals through their user dashboard or reach out directly to regional coordinators for support, logistics, and resource alignment.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="mopHeadingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mopCollapseThree">
+                            How do I log community service hours or project actions?
+                        </button>
+                    </h2>
+                    <div id="mopCollapseThree" class="accordion-collapse collapse" data-bs-parent="#mopFaqAccordion">
+                        <div class="accordion-body">
+                            Once logged into your member account, navigate to your dashboard panel where you can submit reports, upload activity photos to the gallery, and track your individual contribution metrics for regional assessments.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="mopHeadingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mopCollapseFour">
+                            Are there official certificates issued upon completing initiatives?
+                        </button>
+                    </h2>
+                    <div id="mopCollapseFour" class="accordion-collapse collapse" data-bs-parent="#mopFaqAccordion">
+                        <div class="accordion-body">
+                            Yes, active participants who successfully complete designated community dialogues, training cycles, or regional peace caravans are eligible for official digital certificates distributed via the network portal.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="mopHeadingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mopCollapseFive">
+                            How can external organizations partner with the MOP network?
+                        </button>
+                    </h2>
+                    <div id="mopCollapseFive" class="accordion-collapse collapse" data-bs-parent="#mopFaqAccordion">
+                        <div class="accordion-body">
+                            External groups, institutions, and community-based organizations can initiate partnership discussions by getting in touch via the main Plastout contact page or by submitting an official collaboration brief to our administration board.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="mopHeadingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mopCollapseSix">
+                            Who should I contact if I experience technical issues on the portal?
+                        </button>
+                    </h2>
+                    <div id="mopCollapseSix" class="accordion-collapse collapse" data-bs-parent="#mopFaqAccordion">
+                        <div class="accordion-body">
+                            If you encounter any bugs, authentication snags, or broken elements while navigating the platform, you can reach out directly to the development team or post an issue ticket through your dashboard controls.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.mop-faq-hero{
+    background-color:#0e484c;
+    background-image:linear-gradient(150deg,#155e63 0%,#0e484c 100%),repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 34px);
+    padding:3.5rem 0;
+    border-bottom:4px solid #38bdf8;
+}
+.mop-faq-eyebrow{ letter-spacing:3px; font-size:0.75rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:0.7rem; }
+.mop-faq-title{ color:#fff; font-weight:900; font-size:2.1rem; margin-bottom:0.6rem; }
+.mop-faq-lead{ color:#dcf1f2; font-size:1rem; max-width:560px; margin-bottom:0; }
+
+#mopFaqAccordion .accordion-item{ border:none; border-radius:12px; box-shadow:0 6px 18px rgba(21,94,99,0.07); overflow:hidden; }
+#mopFaqAccordion .accordion-button{ font-weight:700; color:#155e63; padding:1.1rem 1.4rem; }
+#mopFaqAccordion .accordion-button:not(.collapsed){ background:#155e63; color:#fff; box-shadow:none; }
+#mopFaqAccordion .accordion-button:not(.collapsed)::after{ filter:brightness(0) invert(1); }
+#mopFaqAccordion .accordion-button:focus{ box-shadow:0 0 0 3px rgba(21,94,99,0.15); }
+#mopFaqAccordion .accordion-body{ padding:1.2rem 1.4rem; color:#5c6b63; line-height:1.7; }
+</style>
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'green_eagles/base.html' %}
+{% block content %}
+<div class="dash-wrap">
+    <div class="dash-banner">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h3 class="dash-name">Edit Profile</h3>
+                    <span class="dash-tag">PLASTOUT Member Account</span>
+                </div>
+                <a href="{% url 'green_eagles:dashboard' %}" class="dash-logout">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="POST" class="edit-form">
+                    {% csrf_token %}
+
+                    <div class="edit-section">
+                        <div class="edit-section-head">
+                            <span class="edit-num">1</span>
+                            <div>
+                                <h5>Personal Information</h5>
+                                <p>Your basic account details</p>
+                            </div>
+                        </div>
+                        <div class="edit-fields">
+                            <div class="edit-field-row">
+                                <div class="edit-field">
+                                    <label>First Name</label>
+                                    {{ u_form.first_name }}
+                                </div>
+                                <div class="edit-field">
+                                    <label>Last Name</label>
+                                    {{ u_form.last_name }}
+                                </div>
+                            </div>
+                            <div class="edit-field">
+                                <label>Email Address</label>
+                                {{ u_form.email }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="edit-section">
+                        <div class="edit-section-head">
+                            <span class="edit-num">2</span>
+                            <div>
+                                <h5>Wing &amp; Profile Details</h5>
+                                <p>How your crew identifies you</p>
+                            </div>
+                        </div>
+                        <div class="edit-fields">
+                            <div class="edit-field-row">
+                                <div class="edit-field">
+                                    <label>Phone Number</label>
+                                    {{ p_form.phone }}
+                                </div>
+                                <div class="edit-field">
+                                    <label>Patrol Name</label>
+                                    {{ p_form.patrol_name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="edit-actions">
+                        <a href="{% url 'green_eagles:dashboard' %}" class="edit-cancel">Cancel</a>
+                        <button type="submit" class="edit-save">
+                            <i class="bi bi-check2"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.edit-form{
+    padding-bottom:1rem;
+}
+
+.edit-section{
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 8px 24px rgba(20,83,45,0.07);
+    padding:1.8rem 2rem;
+    margin-bottom:1.4rem;
+}
+
+.edit-section-head{
+    display:flex;
+    align-items:flex-start;
+    gap:1rem;
+    margin-bottom:1.5rem;
+    padding-bottom:1.2rem;
+    border-bottom:1px solid #edf2ee;
+}
+.edit-num{
+    width:34px; height:34px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:linear-gradient(160deg,#14532d,#0c3a1f);
+    color:#d4af37;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.95rem;
+}
+.edit-section-head h5{
+    font-weight:800;
+    color:#14532d;
+    margin-bottom:0.15rem;
+    font-size:1.05rem;
+}
+.edit-section-head p{
+    color:#9aa89f;
+    font-size:0.85rem;
+    margin-bottom:0;
+}
+
+.edit-fields{ display:flex; flex-direction:column; gap:1.1rem; }
+.edit-field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.1rem;
+}
+@media (max-width:576px){
+    .edit-field-row{ grid-template-columns:1fr; }
+}
+
+.edit-field label{
+    display:block;
+    font-weight:700;
+    font-size:0.8rem;
+    color:#14532d;
+    letter-spacing:0.2px;
+    margin-bottom:6px;
+}
+.edit-field input,
+.edit-fields input{
+    width:100%;
+    border:1.5px solid #e0e6e2;
+    border-radius:9px;
+    padding:11px 14px;
+    font-size:0.94rem;
+    transition:border-color .2s ease, box-shadow .2s ease;
+}
+.edit-field input:focus,
+.edit-fields input:focus{
+    outline:none;
+    border-color:#14532d;
+    box-shadow:0 0 0 4px rgba(20,83,45,0.1);
+}
+
+.edit-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:0.7rem;
+    margin-top:0.4rem;
+}
+.edit-cancel{
+    padding:0.7rem 1.6rem;
+    border-radius:9px;
+    border:1.5px solid #d8e3da;
+    color:#5c6b63;
+    font-weight:700;
+    font-size:0.9rem;
+    text-decoration:none;
+    transition:background .2s ease;
+}
+.edit-cancel:hover{
+    background:#f4f8f5;
+    color:#14532d;
+}
+.edit-save{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:#14532d;
+    color:#fff;
+    border:none;
+    padding:0.7rem 1.8rem;
+    border-radius:9px;
+    font-weight:800;
+    font-size:0.9rem;
+    transition:background .2s ease, transform .2s ease;
+}
+.edit-save:hover{
+    background:#0c3a1f;
+    transform:translateY(-2px);
+    color:#fff;
+}
+</style>
+{% endblock %}

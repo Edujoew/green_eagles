@@ -1,0 +1,167 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+{% block title %}Green Eagles Crew - FAQ{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-expand-lg sticky-top crew-navbar">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:green_eagles_crew' %}">
+            <img src="{% static 'green_eagles/images/crew_logo.jpeg' %}" alt="Crew Logo" class="crew-logo-img">
+            <span class="crew-brand-text">CREW PORTAL</span>
+        </a>
+        <button class="navbar-toggler crew-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#crewNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="crewNav">
+            <ul class="navbar-nav align-items-lg-center gap-1 mb-2 mb-lg-0 me-3">
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:home' %}">Main Plastout</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:green_eagles_crew' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_activities' %}">Activities</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_gallery' %}">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link crew-nav-active" href="{% url 'green_eagles:crew_faq' %}">FAQ</a></li>
+            </ul>
+            <a href="{% url 'green_eagles:crew_dashboard' %}" class="crew-dashboard-btn">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+</nav>
+
+<style>
+.crew-navbar{ background-color:#0c3a1f; background-image:linear-gradient(150deg,#14532d 0%,#0c3a1f 100%),repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 30px); border-bottom:3px solid #d4af37; padding:0.7rem 0; box-shadow:0 6px 20px rgba(0,0,0,0.18); }
+.crew-logo-img{ height:42px; border-radius:8px; box-shadow:0 0 0 2px rgba(212,175,55,0.4); }
+.crew-brand-text{ color:#d4af37; font-family:'Sora',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:0.5px; }
+.crew-toggler{ background:rgba(255,255,255,0.9); border:none; }
+.crew-nav-link{ color:#eaf2ec !important; font-weight:700; font-size:0.88rem; padding:0.55rem 0.9rem !important; position:relative; transition:color .2s ease; }
+.crew-nav-link::after{ content:""; position:absolute; left:0.9rem; right:0.9rem; bottom:0.3rem; height:2px; background:#d4af37; transform:scaleX(0); transform-origin:left; transition:transform .25s ease; }
+.crew-nav-link:hover{ color:#ffffff !important; }
+.crew-nav-link:hover::after{ transform:scaleX(1); }
+.crew-nav-active{ color:#d4af37 !important; }
+.crew-nav-active::after{ transform:scaleX(1); }
+.crew-dashboard-btn{ display:inline-flex; align-items:center; background:#d4af37; color:#0c3a1f; font-weight:800; font-size:0.85rem; padding:0.5rem 1.2rem; border-radius:50px; text-decoration:none; transition:background .2s ease, transform .2s ease; }
+.crew-dashboard-btn:hover{ background:#c19a2e; color:#0c3a1f; transform:translateY(-2px); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="faq-hero">
+    <div class="container">
+        <p class="faq-eyebrow">CREW KNOWLEDGE BASE</p>
+        <h1 class="faq-title">Frequently Asked Questions</h1>
+        <p class="faq-lead">Everything you need to know about joining patrols, gear standards, advancement ranks, and field operations.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="accordion" id="crewFaqAccordion">
+                
+                <!-- Q1 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                            How do I join a patrol in the Green Eagles Crew?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#crewFaqAccordion">
+                        <div class="accordion-body">
+                            You can register through the main portal and select the Green Eagles Crew wing during signup. Once authenticated, your dashboard will assign you to an active local patrol group and link you with team commanders.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                            What equipment is required for field deployments?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#crewFaqAccordion">
+                        <div class="accordion-body">
+                            Standard gear includes proper hiking attire, a compass, notebook, water canteen, and designated patrol identification badges provided during orientation. Heavy operational equipment is checked out via the resource booking system.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                            How are leadership ranks and patrol duties assigned?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#crewFaqAccordion">
+                        <div class="accordion-body">
+                            Leadership roles such as Patrol Leader, Quartermaster, and Scribe are assigned based on active participation, demonstrated reliability during field training, and endorsement from senior coordinators.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                            When and where are regular crew meetings held?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#crewFaqAccordion">
+                        <div class="accordion-body">
+                            Meeting schedules and muster points are updated weekly on the announcements board and your member dashboard. Special briefs are issued prior to any major competitions or outdoor excursions.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                            How do I track proficiency badges and skill advancement?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#crewFaqAccordion">
+                        <div class="accordion-body">
+                            Proficiency badges earned through practical tests, camping exercises, and leadership tasks are recorded digitally. You can review your earned credentials directly from your profile dashboard.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                            Who should I contact regarding logistics or transport issues?
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#crewFaqAccordion">
+                        <div class="accordion-body">
+                            For matters concerning travel coordination, competition logistics, or equipment checkouts, reach out to your patrol leader or submit an inquiry through the main contact portal.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.faq-hero{
+    background-color:#0c3a1f;
+    background-image:linear-gradient(150deg,#14532d 0%,#0c3a1f 100%),repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 34px);
+    padding:3.5rem 0;
+    border-bottom:4px solid #d4af37;
+}
+.faq-eyebrow{ letter-spacing:3px; font-size:0.75rem; font-weight:800; color:#d4af37; text-transform:uppercase; margin-bottom:0.7rem; }
+.faq-title{ color:#fff; font-weight:900; font-size:2.1rem; margin-bottom:0.6rem; }
+.faq-lead{ color:#dce9df; font-size:1rem; max-width:560px; margin-bottom:0; }
+
+#crewFaqAccordion .accordion-item{ border:none; border-radius:12px; box-shadow:0 6px 18px rgba(20,83,45,0.07); overflow:hidden; }
+#crewFaqAccordion .accordion-button{ font-weight:700; color:#14532d; padding:1.1rem 1.4rem; }
+#crewFaqAccordion .accordion-button:not(.collapsed){ background:#14532d; color:#fff; box-shadow:none; }
+#crewFaqAccordion .accordion-button:not(.collapsed)::after{ filter:brightness(0) invert(1); }
+#crewFaqAccordion .accordion-button:focus{ box-shadow:0 0 0 3px rgba(20,83,45,0.15); }
+#crewFaqAccordion .accordion-body{ padding:1.2rem 1.4rem; color:#5c6b63; line-height:1.7; }
+</style>
+{% endblock %}

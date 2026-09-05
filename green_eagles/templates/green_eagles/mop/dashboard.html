@@ -1,0 +1,87 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+{% block title %}Messengers of Peace - Mission Dashboard{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg sticky-top mop-navbar">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:messengers_of_peace' %}">
+            <img src="{% static 'green_eagles/images/mop_logo.jpeg' %}" alt="MOP Logo" class="mop-logo-img">
+            <span class="mop-brand-text">MOP MISSION HUB</span>
+        </a>
+        <div class="collapse navbar-collapse justify-content-end" id="mopNav">
+            <ul class="navbar-nav align-items-lg-center gap-1 mb-2 mb-lg-0 me-3">
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:messengers_of_peace' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_activities' %}">Activities</a></li>
+                <li class="nav-item"><a class="nav-link mop-nav-link" href="{% url 'green_eagles:mop_faq' %}">FAQ</a></li>
+            </ul>
+            <a href="{% url 'green_eagles:dashboard' %}" class="btn btn-outline-light btn-sm rounded-pill px-3 me-2">Main Plastout Hub</a>
+            <a href="{% url 'green_eagles:logout' %}" class="btn btn-info btn-sm rounded-pill fw-bold px-3 text-dark">Logout</a>
+        </div>
+    </div>
+</nav>
+<style>
+.mop-navbar{ background-color:#0e484c; background-image:linear-gradient(150deg,#155e63 0%,#0e484c 100%); border-bottom:3px solid #38bdf8; padding:0.7rem 0; }
+.mop-logo-img{ height:42px; border-radius:8px; box-shadow:0 0 0 2px rgba(56,189,248,0.4); }
+.mop-brand-text{ color:#e0f2fe; font-weight:800; }
+.mop-nav-link{ color:#e7f4f4 !important; font-weight:700; font-size:0.88rem; }
+.mop-nav-link:hover{ color:#38bdf8 !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="p-4 rounded-4 shadow-sm text-white" style="background: linear-gradient(135deg, #155e63 0%, #0e484c 100%); border-left: 6px solid #38bdf8;">
+                <h2 class="fw-bold mb-1">Peace Ambassador: {{ request.user.username }}</h2>
+                <p class="mb-0 text-light opacity-75">Messengers of Peace Network &bull; Role: <strong>{{ profile.get_role_display }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold text-info mb-3"><i class="bi bi-globe-americas me-2"></i>Network Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'green_eagles:edit_profile' %}" class="btn btn-outline-info text-dark text-start"><i class="bi bi-person-gear me-2"></i> Edit Ambassador Profile</a>
+                        {% if request.user.is_superuser or profile.role == 'EXEC' or profile.role == 'COORDINATOR' %}
+                            <a href="{% url 'green_eagles:admin_manage_members' %}" class="btn btn-info text-dark text-start"><i class="bi bi-people-fill me-2"></i> Manage MOP Members</a>
+                            <a href="{% url 'green_eagles:post_announcement' %}" class="btn btn-outline-dark text-start"><i class="bi bi-megaphone-fill me-2"></i> Post Peace Circular</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOP Announcements Feed -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold text-dark mb-3"><i class="bi bi-chat-heart-fill text-info me-2"></i>Peace Dialogue Updates</h4>
+                    {% if announcements %}
+                        <div class="list-group list-group-flush">
+                            {% for item in announcements %}
+                                <div class="list-group-item px-0 py-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h5 class="mb-0 fw-bold text-info">{{ item.title }}</h5>
+                                        <small class="text-muted">{{ item.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1 text-secondary">{{ item.content }}</p>
+                                    <small class="badge bg-secondary">{{ item.get_category_display }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No active peace network circulars at the moment.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,292 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+{% block title %}Green Eagles Crew - Command Dashboard{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg sticky-top crew-navbar">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:green_eagles_crew' %}">
+            <img src="{% static 'green_eagles/images/crew_logo.jpeg' %}" alt="Crew Logo" class="crew-logo-img">
+            <span class="crew-brand-text">CREW COMMAND</span>
+        </a>
+        <div class="collapse navbar-collapse justify-content-end" id="crewNav">
+            <ul class="navbar-nav align-items-lg-center gap-1 mb-2 mb-lg-0 me-3">
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:green_eagles_crew' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_activities' %}">Activities</a></li>
+                <li class="nav-item"><a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_faq' %}">FAQ</a></li>
+            </ul>
+            <a href="{% url 'green_eagles:dashboard' %}" class="btn btn-outline-light btn-sm rounded-pill px-3 me-2">Main Plastout Hub</a>
+            <a href="{% url 'green_eagles:logout' %}" class="btn btn-warning btn-sm rounded-pill fw-bold px-3">Logout</a>
+        </div>
+    </div>
+</nav>
+<style>
+.crew-navbar{ background-color:#0c3a1f; background-image:linear-gradient(150deg,#14532d 0%,#0c3a1f 100%); border-bottom:3px solid #d4af37; padding:0.7rem 0; }
+.crew-logo-img{ height:42px; border-radius:8px; box-shadow:0 0 0 2px rgba(212,175,55,0.4); }
+.crew-brand-text{ color:#d4af37; font-weight:800; }
+.crew-nav-link{ color:#eaf2ec !important; font-weight:700; font-size:0.88rem; }
+.crew-nav-link:hover{ color:#d4af37 !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cmd-wrap">
+    <!-- Command Banner -->
+    <div class="cmd-banner">
+        <div class="container">
+            <div class="cmd-banner-inner">
+                <div class="cmd-avatar-ring">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <h2 class="cmd-welcome">Welcome back, {{ request.user.username }}</h2>
+                    <span class="cmd-rank-tag">Rank: {{ profile.get_role_display }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row g-4">
+            <!-- Quick Actions -->
+            <div class="col-lg-4">
+                <div class="cmd-panel">
+                    <h5 class="cmd-panel-title"><i class="bi bi-lightning-charge-fill"></i> Crew Navigation</h5>
+                    <div class="cmd-action-list">
+                        <a href="{% url 'green_eagles:edit_profile' %}" class="cmd-action-tile">
+                            <span class="cmd-action-icon"><i class="bi bi-person-gear"></i></span>
+                            <span>Edit Scout Profile</span>
+                            <i class="bi bi-chevron-right cmd-action-arrow"></i>
+                        </a>
+                        {% if request.user.is_superuser or profile.role == 'EXEC' or profile.role == 'COORDINATOR' %}
+                            <a href="{% url 'green_eagles:admin_manage_members' %}" class="cmd-action-tile cmd-action-highlight">
+                                <span class="cmd-action-icon"><i class="bi bi-people-fill"></i></span>
+                                <span>Manage Crew Members</span>
+                                <i class="bi bi-chevron-right cmd-action-arrow"></i>
+                            </a>
+                            <a href="{% url 'green_eagles:post_announcement' %}" class="cmd-action-tile">
+                                <span class="cmd-action-icon"><i class="bi bi-megaphone-fill"></i></span>
+                                <span>Post Crew Bulletin</span>
+                                <i class="bi bi-chevron-right cmd-action-arrow"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulletins Feed -->
+            <div class="col-lg-8">
+                <div class="cmd-panel">
+                    <h5 class="cmd-panel-title"><i class="bi bi-flag-fill"></i> Crew Operational Bulletins</h5>
+
+                    {% if announcements %}
+                        <div class="cmd-feed">
+                            {% for item in announcements %}
+                                <div class="cmd-feed-item">
+                                    <div class="cmd-feed-dot"></div>
+                                    <div class="cmd-feed-body">
+                                        <div class="cmd-feed-head">
+                                            <h6>{{ item.title }}</h6>
+                                            <span class="cmd-feed-date">{{ item.created_at|date:"M d, Y" }}</span>
+                                        </div>
+                                        <p>{{ item.content }}</p>
+                                        <span class="cmd-feed-cat">{{ item.get_category_display }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="cmd-empty">
+                            <i class="bi bi-inbox"></i>
+                            <p>No active operational bulletins posted for the crew yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cmd-wrap{
+    background:#f4f8f5;
+    min-height:calc(100vh - 200px);
+    padding-bottom:3rem;
+}
+
+/* Banner */
+.cmd-banner{
+    background:#0c3a1f;
+    background-image:
+        linear-gradient(150deg, #14532d 0%, #0c3a1f 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px);
+    padding:2.6rem 0;
+    margin-bottom:2rem;
+    border-bottom:4px solid #d4af37;
+}
+.cmd-banner-inner{
+    display:flex;
+    align-items:center;
+    gap:1.2rem;
+}
+.cmd-avatar-ring{
+    width:64px; height:64px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:rgba(212,175,55,0.12);
+    border:2px solid #d4af37;
+    color:#d4af37;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.7rem;
+    animation:cmdPulse 2.5s ease-in-out infinite;
+}
+@keyframes cmdPulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(212,175,55,0.35); }
+    50%{ box-shadow:0 0 0 12px rgba(212,175,55,0); }
+}
+.cmd-welcome{
+    color:#fff;
+    font-weight:800;
+    font-size:1.5rem;
+    margin-bottom:0.4rem;
+}
+.cmd-rank-tag{
+    background:#d4af37;
+    color:#0c3a1f;
+    font-weight:800;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    padding:0.3rem 0.8rem;
+    border-radius:50px;
+}
+
+/* Panels */
+.cmd-panel{
+    background:#fff;
+    border-radius:16px;
+    padding:1.8rem;
+    box-shadow:0 8px 24px rgba(20,83,45,0.08);
+    height:100%;
+}
+.cmd-panel-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:800;
+    color:#14532d;
+    font-size:1rem;
+    margin-bottom:1.4rem;
+    padding-bottom:1rem;
+    border-bottom:1px solid #edf2ee;
+}
+.cmd-panel-title i{ color:#d4af37; }
+
+/* Action tiles */
+.cmd-action-list{ display:flex; flex-direction:column; gap:0.7rem; }
+.cmd-action-tile{
+    display:flex;
+    align-items:center;
+    gap:0.9rem;
+    background:#f4f8f5;
+    border-radius:10px;
+    padding:0.9rem 1rem;
+    text-decoration:none;
+    color:#14532d;
+    font-weight:700;
+    font-size:0.9rem;
+    transition:background .2s ease, transform .2s ease;
+}
+.cmd-action-tile:hover{
+    background:#e8f2ea;
+    color:#14532d;
+    transform:translateX(4px);
+}
+.cmd-action-highlight{
+    background:#14532d;
+    color:#fff;
+}
+.cmd-action-highlight:hover{
+    background:#0c3a1f;
+    color:#fff;
+}
+.cmd-action-icon{
+    width:36px; height:36px;
+    flex-shrink:0;
+    border-radius:9px;
+    background:rgba(20,83,45,0.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1rem;
+}
+.cmd-action-highlight .cmd-action-icon{
+    background:rgba(255,255,255,0.15);
+}
+.cmd-action-tile span:not(.cmd-action-icon){ flex:1; }
+.cmd-action-arrow{ opacity:0.5; font-size:0.85rem; }
+
+/* Feed */
+.cmd-feed{ display:flex; flex-direction:column; }
+.cmd-feed-item{
+    display:flex;
+    gap:1rem;
+    padding:1.1rem 0;
+    border-bottom:1px solid #edf2ee;
+}
+.cmd-feed-item:last-child{ border-bottom:none; padding-bottom:0; }
+.cmd-feed-dot{
+    width:10px; height:10px;
+    border-radius:50%;
+    background:#d4af37;
+    margin-top:0.4rem;
+    flex-shrink:0;
+}
+.cmd-feed-body{ flex:1; }
+.cmd-feed-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:0.8rem;
+    margin-bottom:0.4rem;
+    flex-wrap:wrap;
+}
+.cmd-feed-head h6{
+    font-weight:800;
+    color:#14532d;
+    font-size:0.98rem;
+    margin-bottom:0;
+}
+.cmd-feed-date{
+    font-size:0.78rem;
+    color:#9aa89f;
+    white-space:nowrap;
+}
+.cmd-feed-body p{
+    color:#5c6b63;
+    font-size:0.9rem;
+    margin-bottom:0.6rem;
+}
+.cmd-feed-cat{
+    display:inline-block;
+    background:#f4f8f5;
+    color:#5c6b63;
+    font-size:0.72rem;
+    font-weight:700;
+    padding:0.25rem 0.7rem;
+    border-radius:50px;
+}
+
+/* Empty state */
+.cmd-empty{
+    text-align:center;
+    padding:2.5rem 1rem;
+    color:#9aa89f;
+}
+.cmd-empty i{ font-size:2rem; margin-bottom:0.8rem; display:block; }
+.cmd-empty p{ margin-bottom:0; }
+</style>
+{% endblock %}

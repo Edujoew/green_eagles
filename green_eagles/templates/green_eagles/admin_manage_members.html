@@ -1,0 +1,315 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block content %}
+<div class="dash-wrap">
+    <!-- Admin Banner -->
+    <div class="dash-banner">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <h3 class="dash-name"><i class="bi bi-people-fill me-2"></i> Manage Members</h3>
+                    <span class="dash-tag">PLASTOUT Central Admin</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{% url 'green_eagles:admin_add_member' %}" class="dash-btn-action dash-btn-add">
+                        <i class="bi bi-person-plus-fill"></i> Add New Member
+                    </a>
+                    <a href="{% url 'green_eagles:dashboard' %}" class="dash-btn-action">
+                        <i class="bi bi-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="member-count">
+            <i class="bi bi-person-lines-fill"></i>
+            <span>{{ members|length }} registered member{{ members|length|pluralize }}</span>
+        </div>
+
+        <div class="member-grid">
+            {% for member in members %}
+            <div class="member-card">
+                <div class="member-avatar">
+                    {{ member.username|slice:":1" }}
+                </div>
+                <div class="member-main">
+                    <div class="member-name-row">
+                        <strong>{{ member.get_full_name|default:member.username }}</strong>
+                        {% if member.is_superuser %}
+                            <span class="badge-super">Superadmin</span>
+                        {% endif %}
+                    </div>
+                    <div class="member-email">
+                        <i class="bi bi-envelope"></i> {{ member.email|default:"—" }}
+                    </div>
+
+                    <div class="member-meta mb-3">
+                        <div class="meta-chip">
+                            <span class="meta-label">Wing</span>
+                            <span class="meta-value">
+                                {% if member.profile %}
+                                    {{ member.profile.get_wing_display }}
+                                {% else %}
+                                    <span class="unassigned">Unassigned</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="meta-chip">
+                            <span class="meta-label">Role</span>
+                            <span class="meta-value">
+                                {% if member.profile %}
+                                    {{ member.profile.get_role_display }}
+                                {% else %}
+                                    <span class="unassigned">Standard Member</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="meta-chip">
+                            <span class="meta-label">Patrol</span>
+                            <span class="meta-value">{{ member.profile.patrol_name|default:"—" }}</span>
+                        </div>
+                        <div class="meta-chip">
+                            <span class="meta-label">Joined</span>
+                            <span class="meta-value">{{ member.date_joined|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Member Action Buttons -->
+                    <div class="member-actions">
+                        <a href="{% url 'green_eagles:admin_edit_member' member.pk %}" class="btn-action-edit">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <a href="{% url 'green_eagles:admin_delete_member' member.pk %}" class="btn-action-delete">
+                            <i class="bi bi-trash"></i> Remove
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="member-empty">
+                <i class="bi bi-inboxes"></i>
+                <p>No registered members found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.dash-wrap {
+    background: #f4f8f5;
+    min-height: calc(100vh - 200px);
+    padding-bottom: 3rem;
+}
+.dash-banner {
+    background: #14532d;
+    background-image:
+        linear-gradient(160deg, #14532d 0%, #0c3a1f 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px);
+    padding: 2.4rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 4px solid #d4af37;
+}
+.dash-name {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+    font-size: 1.4rem;
+}
+.dash-tag {
+    background: #d4af37;
+    color: #14532d;
+    font-weight: 800;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+}
+.dash-btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all .2s ease;
+}
+.dash-btn-action:hover {
+    background: #d4af37;
+    border-color: #d4af37;
+    color: #14532d;
+}
+.dash-btn-add {
+    background: #d4af37;
+    color: #14532d;
+    border-color: #d4af37;
+}
+.dash-btn-add:hover {
+    background: #b59228;
+    color: #fff;
+}
+
+/* Member grid */
+.member-count{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    color:#14532d;
+    font-size:0.9rem;
+    margin-bottom:1.2rem;
+}
+.member-count i{ color:#d4af37; }
+
+.member-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:1.1rem;
+}
+
+.member-card{
+    background:#fff;
+    border-radius:14px;
+    padding:1.4rem;
+    box-shadow:0 8px 22px rgba(20,83,45,0.07);
+    display:flex;
+    gap:1rem;
+    align-items:flex-start;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+.member-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 30px rgba(20,83,45,0.13);
+}
+
+.member-avatar{
+    width:48px; height:48px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:linear-gradient(160deg,#14532d,#0c3a1f);
+    color:#d4af37;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:1.1rem;
+    text-transform:uppercase;
+}
+
+.member-main{ flex:1; min-width:0; }
+
+.member-name-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:0.2rem;
+}
+.member-name-row strong{
+    color:#14532d;
+    font-size:1rem;
+}
+.badge-super{
+    background:#c0392b;
+    color:#fff;
+    font-size:0.65rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    padding:0.2rem 0.55rem;
+    border-radius:50px;
+}
+
+.member-email{
+    color:#6b7a70;
+    font-size:0.82rem;
+    margin-bottom:0.9rem;
+}
+.member-email i{ margin-right:4px; }
+
+.member-meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.6rem;
+}
+.meta-chip{
+    background:#f4f8f5;
+    border-radius:8px;
+    padding:0.5rem 0.7rem;
+}
+.meta-label{
+    display:block;
+    font-size:0.65rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    color:#9aa89f;
+    margin-bottom:2px;
+}
+.meta-value{
+    display:block;
+    font-size:0.85rem;
+    font-weight:700;
+    color:#14532d;
+}
+.unassigned{
+    color:#9aa89f;
+    font-weight:600;
+    font-style:italic;
+}
+
+/* Card Action Links */
+.member-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.btn-action-edit,
+.btn-action-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all .2s ease;
+}
+.btn-action-edit {
+    background: #e8f2ea;
+    color: #14532d;
+}
+.btn-action-edit:hover {
+    background: #14532d;
+    color: #fff;
+}
+.btn-action-delete {
+    background: #fdf2f2;
+    color: #c0392b;
+}
+.btn-action-delete:hover {
+    background: #c0392b;
+    color: #fff;
+}
+
+.member-empty{
+    grid-column:1 / -1;
+    text-align:center;
+    padding:3rem 1rem;
+    color:#9aa89f;
+}
+.member-empty i{
+    font-size:2rem;
+    margin-bottom:0.8rem;
+    display:block;
+}
+</style>
+{% endblock %}

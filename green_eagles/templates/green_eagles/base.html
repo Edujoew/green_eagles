@@ -170,12 +170,27 @@
 </head>
 <body>
 
-    <!-- Main navbar -->
+    <!-- Main navbar wrapped in a block so specific pages/wings can completely redefine it -->
+    {% block navbar %}
     <nav class="navbar navbar-expand-lg main-nav sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'green_eagles:home' %}">
-                <img src="{% static 'green_eagles/images/logo.jpeg' %}" alt="PLASTOUT Logo" class="d-inline-block">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:home' %}">
+                <!-- Dynamically change logo based on the active wing/page if needed -->
+                {% if request.resolver_match.url_name == 'green_eagles_crew' or 'crew_' in request.resolver_match.url_name %}
+                    <img src="{% static 'green_eagles/images/crew_logo.jpeg' %}" alt="Green Eagles Crew Logo" class="d-inline-block">
+                {% elif request.resolver_match.url_name == 'messengers_of_peace' or 'mop_' in request.resolver_match.url_name %}
+                    <img src="{% static 'green_eagles/images/mop_logo.jpeg' %}" alt="Messengers of Peace Logo" class="d-inline-block">
+                {% else %}
+                    <img src="{% static 'green_eagles/images/logo.jpeg' %}" alt="PLASTOUT Logo" class="d-inline-block">
+                {% endif %}
+
+                {% if user.is_authenticated and user.is_superuser %}
+                    <span class="badge bg-warning text-dark fs-7 d-none d-sm-inline">Central Superadmin</span>
+                {% elif user.is_authenticated and user.profile %}
+                    <span class="badge bg-success-subtle text-success fs-7 d-none d-sm-inline">{{ user.profile.get_wing_display }}</span>
+                {% endif %}
             </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -196,13 +211,13 @@
 
                     <!-- Wings / Branches dropdown -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="wingsDropdown"
+                        <a class="nav-link dropdown-toggle {% if 'green_eagles_crew' in request.resolver_match.url_name or 'crew_' in request.resolver_match.url_name or 'messengers_of_peace' in request.resolver_match.url_name or 'mop_' in request.resolver_match.url_name %}active{% endif %}" href="#" id="wingsDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Wings
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="wingsDropdown">
                             <li>
-                                <a class="dropdown-item" href="{% url 'green_eagles:green_eagles_crew' %}">
+                                <a class="dropdown-item {% if request.resolver_match.url_name == 'green_eagles_crew' or 'crew_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'green_eagles:green_eagles_crew' %}">
                                     <span class="wing-icon"><i class="bi bi-shield-check"></i></span>
                                     <span>
                                         <span class="wing-name d-block">Green Eagles Crew</span>
@@ -211,7 +226,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'green_eagles:messengers_of_peace' %}">
+                                <a class="dropdown-item {% if request.resolver_match.url_name == 'messengers_of_peace' or 'mop_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'green_eagles:messengers_of_peace' %}">
                                     <span class="wing-icon"><i class="bi bi-flag"></i></span>
                                     <span>
                                         <span class="wing-name d-block">Messengers of Peace</span>
@@ -248,6 +263,29 @@
                                         </span>
                                     </a>
                                 </li>
+
+                                {% if user.is_superuser %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'green_eagles:admin_manage_members' %}">
+                                            <span class="wing-icon text-warning" style="background: #fef9c3;"><i class="bi bi-shield-shaded"></i></span>
+                                            <span>
+                                                <span class="wing-name d-block text-warning">Superadmin Controls</span>
+                                                <span class="wing-desc">Manage all wings & members</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                {% elif user.profile.role == 'COORDINATOR' or user.profile.role == 'EXEC' %}
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <span class="wing-icon text-info" style="background: #e0f2fe;"><i class="bi bi-sliders"></i></span>
+                                            <span>
+                                                <span class="wing-name d-block">{{ user.profile.get_wing_display }} Admin</span>
+                                                <span class="wing-desc">Manage wing members</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
                                 <li>
                                     <a class="dropdown-item" href="#">
                                         <span class="wing-icon"><i class="bi bi-journal-plus"></i></span>
@@ -283,6 +321,7 @@
                             <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'green_eagles:login' %}">Login</a>
                         </li>
                         <li class="nav-item">
+                            <!-- Fixed namespace typo from green_eagers to green_eagles -->
                             <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'green_eagles:register' %}">Register</a>
                         </li>
                     {% endif %}
@@ -296,6 +335,7 @@
             </div>
         </div>
     </nav>
+    {% endblock %}
 
     <!-- Django messages -->
     <div class="container mt-3">

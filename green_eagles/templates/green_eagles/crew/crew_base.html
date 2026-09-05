@@ -1,0 +1,127 @@
+{% extends 'green_eagles/base.html' %}
+{% load static %}
+
+{% block navbar %}
+<!-- UNIQUE NAVBAR FOR GREEN EAGLES CREW -->
+<nav class="navbar navbar-expand-lg sticky-top crew-navbar">
+    <div class="container">
+        <!-- Crew Brand -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:green_eagles_crew' %}">
+            <img src="{% static 'green_eagles/images/crew_logo.jpeg' %}" alt="Crew Logo" class="crew-logo-img">
+            <span class="crew-brand-text">CREW PORTAL</span>
+        </a>
+
+        <button class="navbar-toggler crew-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#crewPortalNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="crewPortalNav">
+            <ul class="navbar-nav align-items-lg-center gap-1 mb-2 mb-lg-0 me-3">
+                <li class="nav-item">
+                    <a class="nav-link crew-nav-link" href="{% url 'green_eagles:home' %}"><i class="bi bi-house-door me-1"></i> Main Plastout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link crew-nav-link crew-nav-active" href="{% url 'green_eagles:green_eagles_crew' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_activities' %}">Activities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_gallery' %}">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link crew-nav-link" href="{% url 'green_eagles:crew_faq' %}">FAQ</a>
+                </li>
+            </ul>
+            <a href="{% url 'green_eagles:crew_dashboard' %}" class="crew-dashboard-btn">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+</nav>
+
+<style>
+.crew-navbar{
+    background-color:#0c3a1f;
+    background-image:
+        linear-gradient(150deg, #14532d 0%, #0c3a1f 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 30px);
+    border-bottom:3px solid #d4af37;
+    padding:0.7rem 0;
+    box-shadow:0 6px 20px rgba(0,0,0,0.18);
+}
+
+.crew-logo-img{
+    height:42px;
+    border-radius:8px;
+    box-shadow:0 0 0 2px rgba(212,175,55,0.4);
+}
+
+.crew-brand-text{
+    color:#d4af37;
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:1.1rem;
+    letter-spacing:0.5px;
+}
+
+.crew-toggler{
+    background:rgba(255,255,255,0.9);
+    border:none;
+}
+
+.crew-nav-link{
+    color:#eaf2ec !important;
+    font-weight:700;
+    font-size:0.88rem;
+    padding:0.55rem 0.9rem !important;
+    position:relative;
+    transition:color .2s ease;
+}
+.crew-nav-link::after{
+    content:"";
+    position:absolute;
+    left:0.9rem;
+    right:0.9rem;
+    bottom:0.3rem;
+    height:2px;
+    background:#d4af37;
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .25s ease;
+}
+.crew-nav-link:hover{
+    color:#ffffff !important;
+}
+.crew-nav-link:hover::after{
+    transform:scaleX(1);
+}
+.crew-nav-active{
+    color:#d4af37 !important;
+}
+.crew-nav-active::after{
+    transform:scaleX(1);
+}
+
+.crew-dashboard-btn{
+    display:inline-flex;
+    align-items:center;
+    background:#d4af37;
+    color:#0c3a1f;
+    font-weight:800;
+    font-size:0.85rem;
+    padding:0.5rem 1.2rem;
+    border-radius:50px;
+    text-decoration:none;
+    transition:background .2s ease, transform .2s ease;
+}
+.crew-dashboard-btn:hover{
+    background:#c19a2e;
+    color:#0c3a1f;
+    transform:translateY(-2px);
+}
+</style>
+{% endblock %}

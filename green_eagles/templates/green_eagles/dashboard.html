@@ -1,55 +1,390 @@
 {% extends 'green_eagles/base.html' %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <!-- Sidebar Profile Summary -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow border-0 text-center p-4">
-                <div class="mb-3">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center text-white text-uppercase" 
-                         style="width: 90px; height: 90px; background-color: #14532d; font-size: 2.2rem;">
+<div class="dash-wrap">
+    <!-- Profile Banner -->
+    <div class="dash-banner">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dash-avatar">
                         {{ user.username|slice:":1" }}
                     </div>
-                </div>
-                <h4 class="fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h4>
-                <p class="badge bg-success mb-2">{{ profile.get_wing_display }}</p>
-                <p class="text-muted small mb-3">Role: {{ profile.get_role_display }}</p>
-                
-                {% if profile.patrol_name %}
-                    <p class="small mb-1"><strong>Patrol:</strong> {{ profile.patrol_name }}</p>
-                {% endif %}
-                <p class="small"><strong>Email:</strong> {{ user.email }}</p>
-                
-                <a href="{% url 'green_eagles:logout' %}" class="btn btn-outline-danger btn-sm mt-2">Logout</a>
-            </div>
-        </div>
-
-        <!-- Dashboard Content -->
-        <div class="col-md-8">
-            <div class="card shadow border-0 p-4">
-                <h3 class="fw-bold" style="color: #14532d;">Welcome to your Dashboard</h3>
-                <hr>
-                <div class="alert alert-success border-0" style="background-color: #f0fdf4; color: #14532d;">
-                    <strong>Active Wing:</strong> You are currently operating under {{ profile.get_wing_display }}.
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-6 mb-3">
-                        <div class="card border-0 bg-light p-3">
-                            <h5 class="fw-bold" style="color: #14532d;">Upcoming Cleanups</h5>
-                            <p class="text-muted small">Check scheduled community drives and record participation.</p>
+                    <div>
+                        <h3 class="dash-name">{{ user.get_full_name|default:user.username }}</h3>
+                        <div class="dash-tags">
+                            {% if user.is_superuser %}
+                                <span class="dash-tag">Superadmin</span>
+                            {% else %}
+                                <span class="dash-tag">{{ profile.get_wing_display }}</span>
+                            {% endif %}
+                            <span class="dash-tag dash-tag-outline">{{ profile.get_role_display|default:"Administrator" }}</span>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="card border-0 bg-light p-3">
-                            <h5 class="fw-bold" style="color: #14532d;">Wing Notices</h5>
-                            <p class="text-muted small">Access announcements for {{ profile.get_wing_display }}.</p>
-                        </div>
-                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{% url 'green_eagles:edit_profile' %}" class="dash-btn-action">
+                        <i class="bi bi-pencil-square"></i> Edit Profile
+                    </a>
+                    <a href="{% url 'green_eagles:logout' %}" class="dash-logout">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <!-- Info Strip -->
+        <div class="dash-info-strip">
+            <div class="dash-info-item">
+                <i class="bi bi-envelope"></i>
+                <div>
+                    <span class="label">Email</span>
+                    <span class="value">{{ user.email }}</span>
+                </div>
+            </div>
+            {% if profile.patrol_name %}
+            <div class="dash-info-item">
+                <i class="bi bi-people"></i>
+                <div>
+                    <span class="label">Patrol</span>
+                    <span class="value">{{ profile.patrol_name }}</span>
+                </div>
+            </div>
+            {% endif %}
+            <div class="dash-info-item">
+                <i class="bi bi-shield-check"></i>
+                <div>
+                    <span class="label">Active Wing</span>
+                    <span class="value">
+                        {% if user.is_superuser %}
+                            All Wings (PLASTOUT Central)
+                        {% else %}
+                            {{ profile.get_wing_display }}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Superuser Specific Control Panel -->
+        {% if user.is_superuser %}
+        <h5 class="dash-section-title">PLASTOUT Central Admin</h5>
+        <div class="dash-grid mb-4">
+            <div class="dash-tile">
+                <div class="dash-tile-icon"><i class="bi bi-shield-lock"></i></div>
+                <h5>Django Admin Panel</h5>
+                <p>Access full backend management, user roles, database models, and permissions.</p>
+                <a href="/admin/" class="btn btn-sm btn-outline-success mt-2 font-weight-bold" target="_blank">Open Admin</a>
+            </div>
+            <div class="dash-tile">
+                <div class="dash-tile-icon"><i class="bi bi-people-fill"></i></div>
+                <h5>Manage Members</h5>
+                <p>Review Green Eagles Crew and Messengers of Peace registrations and assign roles.</p>
+                <a href="{% url 'green_eagles:admin_manage_members' %}" class="btn btn-sm btn-outline-success mt-2 font-weight-bold">View Members</a>
+            </div>
+            <div class="dash-tile">
+                <div class="dash-tile-icon"><i class="bi bi-journal-plus"></i></div>
+                <h5>Publish Notices & Events</h5>
+                <p>Create global announcements and schedule cleanups across all active wings.</p>
+                <a href="{% url 'green_eagles:post_announcement' %}" class="btn btn-sm btn-outline-success mt-2 font-weight-bold">Post Announcement</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Dashboard Grid -->
+        <h5 class="dash-section-title">
+            {% if user.is_superuser %}Member View Dashboard{% else %}Your Dashboard{% endif %}
+        </h5>
+        <div class="dash-grid mb-4">
+            <!-- First Tile: Upcoming Cleanups carrying the Announcements feed -->
+            <div class="dash-tile">
+                <div class="dash-tile-icon"><i class="bi bi-calendar-event"></i></div>
+                <h5>Upcoming Cleanups</h5>
+                <p class="mb-3">Check scheduled community drives and record your participation.</p>
+
+                <!-- Embedded Announcements Feed -->
+                <div class="dash-notice-wrap">
+                    {% for notice in announcements %}
+                        <div class="dash-notice-card {% if notice.is_pinned %}pinned{% endif %} mb-3">
+                            <div class="dash-notice-header">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="dash-notice-badge badge-{{ notice.category|lower }}">
+                                        {{ notice.get_category_display }}
+                                    </span>
+                                    {% if notice.is_pinned %}
+                                        <span class="dash-notice-badge badge-pinned"><i class="bi bi-pin-angle-fill"></i> Pinned</span>
+                                    {% endif %}
+                                </div>
+                                <span class="dash-notice-time">{{ notice.created_at|date:"M d, Y • H:i" }}</span>
+                            </div>
+
+                            <h6 class="dash-notice-title">{{ notice.title }}</h6>
+                            <p class="dash-notice-body">{{ notice.content }}</p>
+
+                            <div class="dash-notice-footer">
+                                <small class="text-muted">Posted by <strong>{{ notice.author.get_full_name|default:notice.author.username }}</strong></small>
+                                {% if user.is_superuser %}
+                                    <a href="{% url 'green_eagles:delete_announcement' notice.pk %}" class="dash-notice-delete" onclick="return confirm('Delete this announcement?');">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-center py-3 bg-light rounded-3">
+                            <i class="bi bi-inbox fs-4 text-muted d-block mb-1"></i>
+                            <p class="mb-0 text-muted small">No announcements posted yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Second Tile: Wing Pages Card Header (body left empty for upcoming pages) -->
+            <div class="dash-tile">
+                <div class="dash-tile-icon"><i class="bi bi-compass"></i></div>
+                <h5>Wing Pages</h5>
+                <p>Explore specialized wing initiatives, updates, and materials.</p>
+                <!-- Left empty inside for future wing page content/links -->
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+.dash-wrap{
+    background:#f4f8f5;
+    min-height:calc(100vh - 200px);
+    padding-bottom:3rem;
+}
+
+/* Banner */
+.dash-banner{
+    background:#14532d;
+    background-image:
+        linear-gradient(160deg, #14532d 0%, #0c3a1f 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px);
+    padding:2.4rem 0;
+    margin-bottom:2rem;
+    border-bottom:4px solid #d4af37;
+}
+.dash-avatar{
+    width:70px; height:70px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    border:2px solid #d4af37;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.7rem;
+    font-weight:800;
+    text-transform:uppercase;
+    flex-shrink:0;
+}
+.dash-name{
+    color:#fff;
+    font-weight:800;
+    margin-bottom:0.4rem;
+    font-size:1.4rem;
+}
+.dash-tags{
+    display:flex;
+    gap:0.5rem;
+    flex-wrap:wrap;
+}
+.dash-tag{
+    background:#d4af37;
+    color:#14532d;
+    font-weight:800;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    padding:0.3rem 0.8rem;
+    border-radius:50px;
+}
+.dash-tag-outline{
+    background:transparent;
+    border:1.5px solid rgba(255,255,255,0.4);
+    color:#e7f0e9;
+}
+.dash-btn-action,
+.dash-logout{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(255,255,255,0.08);
+    border:1.5px solid rgba(255,255,255,0.3);
+    color:#fff;
+    font-weight:700;
+    font-size:0.85rem;
+    padding:0.55rem 1.1rem;
+    border-radius:50px;
+    text-decoration:none;
+    transition:all .2s ease;
+}
+.dash-btn-action:hover{
+    background:#d4af37;
+    border-color:#d4af37;
+    color:#14532d;
+}
+.dash-logout:hover{
+    background:#c0392b;
+    border-color:#c0392b;
+    color:#fff;
+}
+
+/* Info strip */
+.dash-info-strip{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(20,83,45,0.08);
+    padding:1.2rem 1.6rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.6rem;
+    margin-bottom:2.2rem;
+}
+.dash-info-item{
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    flex:1 1 200px;
+}
+.dash-info-item i{
+    width:38px; height:38px;
+    border-radius:9px;
+    background:#e8f2ea;
+    color:#14532d;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.05rem;
+    flex-shrink:0;
+}
+.dash-info-item .label{
+    display:block;
+    font-size:0.72rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    color:#9aa89f;
+}
+.dash-info-item .value{
+    display:block;
+    font-weight:700;
+    color:#14532d;
+    font-size:0.92rem;
+}
+
+/* Section title + grid */
+.dash-section-title{
+    font-weight:800;
+    color:#14532d;
+    margin-bottom:1rem;
+}
+.dash-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    gap:1.5rem;
+}
+.dash-tile{
+    background:#fff;
+    border-radius:14px;
+    padding:1.6rem;
+    height: 100%;
+    box-shadow:0 8px 22px rgba(20,83,45,0.07);
+}
+.dash-tile-icon{
+    width:50px; height:50px;
+    border-radius:12px;
+    background:linear-gradient(160deg,#14532d,#0c3a1f);
+    color:#d4af37;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.3rem;
+    margin-bottom:1rem;
+}
+.dash-tile h5{
+    font-weight:800;
+    color:#14532d;
+    margin-bottom:0.5rem;
+}
+.dash-tile p{
+    color:#5c6b63;
+    font-size:0.9rem;
+    margin-bottom:0;
+}
+
+/* Announcements feed styles embedded inside card */
+.dash-notice-wrap{
+    display:flex;
+    flex-direction:column;
+    gap:0.75rem;
+    margin-top:1rem;
+}
+.dash-notice-card{
+    background:#fcfdfc;
+    border: 1px solid #e2ece4;
+    border-radius:10px;
+    padding:1rem;
+    box-shadow:0 4px 12px rgba(20,83,45,0.04);
+    border-left:4px solid #14532d;
+}
+.dash-notice-card.pinned{
+    border-left-color:#d4af37;
+    background:#fffdf6;
+}
+.dash-notice-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:0.4rem;
+}
+.dash-notice-badge{
+    font-size:0.65rem;
+    font-weight:800;
+    text-transform:uppercase;
+    padding:0.2rem 0.5rem;
+    border-radius:50px;
+}
+.badge-general{ background:#e8f2ea; color:#14532d; }
+.badge-urgent{ background:#fde8e8; color:#c0392b; }
+.badge-meeting{ background:#e3f2fd; color:#0d6efd; }
+.badge-event{ background:#fff3cd; color:#856404; }
+.badge-pinned{ background:#d4af37; color:#14532d; }
+.dash-notice-time{
+    font-size:0.7rem;
+    color:#9aa89f;
+    font-weight:600;
+}
+.dash-notice-title{
+    font-weight:800;
+    color:#14532d;
+    font-size:0.95rem;
+    margin-bottom:0.3rem;
+}
+.dash-notice-body{
+    color:#4a5568;
+    font-size:0.86rem;
+    white-space:pre-line;
+    margin-bottom:0.6rem;
+}
+.dash-notice-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top:1px solid #edf2ee;
+    padding-top:0.5rem;
+}
+.dash-notice-delete{
+    color:#c0392b;
+    font-size:0.75rem;
+    font-weight:700;
+    text-decoration:none;
+}
+.dash-notice-delete:hover{ text-decoration:underline; }
+</style>
 {% endblock %}

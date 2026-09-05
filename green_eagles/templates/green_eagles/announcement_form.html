@@ -1,0 +1,360 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block content %}
+<div class="dash-wrap">
+    <!-- Form Banner -->
+    <div class="dash-banner">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h3 class="dash-name">Publish Announcement</h3>
+                    <p class="text-white-50 mb-0 small">Post a new update, circular, or notice for all crew members</p>
+                </div>
+                <a href="{% url 'green_eagles:dashboard' %}" class="dash-btn-action">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="compose-grid">
+
+            <!-- Form Panel -->
+            <div class="compose-panel">
+                <div class="compose-panel-head">
+                    <i class="bi bi-pencil-square"></i>
+                    <span>Compose</span>
+                </div>
+
+                <form method="post" novalidate id="announcementForm">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Announcement Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Category / Notice Type</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                            <div class="text-danger small mt-1">{{ form.category.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notice Content</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                            <div class="text-danger small mt-1">{{ form.content.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="compose-pin">
+                        {{ form.is_pinned }}
+                        <label class="form-check-label" for="{{ form.is_pinned.id_for_label }}">
+                            <i class="bi bi-pin-angle-fill"></i> Pin to top of feed
+                        </label>
+                    </div>
+
+                    <div class="compose-actions">
+                        <a href="{% url 'green_eagles:dashboard' %}" class="compose-cancel">Cancel</a>
+                        <button type="submit" class="compose-publish">
+                            <i class="bi bi-send-fill"></i> Publish Notice
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Live Preview Panel -->
+            <div class="preview-panel">
+                <div class="preview-panel-head">
+                    <i class="bi bi-eye"></i>
+                    <span>Live Preview</span>
+                </div>
+                <div class="preview-card" id="previewCard">
+                    <div class="preview-pin-badge" id="previewPin" style="display:none;">
+                        <i class="bi bi-pin-angle-fill"></i> Pinned
+                    </div>
+                    <span class="preview-category" id="previewCategory">Category</span>
+                    <h5 class="preview-title" id="previewTitle">Your announcement title will appear here</h5>
+                    <p class="preview-content" id="previewContent">Start typing your notice content and it will show up live in this preview panel.</p>
+                    <div class="preview-meta">
+                        <i class="bi bi-calendar3"></i> Posting today
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+.dash-wrap {
+    background: #f4f8f5;
+    min-height: calc(100vh - 200px);
+    padding-bottom: 3rem;
+}
+
+.dash-banner {
+    background: #14532d;
+    background-image:
+        linear-gradient(160deg, #14532d 0%, #0c3a1f 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px);
+    padding: 2.4rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 4px solid #d4af37;
+}
+
+.dash-name {
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+    font-size: 1.4rem;
+}
+
+.dash-btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all .2s ease;
+}
+
+.dash-btn-action:hover {
+    background: #d4af37;
+    border-color: #d4af37;
+    color: #14532d;
+}
+
+/* Compose grid */
+.compose-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:1.4rem;
+    align-items:start;
+}
+@media (max-width:900px){
+    .compose-grid{ grid-template-columns:1fr; }
+}
+
+.compose-panel, .preview-panel{
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 8px 24px rgba(20,83,45,0.08);
+    padding:1.8rem;
+}
+
+.compose-panel-head, .preview-panel-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:800;
+    color:#14532d;
+    font-size:0.9rem;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    margin-bottom:1.4rem;
+    padding-bottom:1rem;
+    border-bottom:1px solid #edf2ee;
+}
+.preview-panel-head{ color:#d4af37; }
+.preview-panel-head i{ color:#d4af37; }
+.compose-panel-head i{ color:#14532d; }
+
+.form-label{
+    display:block;
+    font-weight:700;
+    color:#14532d;
+    font-size:0.85rem;
+    margin-bottom:6px;
+}
+
+#announcementForm input[type="text"],
+#announcementForm select,
+#announcementForm textarea{
+    width:100%;
+    border:1.5px solid #e0e6e2;
+    border-radius:9px;
+    padding:11px 14px;
+    font-size:0.94rem;
+    transition:border-color .2s ease, box-shadow .2s ease;
+}
+#announcementForm input[type="text"]:focus,
+#announcementForm select:focus,
+#announcementForm textarea:focus{
+    outline:none;
+    border-color:#14532d;
+    box-shadow:0 0 0 4px rgba(20,83,45,0.1);
+}
+#announcementForm textarea{
+    min-height:140px;
+    resize:vertical;
+}
+
+.compose-pin{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#f4f8f5;
+    padding:0.8rem 1rem;
+    border-radius:9px;
+    margin-bottom:1.6rem;
+}
+.compose-pin label{
+    font-weight:700;
+    color:#14532d;
+    font-size:0.88rem;
+    margin-bottom:0;
+    cursor:pointer;
+}
+.compose-pin i{ color:#d4af37; margin-right:4px; }
+
+.compose-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:1.2rem;
+    border-top:1px solid #edf2ee;
+}
+.compose-cancel{
+    padding:0.65rem 1.4rem;
+    border-radius:50px;
+    border:1.5px solid #d8e3da;
+    color:#5c6b63;
+    font-weight:700;
+    font-size:0.88rem;
+    text-decoration:none;
+    transition:background .2s ease;
+}
+.compose-cancel:hover{
+    background:#f4f8f5;
+    color:#14532d;
+}
+.compose-publish{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:#14532d;
+    color:#fff;
+    border:none;
+    padding:0.65rem 1.6rem;
+    border-radius:50px;
+    font-weight:800;
+    font-size:0.88rem;
+    transition:background .2s ease, transform .2s ease;
+}
+.compose-publish:hover{
+    background:#0c3a1f;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+/* Preview card */
+.preview-card{
+    position:relative;
+    background:#f4f8f5;
+    border-left:4px solid #d4af37;
+    border-radius:0 12px 12px 0;
+    padding:1.4rem;
+    min-height:220px;
+    transition:box-shadow .2s ease;
+}
+.preview-pin-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    background:#d4af37;
+    color:#14532d;
+    font-weight:800;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    padding:0.25rem 0.6rem;
+    border-radius:50px;
+    margin-bottom:0.7rem;
+}
+.preview-category{
+    display:inline-block;
+    background:#14532d;
+    color:#fff;
+    font-size:0.68rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    padding:0.2rem 0.6rem;
+    border-radius:50px;
+    margin-bottom:0.7rem;
+}
+.preview-title{
+    font-weight:800;
+    color:#14532d;
+    font-size:1.05rem;
+    margin-bottom:0.6rem;
+}
+.preview-content{
+    color:#5c6b63;
+    font-size:0.88rem;
+    line-height:1.6;
+    margin-bottom:0.9rem;
+    white-space:pre-wrap;
+}
+.preview-meta{
+    font-size:0.76rem;
+    color:#9aa89f;
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const titleField = document.querySelector('#announcementForm input[name="title"]');
+    const categoryField = document.querySelector('#announcementForm select[name="category"], #announcementForm input[name="category"]');
+    const contentField = document.querySelector('#announcementForm textarea[name="content"]');
+    const pinField = document.querySelector('#announcementForm input[name="is_pinned"]');
+
+    const previewTitle = document.getElementById('previewTitle');
+    const previewCategory = document.getElementById('previewCategory');
+    const previewContent = document.getElementById('previewContent');
+    const previewPin = document.getElementById('previewPin');
+
+    function updatePreview() {
+        if (titleField) {
+            previewTitle.textContent = titleField.value.trim() || "Your announcement title will appear here";
+        }
+        if (categoryField) {
+            const catText = categoryField.tagName === "SELECT"
+                ? (categoryField.options[categoryField.selectedIndex] ? categoryField.options[categoryField.selectedIndex].text : "Category")
+                : (categoryField.value || "Category");
+            previewCategory.textContent = catText || "Category";
+        }
+        if (contentField) {
+            previewContent.textContent = contentField.value.trim() || "Start typing your notice content and it will show up live in this preview panel.";
+        }
+        if (pinField) {
+            previewPin.style.display = pinField.checked ? "inline-flex" : "none";
+        }
+    }
+
+    [titleField, categoryField, contentField].forEach(el => {
+        if (el) el.addEventListener('input', updatePreview);
+        if (el) el.addEventListener('change', updatePreview);
+    });
+    if (pinField) pinField.addEventListener('change', updatePreview);
+
+    updatePreview();
+});
+</script>
+{% endblock %}
