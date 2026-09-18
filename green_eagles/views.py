@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from axes.handlers.proxy import AxesProxyHandler
 from .models import Announcement
 from .forms import AnnouncementForm
 
@@ -104,7 +105,14 @@ def register_member(request):
 
         if form.is_valid():
             user = form.save()
-            MemberProfile.objects.create(user=user, wing=wing, phone=phone)
+            profile, _ = MemberProfile.objects.get_or_create(user=user)
+            profile.wing = wing
+            profile.phone = phone
+            profile.save()
+            
+            # Explicitly set the backend attribute for axes/multiple backends compatibility
+            user.backend = 'axes.backends.AxesBackend'
+            
             login(request, user)
             messages.success(request, 'Welcome to PLASTOUT! Your account was created successfully.')
             return redirect('green_eagles:dashboard')
@@ -115,6 +123,11 @@ def register_member(request):
 
 
 def login_member(request):
+    # Check if the user/IP is already locked out before processing the form
+    if AxesProxyHandler.is_locked(request):
+        messages.error(request, 'Account locked: too many login attempts. Please try again later.')
+        return redirect('green_eagles:login')
+
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -122,6 +135,11 @@ def login_member(request):
             login(request, user)
             messages.success(request, f'Welcome back, {user.username}!')
             return redirect('green_eagles:dashboard')
+        else:
+            # Check if this failed attempt just triggered a lockout
+            if AxesProxyHandler.is_locked(request):
+                messages.error(request, 'Account locked: too many login attempts. Please try again later.')
+                return redirect('green_eagles:login')
     else:
         form = AuthenticationForm()
 
@@ -243,7 +261,11 @@ def admin_add_member(request):
         phone = request.POST.get('phone', '')
         if form.is_valid():
             user = form.save()
-            MemberProfile.objects.create(user=user, wing=wing, phone=phone)
+            profile, _ = MemberProfile.objects.get_or_create(user=user)
+            profile.wing = wing
+            profile.phone = phone
+            profile.save()
+            
             messages.success(request, f'Member "{user.username}" added successfully.')
             return redirect('green_eagles:admin_manage_members')
     else:
@@ -376,3 +398,6 @@ def mop_dashboard(request):
         'announcements': announcements,
     }
     return render(request, 'green_eagles/mop/dashboard.html', context)
+
+def locked_out(request):
+    return render(request, 'green_eagles/locked.html')

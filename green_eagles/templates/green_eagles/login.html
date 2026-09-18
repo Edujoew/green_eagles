@@ -1,242 +1,226 @@
 {% extends 'green_eagles/base.html' %}
 
 {% block content %}
-<div class="login-page">
-    <div class="login-visual">
-        <div class="floating-shapes">
-            <span class="shape s1"></span>
-            <span class="shape s2"></span>
-            <span class="shape s3"></span>
-            <span class="shape s4"></span>
-            <span class="shape s5"></span>
-        </div>
-        <div class="visual-content">
-            <div class="visual-icon">
-                <i class="bi bi-recycle"></i>
-            </div>
-            <h2>Welcome Back, Changemaker.</h2>
-            <p>Every login brings you one step closer to the next clean-up, the next badge, the next mission.</p>
-        </div>
+<div class="lg-page">
+    <div class="lg-particles">
+        <span class="p p1"></span><span class="p p2"></span><span class="p p3"></span>
+        <span class="p p4"></span><span class="p p5"></span><span class="p p6"></span>
+        <span class="p p7"></span><span class="p p8"></span>
     </div>
 
-    <div class="login-form-side">
-        <div class="login-box">
-            <div class="login-badge">
-                <i class="bi bi-shield-check"></i>
-            </div>
-            <h3 class="login-title">Member Login</h3>
-            <p class="login-subtitle">Sign in to your PLASTOUT Portal</p>
-
-            <form method="POST" class="login-form">
-                {% csrf_token %}
-                
-                {{ form.as_p }}
-
-                <button type="submit" class="login-btn">
-                    <span>Login</span>
-                    <i class="bi bi-arrow-right"></i>
-                </button>
-            </form>
-
-            <div class="login-footer">
-                <p>Don't have an account? <a href="{% url 'green_eagles:register' %}">Register here</a></p>
-            </div>
+    <div class="lg-card">
+        <div class="lg-crest">
+            <span class="crest-ring"></span>
+            <i class="bi bi-shield-check"></i>
         </div>
+
+        <h2 class="lg-title">Member Login</h2>
+        <p class="lg-sub">Sign in to your PLASTOUT Portal</p>
+
+        {% if messages %}
+            <div class="lg-messages">
+                {% for message in messages %}
+                    <div class="lg-alert">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" class="lg-form">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+
+            <button type="submit" class="lg-btn">
+                <span>Login</span>
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </form>
+
+        <div class="lg-divider"><span>New to PLASTOUT?</span></div>
+
+        <a href="{% url 'green_eagles:register' %}" class="lg-register-link">
+            <i class="bi bi-person-plus"></i> Create an account
+        </a>
     </div>
 </div>
 
 <style>
-.login-page{
-    display:flex;
-    min-height:calc(100vh - 200px);
-    flex-wrap:wrap;
-}
-
-/* LEFT VISUAL PANEL */
-.login-visual{
-    flex:1 1 45%;
+.lg-page{
     position:relative;
-    overflow:hidden;
-    background:#14532d;
-    background-image:
-        linear-gradient(160deg, #14532d 0%, #0c3a1f 100%),
-        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px);
+    min-height:calc(100vh - 200px);
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:3rem;
-    min-height:400px;
-}
-.floating-shapes{
-    position:absolute;
-    inset:0;
+    padding:3rem 1rem;
+    background:#0c3a1f;
+    background-image:
+        linear-gradient(165deg, #14532d 0%, #0a2a17 100%),
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 32px);
     overflow:hidden;
 }
-.shape{
+
+/* Floating particles */
+.lg-particles{ position:absolute; inset:0; }
+.p{
     position:absolute;
     border-radius:50%;
-    background:rgba(212,175,55,0.12);
-    animation:float 12s ease-in-out infinite;
+    background:rgba(212,175,55,0.35);
+    animation:rise 18s linear infinite;
 }
-.s1{ width:120px; height:120px; top:10%; left:10%; animation-delay:0s; }
-.s2{ width:70px; height:70px; top:70%; left:20%; animation-delay:2s; background:rgba(255,255,255,0.06); }
-.s3{ width:160px; height:160px; top:55%; left:65%; animation-delay:4s; }
-.s4{ width:50px; height:50px; top:20%; left:75%; animation-delay:1s; background:rgba(255,255,255,0.08); }
-.s5{ width:90px; height:90px; top:85%; left:80%; animation-delay:3s; }
-
-@keyframes float{
-    0%, 100%{ transform:translateY(0) translateX(0) scale(1); }
-    33%{ transform:translateY(-25px) translateX(15px) scale(1.05); }
-    66%{ transform:translateY(15px) translateX(-15px) scale(0.95); }
+.p1{ width:6px; height:6px; left:8%;  animation-delay:0s;  }
+.p2{ width:10px;height:10px;left:20%; animation-delay:3s; background:rgba(255,255,255,0.18); }
+.p3{ width:5px; height:5px; left:34%; animation-delay:6s; }
+.p4{ width:12px;height:12px;left:48%; animation-delay:1.5s; background:rgba(255,255,255,0.12); }
+.p5{ width:7px; height:7px; left:62%; animation-delay:8s; }
+.p6{ width:9px; height:9px; left:75%; animation-delay:4.5s; background:rgba(255,255,255,0.15); }
+.p7{ width:5px; height:5px; left:86%; animation-delay:10s; }
+.p8{ width:8px; height:8px; left:94%; animation-delay:2s; }
+@keyframes rise{
+    0%{ transform:translateY(110vh) scale(0.7); opacity:0; }
+    10%{ opacity:1; }
+    90%{ opacity:1; }
+    100%{ transform:translateY(-10vh) scale(1.1); opacity:0; }
 }
 
-.visual-content{
+/* Card */
+.lg-card{
     position:relative;
     z-index:1;
+    width:100%;
+    max-width:410px;
+    background:rgba(255,255,255,0.97);
+    border-radius:20px;
+    padding:2.8rem 2.4rem 2.4rem;
     text-align:center;
-    color:#fff;
-    max-width:380px;
+    box-shadow:0 26px 60px rgba(0,0,0,0.35);
+    animation:cardIn .6s cubic-bezier(.2,.8,.3,1) both;
 }
-.visual-icon{
-    width:72px; height:72px;
-    background:rgba(212,175,55,0.15);
-    border:2px solid #d4af37;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.8rem;
-    color:#d4af37;
-    margin:0 auto 1.6rem;
-    animation:pulse 2.5s ease-in-out infinite;
-}
-@keyframes pulse{
-    0%, 100%{ box-shadow:0 0 0 0 rgba(212,175,55,0.4); }
-    50%{ box-shadow:0 0 0 14px rgba(212,175,55,0); }
-}
-.visual-content h2{
-    font-family:'Sora', sans-serif;
-    font-weight:800;
-    font-size:1.7rem;
-    margin-bottom:1rem;
-}
-.visual-content p{
-    color:#dce9df;
-    font-size:0.95rem;
-    line-height:1.6;
+@keyframes cardIn{
+    from{ opacity:0; transform:translateY(28px) scale(0.97); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
 }
 
-/* RIGHT FORM PANEL */
-.login-form-side{
-    flex:1 1 55%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#f4f8f5;
-    padding:3rem 1.5rem;
-}
-.login-box{
-    width:100%;
-    max-width:400px;
-    background:#ffffff;
-    border-radius:18px;
-    padding:2.8rem 2.4rem;
-    box-shadow:0 20px 50px rgba(20,83,45,0.1);
-    animation:riseIn .6s ease both;
-}
-@keyframes riseIn{
-    from{ opacity:0; transform:translateY(24px); }
-    to{ opacity:1; transform:translateY(0); }
-}
-.login-badge{
-    width:56px; height:56px;
+.lg-crest{
+    position:relative;
+    width:72px; height:72px;
+    margin:0 auto 1.3rem;
+    border-radius:50%;
     background:linear-gradient(160deg,#14532d,#0c3a1f);
     color:#d4af37;
-    border-radius:14px;
     display:flex; align-items:center; justify-content:center;
-    font-size:1.4rem;
-    margin-bottom:1.2rem;
+    font-size:1.8rem;
 }
-.login-title{
-    font-family:'Sora', sans-serif;
-    font-weight:800;
-    color:#14532d;
-    margin-bottom:0.2rem;
-    font-size:1.6rem;
+.crest-ring{
+    position:absolute;
+    inset:-6px;
+    border-radius:50%;
+    border:2px solid rgba(212,175,55,0.45);
+    animation:crestPulse 2.6s ease-out infinite;
 }
-.login-subtitle{
-    color:#6b7a70;
-    font-size:0.9rem;
-    margin-bottom:1.8rem;
+@keyframes crestPulse{
+    0%{ transform:scale(0.92); opacity:0.9; }
+    100%{ transform:scale(1.25); opacity:0; }
 }
 
-.login-form p{ margin-bottom:1.1rem; }
-.login-form label{
-    display:block;
-    font-weight:700;
-    font-size:0.82rem;
+.lg-title{
+    font-family:'Sora',sans-serif;
+    font-weight:900;
     color:#14532d;
-    margin-bottom:6px;
-    letter-spacing:0.2px;
+    font-size:1.55rem;
+    margin-bottom:0.25rem;
 }
-.login-form input{
+.lg-sub{ color:#6b7a70; font-size:0.88rem; margin-bottom:1.7rem; }
+
+.lg-messages{ margin-bottom:1.2rem; }
+.lg-alert{
+    display:flex; align-items:flex-start; gap:8px;
+    background:#fdecea;
+    border:1px solid #f5c2c7;
+    color:#842029;
+    font-size:0.83rem;
+    text-align:left;
+    padding:0.7rem 0.9rem;
+    border-radius:9px;
+    margin-bottom:0.6rem;
+}
+.lg-alert i{ margin-top:2px; flex-shrink:0; }
+
+.lg-form{ text-align:left; }
+.lg-form p{ margin-bottom:1.05rem; }
+.lg-form label{
+    display:block; font-weight:700; font-size:0.8rem;
+    color:#14532d; margin-bottom:6px; letter-spacing:0.2px;
+}
+.lg-form input{
     width:100%;
     padding:12px 14px;
     border:1.5px solid #e0e6e2;
-    border-radius:9px;
-    font-size:0.95rem;
+    border-radius:10px;
+    font-size:0.94rem;
     transition:border-color .2s ease, box-shadow .2s ease;
 }
-.login-form input:focus{
+.lg-form input:focus{
     outline:none;
     border-color:#14532d;
     box-shadow:0 0 0 4px rgba(20,83,45,0.1);
 }
 
-.login-btn{
+.lg-btn{
     width:100%;
-    background:#14532d;
-    color:#fff;
-    border:none;
-    border-radius:9px;
-    padding:13px;
-    font-weight:700;
-    font-size:0.95rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    margin-top:0.6rem;
-    cursor:pointer;
+    background:#14532d; color:#fff; border:none;
+    border-radius:10px; padding:13px;
+    font-weight:800; font-size:0.93rem;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-top:0.5rem; cursor:pointer;
     transition:background .2s ease, transform .2s ease;
 }
-.login-btn:hover{
-    background:#0c3a1f;
-    transform:translateY(-2px);
-}
-.login-btn i{
-    transition:transform .2s ease;
-}
-.login-btn:hover i{
-    transform:translateX(4px);
-}
+.lg-btn:hover{ background:#0c3a1f; transform:translateY(-2px); }
+.lg-btn i{ transition:transform .2s ease; }
+.lg-btn:hover i{ transform:translateX(4px); }
 
-.login-footer{
+.lg-divider{
+    position:relative;
+    margin:1.6rem 0 1rem;
     text-align:center;
-    margin-top:1.6rem;
-    font-size:0.88rem;
-    color:#6b7a70;
 }
-.login-footer a{
-    color:#14532d;
-    font-weight:700;
-    text-decoration:none;
+.lg-divider::before{
+    content:""; position:absolute; top:50%; left:0; right:0;
+    height:1px; background:#e4ebe6;
 }
-.login-footer a:hover{
-    color:#d4af37;
+.lg-divider span{
+    position:relative;
+    background:#fff;
+    padding:0 0.8rem;
+    font-size:0.78rem;
+    color:#9aa89f;
+    font-weight:600;
 }
 
-@media (max-width:768px){
-    .login-visual{ min-height:280px; padding:2rem; }
-    .visual-content h2{ font-size:1.4rem; }
+.lg-register-link{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    color:#14532d;
+    font-weight:800;
+    font-size:0.88rem;
+    text-decoration:none;
+    padding:0.55rem 1.3rem;
+    border:1.5px solid #d9e6dd;
+    border-radius:50px;
+    transition:all .2s ease;
+}
+.lg-register-link:hover{
+    background:#14532d;
+    border-color:#14532d;
+    color:#fff;
+}
+
+@media (max-width:576px){
+    .lg-card{ padding:2.2rem 1.6rem 2rem; }
+    .lg-title{ font-size:1.35rem; }
 }
 </style>
 {% endblock %}

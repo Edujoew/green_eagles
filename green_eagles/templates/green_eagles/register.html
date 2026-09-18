@@ -1,182 +1,294 @@
 {% extends 'green_eagles/base.html' %}
 
 {% block content %}
-<div class="join-wrap">
-    <div class="join-orbs">
-        <span class="orb o1"></span>
-        <span class="orb o2"></span>
-        <span class="orb o3"></span>
+<div class="reg-page">
+    <!-- LEFT: Info rail -->
+    <div class="reg-rail">
+        <div class="rail-lines"></div>
+        <div class="rail-content">
+            <div class="rail-logo"><i class="bi bi-recycle"></i></div>
+            <h2>One form.<br>Two wings.</h2>
+            <p class="rail-sub">Join the movement cutting plastic pollution across Kericho County.</p>
+
+            <div class="rail-steps">
+                <div class="rail-step">
+                    <span class="step-num">1</span>
+                    <div><strong>Create your account</strong><span>Basic details and a secure password</span></div>
+                </div>
+                <div class="rail-step">
+                    <span class="step-num">2</span>
+                    <div><strong>Pick your wing</strong><span>Green Eagles, Messengers of Peace, or both</span></div>
+                </div>
+                <div class="rail-step">
+                    <span class="step-num">3</span>
+                    <div><strong>Get deployed</strong><span>Join your first clean-up or patrol</span></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="container" style="max-width: 460px;">
-        <div class="join-card">
-            <div class="join-icon">
-                <i class="bi bi-recycle"></i>
-            </div>
-            <h2 class="join-title">Join PLASTOUT</h2>
+    <!-- RIGHT: Form -->
+    <div class="reg-form-side">
+        <div class="reg-box">
+            <h2 class="reg-title">Create Your Account</h2>
+            <p class="reg-sub">Register as a PLASTOUT member</p>
 
-            <form method="POST" class="join-form">
+            {% if form.errors %}
+                <div class="reg-errors">
+                    <div class="reg-errors-head"><i class="bi bi-exclamation-octagon-fill"></i> Please correct the errors below:</div>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="POST" class="reg-form" id="regForm">
                 {% csrf_token %}
                 
                 {{ form.as_p }}
 
-                <div class="mb-3">
-                    <label for="wing" class="form-label">Wing</label>
-                    <select name="wing" id="wing" class="form-select join-input">
+                <div class="reg-field">
+                    <label for="wing">Wing</label>
+                    <select name="wing" id="wing" class="reg-input">
                         <option value="GE">Green Eagles Crew</option>
                         <option value="MOP">Messengers of Peace</option>
                         <option value="BOTH">Both Wings</option>
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" name="phone" id="phone" class="form-control join-input" placeholder="+254 700 000000">
+                <div class="reg-field">
+                    <label for="phone">Phone</label>
+                    <input type="text" name="phone" id="phone" class="reg-input" placeholder="+254 700 000000">
                 </div>
 
-                <button type="submit" class="join-btn w-100">Register</button>
+                <!-- Live password checklist -->
+                <div class="pw-panel">
+                    <div class="pw-panel-head">
+                        <i class="bi bi-shield-lock"></i> Password Requirements
+                    </div>
+                    <div class="pw-meter"><div class="pw-meter-fill" id="pwFill"></div></div>
+                    <ul class="pw-list">
+                        <li data-rule="length"><i class="bi bi-circle"></i> At least <strong>8 characters</strong></li>
+                        <li data-rule="upper"><i class="bi bi-circle"></i> One <strong>uppercase</strong> letter (A–Z)</li>
+                        <li data-rule="lower"><i class="bi bi-circle"></i> One <strong>lowercase</strong> letter (a–z)</li>
+                        <li data-rule="number"><i class="bi bi-circle"></i> One <strong>number</strong> (0–9)</li>
+                        <li data-rule="special"><i class="bi bi-circle"></i> One <strong>special character</strong> (@, #, $, !)</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="reg-btn">
+                    <span>Create Account</span>
+                    <i class="bi bi-arrow-right"></i>
+                </button>
             </form>
 
-            <p class="join-footer">Already a member? <a href="{% url 'green_eagles:login' %}" class="join-link">Login</a></p>
+            <p class="reg-footer">Already a member? <a href="{% url 'green_eagles:login' %}">Login</a></p>
         </div>
     </div>
 </div>
 
 <style>
-.join-wrap{
+.reg-page{ display:flex; min-height:calc(100vh - 200px); flex-wrap:wrap; }
+
+/* LEFT RAIL */
+.reg-rail{
+    flex:1 1 40%;
     position:relative;
     overflow:hidden;
-    min-height:calc(100vh - 200px);
+    background:#0c3a1f;
+    background-image:linear-gradient(165deg,#14532d 0%,#0a2a17 100%);
+    padding:3.5rem 2.5rem;
+    display:flex;
+    align-items:center;
+    min-height:360px;
+}
+.rail-lines{
+    position:absolute; inset:0;
+    background-image:repeating-linear-gradient(125deg, rgba(212,175,55,0.07) 0px, rgba(212,175,55,0.07) 1px, transparent 1px, transparent 26px);
+    animation:railSlide 22s linear infinite;
+}
+@keyframes railSlide{ from{ background-position:0 0; } to{ background-position:120px 0; } }
+.rail-content{ position:relative; z-index:1; max-width:340px; }
+.rail-logo{
+    width:56px; height:56px;
+    border-radius:16px;
+    background:rgba(212,175,55,0.15);
+    border:1.5px solid rgba(212,175,55,0.5);
+    color:#d4af37;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+    margin-bottom:1.6rem;
+}
+.rail-content h2{
+    color:#fff;
+    font-family:'Sora',sans-serif;
+    font-weight:900;
+    font-size:1.9rem;
+    line-height:1.25;
+    margin-bottom:0.8rem;
+}
+.rail-sub{ color:#b9d2c0; font-size:0.92rem; margin-bottom:2.2rem; }
+
+.rail-steps{ display:flex; flex-direction:column; gap:1.3rem; }
+.rail-step{ display:flex; gap:0.9rem; align-items:flex-start; }
+.step-num{
+    flex-shrink:0;
+    width:30px; height:30px;
+    border-radius:50%;
+    background:#d4af37;
+    color:#0c3a1f;
+    font-weight:900;
+    font-size:0.85rem;
+    display:flex; align-items:center; justify-content:center;
+}
+.rail-step strong{ display:block; color:#fff; font-size:0.9rem; margin-bottom:2px; }
+.rail-step span{ color:#9ab8a3; font-size:0.8rem; }
+
+/* RIGHT FORM */
+.reg-form-side{
+    flex:1 1 60%;
     display:flex;
     align-items:center;
     justify-content:center;
     background:#f4f8f5;
-    padding:3rem 1rem;
+    padding:3rem 1.5rem;
 }
-
-.join-orbs{
-    position:absolute;
-    inset:0;
-    z-index:0;
-}
-.orb{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(40px);
-    opacity:0.5;
-    animation:drift 16s ease-in-out infinite;
-}
-.o1{
-    width:280px; height:280px;
-    background:rgba(20,83,45,0.18);
-    top:-60px; left:-60px;
-    animation-delay:0s;
-}
-.o2{
-    width:220px; height:220px;
-    background:rgba(212,175,55,0.18);
-    bottom:-40px; right:-40px;
-    animation-delay:4s;
-}
-.o3{
-    width:160px; height:160px;
-    background:rgba(20,83,45,0.12);
-    top:40%; right:10%;
-    animation-delay:8s;
-}
-@keyframes drift{
-    0%, 100%{ transform:translate(0,0) scale(1); }
-    50%{ transform:translate(30px,-30px) scale(1.15); }
-}
-
-.join-card{
-    position:relative;
-    z-index:1;
-    background:#ffffff;
+.reg-box{
+    width:100%;
+    max-width:460px;
+    background:#fff;
     border-radius:18px;
-    padding:2.6rem 2.2rem;
-    box-shadow:0 20px 50px rgba(20,83,45,0.12);
-    text-align:center;
-    animation:riseIn .6s ease both;
+    padding:2.6rem 2.4rem;
+    box-shadow:0 20px 50px rgba(20,83,45,0.1);
+    animation:regIn .5s ease both;
 }
-@keyframes riseIn{
-    from{ opacity:0; transform:translateY(20px); }
-    to{ opacity:1; transform:translateY(0); }
-}
+@keyframes regIn{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+.reg-title{ font-family:'Sora',sans-serif; font-weight:900; color:#14532d; font-size:1.5rem; margin-bottom:0.2rem; }
+.reg-sub{ color:#6b7a70; font-size:0.88rem; margin-bottom:1.6rem; }
 
-.join-icon{
-    width:60px; height:60px;
-    margin:0 auto 1rem;
-    border-radius:50%;
-    background:linear-gradient(160deg,#14532d,#0c3a1f);
-    color:#d4af37;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.5rem;
-    animation:pulse 2.4s ease-in-out infinite;
+.reg-errors{
+    background:#fdecea;
+    border:1px solid #f5c2c7;
+    border-radius:10px;
+    padding:0.9rem 1rem;
+    margin-bottom:1.3rem;
+    font-size:0.83rem;
+    color:#842029;
 }
-@keyframes pulse{
-    0%, 100%{ box-shadow:0 0 0 0 rgba(212,175,55,0.35); }
-    50%{ box-shadow:0 0 0 12px rgba(212,175,55,0); }
-}
+.reg-errors-head{ font-weight:800; margin-bottom:0.4rem; display:flex; align-items:center; gap:6px; }
+.reg-errors ul{ margin:0; padding-left:1.3rem; }
+.reg-errors li{ margin-bottom:2px; }
 
-.join-title{
-    font-weight:900;
-    color:#14532d;
-    font-size:1.6rem;
-    margin-bottom:1.6rem;
+.reg-form p{ margin-bottom:1rem; }
+.reg-field{ margin-bottom:1rem; }
+.reg-form label, .reg-field label{
+    display:block; font-weight:700; font-size:0.8rem; color:#14532d; margin-bottom:6px;
 }
-
-.join-form{ text-align:left; }
-.join-form p{ margin-bottom:1rem; }
-.join-form label, .join-form .form-label{
-    display:block;
-    font-weight:700;
-    font-size:0.82rem;
-    color:#14532d;
-    margin-bottom:6px;
-}
-.join-input, .join-form input, .join-form select, .join-form textarea{
+.reg-input, .reg-form input, .reg-form select{
     width:100%;
     border:1.5px solid #e0e6e2;
     border-radius:9px;
     padding:11px 14px;
-    font-size:0.95rem;
+    font-size:0.94rem;
     transition:border-color .2s ease, box-shadow .2s ease;
 }
-.join-input:focus, .join-form input:focus, .join-form select:focus, .join-form textarea:focus{
-    outline:none;
-    border-color:#14532d;
-    box-shadow:0 0 0 4px rgba(20,83,45,0.1);
+.reg-input:focus, .reg-form input:focus, .reg-form select:focus{
+    outline:none; border-color:#14532d; box-shadow:0 0 0 4px rgba(20,83,45,0.1);
 }
 
-.join-btn{
-    background:#14532d;
-    color:#fff;
-    border:none;
-    font-weight:800;
-    border-radius:9px;
-    padding:12px;
-    margin-top:0.4rem;
+/* Password panel */
+.pw-panel{
+    background:#f4f8f5;
+    border:1px solid #d9e6dd;
+    border-radius:11px;
+    padding:0.9rem 1rem;
+    margin-bottom:1.3rem;
+}
+.pw-panel-head{
+    font-weight:800; color:#14532d; font-size:0.8rem;
+    display:flex; align-items:center; gap:6px; margin-bottom:0.7rem;
+}
+.pw-meter{
+    height:5px; background:#e0e6e2; border-radius:50px; overflow:hidden; margin-bottom:0.8rem;
+}
+.pw-meter-fill{
+    height:100%; width:0%; background:#dc3545; border-radius:50px;
+    transition:width .3s ease, background .3s ease;
+}
+.pw-list{ list-style:none; margin:0; padding:0; }
+.pw-list li{
+    display:flex; align-items:center; gap:7px;
+    font-size:0.79rem; color:#6b7a70; margin-bottom:5px;
+    transition:color .2s ease;
+}
+.pw-list li i{ font-size:0.7rem; color:#c3cfc7; transition:color .2s ease; }
+.pw-list li.met{ color:#14532d; }
+.pw-list li.met i{ color:#2e8b57; }
+
+.reg-btn{
+    width:100%;
+    background:#14532d; color:#fff; border:none;
+    border-radius:9px; padding:13px;
+    font-weight:800; font-size:0.93rem;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    cursor:pointer;
     transition:background .2s ease, transform .2s ease;
 }
-.join-btn:hover{
-    background:#0c3a1f;
-    transform:translateY(-2px);
-    color:#fff;
-}
+.reg-btn:hover{ background:#0c3a1f; transform:translateY(-2px); }
+.reg-btn i{ transition:transform .2s ease; }
+.reg-btn:hover i{ transform:translateX(4px); }
 
-.join-footer{
-    margin-top:1.5rem;
-    font-size:0.88rem;
-    color:#6b7a70;
+.reg-footer{ text-align:center; margin-top:1.4rem; font-size:0.87rem; color:#6b7a70; }
+.reg-footer a{ color:#14532d; font-weight:700; text-decoration:none; }
+.reg-footer a:hover{ color:#d4af37; }
+
+@media (max-width:900px){
+    .reg-rail{ flex:1 1 100%; padding:2.5rem 2rem; }
+    .rail-content h2{ font-size:1.6rem; }
 }
-.join-link{
-    color:#14532d;
-    font-weight:700;
-    text-decoration:none;
-}
-.join-link:hover{ color:#d4af37; }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById('regForm');
+    if (!form) return;
+    const pwInputs = form.querySelectorAll('input[type="password"]');
+    if (!pwInputs.length) return;
+    const pw = pwInputs[0];
+
+    const fill = document.getElementById('pwFill');
+    const items = document.querySelectorAll('.pw-list li');
+
+    const rules = {
+        length: v => v.length >= 8,
+        upper:  v => /[A-Z]/.test(v),
+        lower:  v => /[a-z]/.test(v),
+        number: v => /[0-9]/.test(v),
+        special:v => /[^A-Za-z0-9]/.test(v)
+    };
+
+    pw.addEventListener('input', function () {
+        const v = pw.value;
+        let passed = 0;
+        items.forEach(li => {
+            const rule = li.getAttribute('data-rule');
+            const ok = rules[rule] ? rules[rule](v) : false;
+            li.classList.toggle('met', ok);
+            const icon = li.querySelector('i');
+            icon.className = ok ? 'bi bi-check-circle-fill' : 'bi bi-circle';
+            if (ok) passed++;
+        });
+        const pct = (passed / 5) * 100;
+        fill.style.width = pct + '%';
+        fill.style.background = pct < 40 ? '#dc3545' : pct < 80 ? '#e0a82e' : '#2e8b57';
+    });
+});
+</script>
 {% endblock %}

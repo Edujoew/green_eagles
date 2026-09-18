@@ -42,4 +42,5 @@ urlpatterns = [
     path('announcements/<int:pk>/delete/', views.delete_announcement, name='delete_announcement'),
     path('crew/dashboard/', views.crew_dashboard, name='crew_dashboard'),
     path('mop/dashboard/', views.mop_dashboard, name='mop_dashboard'),
+    path('locked/', views.locked_out, name='locked_out'),
 ]
