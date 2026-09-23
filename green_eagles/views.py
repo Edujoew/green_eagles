@@ -7,11 +7,51 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from axes.handlers.proxy import AxesProxyHandler
+from functools import wraps
 from .models import Announcement
 from .forms import AnnouncementForm
 
 from .models import MemberProfile, GalleryItem
 from .forms import ContactForm, GalleryItemForm, UserUpdateForm, MemberProfileUpdateForm
+
+
+# --- WING ACCESS CONTROL DECORATOR ---
+def wing_required(required_wing):
+    """
+    Restricts access to wing views based on MemberProfile wing choice.
+    Allows access if the user's wing is 'BOTH' or matches the required_wing ('GE' or 'MOP').
+    Superusers and Executive Admins/Coordinators can also be bypassed or handled if needed.
+    """
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                messages.error(request, "Please log in first to access this wing.")
+                return redirect('green_eagles:login')
+            
+            # Superusers always have full access
+            if request.user.is_superuser:
+                return view_func(request, *args, **kwargs)
+
+            # Retrieve member profile wing choice
+            try:
+                profile = request.user.profile
+                user_wing = profile.wing
+                # Allow EXEC/Superuser roles across wings if applicable
+                if profile.role in ['EXEC', 'COORDINATOR'] and profile.wing == 'BOTH':
+                    return view_func(request, *args, **kwargs)
+            except AttributeError:
+                user_wing = 'GE'  # Default fallback if profile is missing
+
+            # Check if user belongs to both or the specific required wing
+            if user_wing == 'BOTH' or user_wing == required_wing:
+                return view_func(request, *args, **kwargs)
+
+            messages.error(request, "Access denied. You are not registered for this wing.")
+            return redirect('green_eagles:dashboard')
+            
+        return _wrapped_view
+    return decorator
 
 
 def home(request):
@@ -30,36 +70,46 @@ def faq(request):
     return render(request, 'green_eagles/faq.html')
 
 
-# --- GREEN EAGLES CREW WING VIEWS (Separate HTML files) ---
+# --- GREEN EAGLES CREW WING VIEWS (Restricted to 'GE' or 'BOTH') ---
+@wing_required('GE')
 def green_eagles_crew(request):
     return render(request, 'green_eagles/crew/home.html')
 
+@wing_required('GE')
 def crew_about(request):
     return render(request, 'green_eagles/crew/about.html')
 
+@wing_required('GE')
 def crew_activities(request):
     return render(request, 'green_eagles/crew/activities.html')
 
+@wing_required('GE')
 def crew_gallery(request):
     return render(request, 'green_eagles/crew/gallery.html')
 
+@wing_required('GE')
 def crew_faq(request):
     return render(request, 'green_eagles/crew/faq.html')
 
 
-# --- MESSENGERS OF PEACE WING VIEWS (Separate HTML files) ---
+# --- MESSENGERS OF PEACE WING VIEWS (Restricted to 'MOP' or 'BOTH') ---
+@wing_required('MOP')
 def messengers_of_peace(request):
     return render(request, 'green_eagles/mop/home.html')
 
+@wing_required('MOP')
 def mop_about(request):
     return render(request, 'green_eagles/mop/about.html')
 
+@wing_required('MOP')
 def mop_activities(request):
     return render(request, 'green_eagles/mop/activities.html')
 
+@wing_required('MOP')
 def mop_gallery(request):
     return render(request, 'green_eagles/mop/gallery.html')
 
+@wing_required('MOP')
 def mop_faq(request):
     return render(request, 'green_eagles/mop/faq.html')
 
@@ -375,6 +425,7 @@ def delete_announcement(request, pk):
     return redirect('green_eagles:dashboard')
 
 @login_required
+@wing_required('GE')
 def crew_dashboard(request):
     """Dedicated dashboard for Green Eagles Crew members and admins."""
     profile, _ = MemberProfile.objects.get_or_create(user=request.user)
@@ -388,6 +439,7 @@ def crew_dashboard(request):
 
 
 @login_required
+@wing_required('MOP')
 def mop_dashboard(request):
     """Dedicated dashboard for Messengers of Peace members and admins."""
     profile, _ = MemberProfile.objects.get_or_create(user=request.user)

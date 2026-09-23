@@ -209,13 +209,15 @@
                         <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'green_eagles:services' %}">Activities</a>
                     </li>
 
-                    <!-- Wings / Branches dropdown -->
+                    <!-- Wings / Branches dropdown - Hidden if user is not logged in -->
+                    {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {% if 'green_eagles_crew' in request.resolver_match.url_name or 'crew_' in request.resolver_match.url_name or 'messengers_of_peace' in request.resolver_match.url_name or 'mop_' in request.resolver_match.url_name %}active{% endif %}" href="#" id="wingsDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Wings
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="wingsDropdown">
+                            {% if user.is_superuser or user.profile.wing == 'GE' or user.profile.wing == 'BOTH' %}
                             <li>
                                 <a class="dropdown-item {% if request.resolver_match.url_name == 'green_eagles_crew' or 'crew_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'green_eagles:green_eagles_crew' %}">
                                     <span class="wing-icon"><i class="bi bi-shield-check"></i></span>
@@ -225,6 +227,8 @@
                                     </span>
                                 </a>
                             </li>
+                            {% endif %}
+                            {% if user.is_superuser or user.profile.wing == 'MOP' or user.profile.wing == 'BOTH' %}
                             <li>
                                 <a class="dropdown-item {% if request.resolver_match.url_name == 'messengers_of_peace' or 'mop_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'green_eagles:messengers_of_peace' %}">
                                     <span class="wing-icon"><i class="bi bi-flag"></i></span>
@@ -234,8 +238,10 @@
                                     </span>
                                 </a>
                             </li>
+                            {% endif %}
                         </ul>
                     </li>
+                    {% endif %}
 
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}"
