@@ -1,0 +1,166 @@
+{% extends 'green_eagles/base.html' %}
+
+{% block title %}Patrol Roster - PLASTOUT{% endblock %}
+
+{% block content %}
+<div class="ros-wrap">
+    <div class="ros-header">
+        <div class="container">
+            <div class="ros-header-inner">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="ros-header-icon"><i class="bi bi-people-fill"></i></div>
+                    <div>
+                        <h2>Wing Patrol Roster</h2>
+                        <p>View registered members and wing assignments.</p>
+                    </div>
+                </div>
+                <span class="ros-wing-badge">
+                    <i class="bi bi-shield-check"></i> {{ profile.get_wing_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="ros-list">
+            {% for m in members %}
+            <div class="ros-row">
+                <div class="ros-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="ros-info">
+                    <h6>{{ m.user.get_full_name|default:m.user.username }}</h6>
+                    <div class="ros-tags">
+                        <span class="ros-tag ros-tag-wing">{{ m.get_wing_display }}</span>
+                        <span class="ros-tag ros-tag-role">{{ m.get_role_display }}</span>
+                        {% if m.patrol_name %}
+                            <span class="ros-tag ros-tag-patrol">{{ m.patrol_name }}</span>
+                        {% else %}
+                            <span class="ros-tag ros-tag-unassigned">Unassigned</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="ros-phone">
+                    <i class="bi bi-telephone"></i>
+                    <span>{{ m.phone|default:"N/A" }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <div class="ros-empty">
+                <i class="bi bi-inboxes"></i>
+                <p>No members found in this roster view.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'green_eagles:dashboard' %}" class="ros-back">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.ros-wrap{ background:#f4f8f5; min-height:calc(100vh - 200px); padding-bottom:2rem; }
+
+.ros-header{
+    background:#0c3a1f;
+    background-image:linear-gradient(150deg,#14532d 0%,#0c3a1f 100%),repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 34px);
+    padding:2.4rem 0;
+    margin-bottom:2rem;
+    border-bottom:4px solid #d4af37;
+}
+.ros-header-inner{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+}
+.ros-header-icon{
+    width:54px; height:54px; flex-shrink:0;
+    border-radius:14px;
+    background:rgba(212,175,55,0.15);
+    color:#d4af37;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+}
+.ros-header-inner h2{ color:#fff; font-weight:800; font-size:1.35rem; margin-bottom:0.2rem; }
+.ros-header-inner p{ color:#c9ddce; font-size:0.9rem; margin-bottom:0; }
+.ros-wing-badge{
+    background:#d4af37; color:#0c3a1f;
+    font-weight:800; font-size:0.82rem;
+    padding:0.5rem 1.1rem;
+    border-radius:50px;
+    display:inline-flex; align-items:center; gap:6px;
+}
+
+.ros-list{ display:flex; flex-direction:column; gap:0.8rem; }
+.ros-row{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    background:#fff;
+    border-radius:14px;
+    padding:1rem 1.3rem;
+    box-shadow:0 6px 18px rgba(20,83,45,0.06);
+    border-left:4px solid #14532d;
+    transition:transform .2s ease, box-shadow .2s ease;
+    flex-wrap:wrap;
+}
+.ros-row:hover{ transform:translateX(4px); box-shadow:0 12px 26px rgba(20,83,45,0.12); }
+
+.ros-avatar{
+    width:42px; height:42px; flex-shrink:0;
+    border-radius:50%;
+    background:linear-gradient(160deg,#14532d,#0c3a1f);
+    color:#d4af37;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem;
+}
+
+.ros-info{ flex:1; min-width:200px; }
+.ros-info h6{ font-weight:800; color:#14532d; margin-bottom:0.4rem; font-size:0.95rem; }
+.ros-tags{ display:flex; gap:0.4rem; flex-wrap:wrap; }
+.ros-tag{
+    font-size:0.68rem;
+    font-weight:800;
+    padding:0.22rem 0.65rem;
+    border-radius:50px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+}
+.ros-tag-wing{ background:#e8f2ea; color:#14532d; }
+.ros-tag-role{ background:#f1f4f2; color:#5c6b63; }
+.ros-tag-patrol{ background:#fdf3d9; color:#a3811b; }
+.ros-tag-unassigned{ background:#f1f4f2; color:#9aa89f; font-style:italic; text-transform:none; }
+
+.ros-phone{
+    display:flex; align-items:center; gap:6px;
+    color:#5c6b63;
+    font-size:0.85rem;
+    font-weight:600;
+    flex-shrink:0;
+}
+.ros-phone i{ color:#14532d; }
+
+.ros-empty{
+    text-align:center;
+    padding:3rem 1rem;
+    color:#9aa89f;
+    background:#fff;
+    border-radius:14px;
+}
+.ros-empty i{ font-size:2rem; margin-bottom:0.8rem; display:block; }
+.ros-empty p{ margin-bottom:0; }
+
+.ros-back{
+    color:#14532d; font-weight:700; font-size:0.9rem;
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:6px;
+}
+.ros-back:hover{ color:#0c3a1f; }
+
+@media (max-width:576px){
+    .ros-row{ flex-direction:column; align-items:flex-start; }
+    .ros-phone{ align-self:flex-start; }
+}
+</style>
+{% endblock %}

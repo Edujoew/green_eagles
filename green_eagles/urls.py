@@ -43,4 +43,7 @@ urlpatterns = [
     path('crew/dashboard/', views.crew_dashboard, name='crew_dashboard'),
     path('mop/dashboard/', views.mop_dashboard, name='mop_dashboard'),
     path('locked/', views.locked_out, name='locked_out'),
+    path('reports/', views.activity_reports, name='activity_reports'),
+    path('roster/', views.patrol_roster, name='patrol_roster'),
+    path('payment/waiting/', views.payment_waiting, name='payment_waiting'),
 ]

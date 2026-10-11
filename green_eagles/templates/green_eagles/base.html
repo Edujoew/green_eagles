@@ -293,16 +293,16 @@
                                 {% endif %}
 
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item {% if request.resolver_match.url_name == 'activity_reports' %}active{% endif %}" href="{% url 'green_eagles:activity_reports' %}">
                                         <span class="wing-icon"><i class="bi bi-journal-plus"></i></span>
                                         <span>
                                             <span class="wing-name d-block">Activity Reports</span>
-                                            <span class="wing-desc">Submit & view cleanup logs</span>
+                                            <span class="wing-desc">Submit &amp; view cleanup logs</span>
                                         </span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item {% if request.resolver_match.url_name == 'patrol_roster' %}active{% endif %}" href="{% url 'green_eagles:patrol_roster' %}">
                                         <span class="wing-icon"><i class="bi bi-people-fill"></i></span>
                                         <span>
                                             <span class="wing-name d-block">Patrol Roster</span>
@@ -327,7 +327,6 @@
                             <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'green_eagles:login' %}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <!-- Fixed namespace typo from green_eagers to green_eagles -->
                             <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'green_eagles:register' %}">Register</a>
                         </li>
                     {% endif %}

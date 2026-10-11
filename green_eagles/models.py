@@ -78,6 +78,12 @@ class MemberProfile(models.Model):
     wing = models.CharField(max_length=10, choices=WING_CHOICES, default='GE')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='MEMBER')
     patrol_name = models.CharField(max_length=50, blank=True, help_text="e.g. Rhino Patrol, Eagle Patrol")
+    
+    # M-Pesa & Fee Tracking Fields Added Below
+    registration_paid = models.BooleanField(default=False)
+    scarf_balance = models.DecimalField(max_digits=6, decimal_places=2, default=200.00)
+    total_paid = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+    mpesa_receipt = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.get_full_name() or self.user.username} - {self.get_wing_display()}"
@@ -118,4 +124,3 @@ class Announcement(models.Model):
 
     def __str__(self):
         return f"[{self.get_target_wing_display()}] {self.title}"
-

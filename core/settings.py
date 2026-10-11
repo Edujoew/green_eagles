@@ -176,3 +176,10 @@ if not DEBUG:
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
+
+# M-Pesa Daraja API Settings (Sandbox)
+MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY', default='VYGL1n6IzlReziAYqheeOz9cKUrPkkV9FOKWAo14IW51RN3z') #[cite: 3]
+MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET', default='IMRzkDZFNbqBwdv1IAeEhrG30ZySyioHrAueT2kAfrcyfDztNjoeEqSC2DYY3oi') #[cite: 3]
+MPESA_SHORTCODE = config('MPESA_SHORTCODE', default='174379')
+MPESA_PASSKEY = config('MPESA_PASSKEY', default='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919')
+MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL', default='https://yourdomain.com/api/mpesa/callback/')

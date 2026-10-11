@@ -10,6 +10,7 @@ from axes.handlers.proxy import AxesProxyHandler
 from functools import wraps
 from .models import Announcement
 from .forms import AnnouncementForm
+from .mpesa import initiate_stk_push
 
 from .models import MemberProfile, GalleryItem
 from .forms import ContactForm, GalleryItemForm, UserUpdateForm, MemberProfileUpdateForm
@@ -152,20 +153,38 @@ def register_member(request):
         form = UserCreationForm(request.POST)
         wing = request.POST.get('wing', 'GE')
         phone = request.POST.get('phone', '')
+        phone_number = request.POST.get('phone_number', '')
+        paid_amount = int(request.POST.get('payment_amount', 300))
 
         if form.is_valid():
             user = form.save()
             profile, _ = MemberProfile.objects.get_or_create(user=user)
             profile.wing = wing
             profile.phone = phone
+            
+            # Fee calculation: 300 mandatory registration, remaining amount goes to 200 scarf fee
+            scarf_contribution = max(0, paid_amount - 300)
+            profile.total_paid = paid_amount
+            profile.registration_paid = (paid_amount >= 300)
+            profile.scarf_balance = max(0, 200 - scarf_contribution)
             profile.save()
+
+            # Trigger M-Pesa STK Push
+            try:
+                stk_response = initiate_stk_push(phone_number, paid_amount, f"PLASTOUT-{user.username}")
+                if stk_response.get('ResponseCode') == '0':
+                    messages.success(request, 'STK Push sent to your phone! Please enter your M-Pesa PIN to complete registration.')
+                else:
+                    messages.warning(request, 'Account created, but M-Pesa prompt failed to trigger. You can retry from the waiting screen.')
+            except Exception:
+                messages.warning(request, 'Account created, but payment gateway encountered an issue.')
             
             # Explicitly set the backend attribute for axes/multiple backends compatibility
             user.backend = 'axes.backends.AxesBackend'
             
             login(request, user)
             messages.success(request, 'Welcome to PLASTOUT! Your account was created successfully.')
-            return redirect('green_eagles:dashboard')
+            return redirect('green_eagles:payment_waiting')
     else:
         form = UserCreationForm()
 
@@ -453,3 +472,45 @@ def mop_dashboard(request):
 
 def locked_out(request):
     return render(request, 'green_eagles/locked.html')
+
+@login_required
+def activity_reports(request):
+    profile, _ = MemberProfile.objects.get_or_create(user=request.user)
+    return render(request, 'green_eagles/activity_reports.html', {'profile': profile})
+
+@login_required
+def patrol_roster(request):
+    profile, _ = MemberProfile.objects.get_or_create(user=request.user)
+    # Fetch members depending on their wing or show all if EXEC/Superuser
+    if request.user.is_superuser or profile.role == 'EXEC' or profile.wing == 'BOTH':
+        members = MemberProfile.objects.select_related('user').all()
+    else:
+        members = MemberProfile.objects.select_related('user').filter(wing=profile.wing)
+        
+    context = {
+        'profile': profile,
+        'members': members,
+    }
+    return render(request, 'green_eagles/patrol_roster.html', context)
+
+@login_required
+def payment_waiting(request):
+    profile, _ = MemberProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        # Allow user to retry STK push if they missed it
+        phone_number = request.POST.get('phone_number', profile.phone)
+        amount = 500 if profile.scarf_balance > 0 else 300
+        
+        try:
+            stk_response = initiate_stk_push(phone_number, amount, f"PLASTOUT-{request.user.username}")
+            if stk_response.get('ResponseCode') == '0':
+                messages.success(request, 'New STK Push sent to your phone! Please check your screen.')
+            else:
+                messages.error(request, 'Failed to trigger M-Pesa prompt. Please try again.')
+        except Exception:
+            messages.error(request, 'Payment gateway error. Please try again later.')
+            
+        return redirect('green_eagles:payment_waiting')
+
+    return render(request, 'green_eagles/payment_waiting.html', {'profile': profile})

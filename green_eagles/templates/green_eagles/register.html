@@ -21,7 +21,7 @@
                 </div>
                 <div class="rail-step">
                     <span class="step-num">3</span>
-                    <div><strong>Get deployed</strong><span>Join your first clean-up or patrol</span></div>
+                    <div><strong>M-Pesa Payment</strong><span>300 KES mandatory + optional scarf fee</span></div>
                 </div>
             </div>
         </div>
@@ -64,8 +64,23 @@
                 </div>
 
                 <div class="reg-field">
-                    <label for="phone">Phone</label>
-                    <input type="text" name="phone" id="phone" class="reg-input" placeholder="+254 700 000000">
+                    <label for="phone">Phone Number (Account/Profile)</label>
+                    <input type="text" name="phone" id="phone" class="reg-input" placeholder="+254 700 000000" required>
+                </div>
+
+                <!-- M-Pesa STK Push Integration Fields -->
+                <div class="reg-field" style="background: #f0f7f2; padding: 1rem; border-radius: 11px; border: 1.5px dashed #14532d; margin-bottom: 1.2rem;">
+                    <label for="phone_number" style="color: #14532d; display: flex; align-items: center; gap: 6px;">
+                        <i class="bi bi-phone-fill text-success"></i> M-Pesa STK Push Number
+                    </label>
+                    <input type="text" name="phone_number" id="phone_number" class="reg-input mb-2" placeholder="2547XXXXXXXX or 07XXXXXXXX" required>
+                    
+                    <label for="payment_amount" style="color: #14532d; margin-top: 0.5rem;">Registration Fee Option</label>
+                    <select name="payment_amount" id="payment_amount" class="reg-input" required>
+                        <option value="300">300 KES (Mandatory Reg Fee only — 200 KES scarf balance)</option>
+                        <option value="500" selected>500 KES (Full Payment: 300 Reg Fee + 200 Scarf)</option>
+                    </select>
+                    <small class="text-muted d-block mt-1" style="font-size: 0.76rem;">An M-Pesa prompt will be sent to your phone to authorize payment.</small>
                 </div>
 
                 <!-- Live password checklist -->
@@ -84,7 +99,7 @@
                 </div>
 
                 <button type="submit" class="reg-btn">
-                    <span>Create Account</span>
+                    <span>Pay &amp; Create Account</span>
                     <i class="bi bi-arrow-right"></i>
                 </button>
             </form>
@@ -291,4 +306,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-{% endblock %}v
+{% endblock %}
