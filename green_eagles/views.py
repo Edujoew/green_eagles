@@ -8,9 +8,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from axes.handlers.proxy import AxesProxyHandler
 from functools import wraps
+from django_daraja.views import MpesaClient
 from .models import Announcement
 from .forms import AnnouncementForm
-from .mpesa import initiate_stk_push
 
 from .models import MemberProfile, GalleryItem
 from .forms import ContactForm, GalleryItemForm, UserUpdateForm, MemberProfileUpdateForm
@@ -153,37 +153,60 @@ def register_member(request):
         form = UserCreationForm(request.POST)
         wing = request.POST.get('wing', 'GE')
         phone = request.POST.get('phone', '')
-        phone_number = request.POST.get('phone_number', '')
+        phone_number = request.POST.get('phone_number') or request.POST.get('phone') or ''
+        phone_number = ''.join(character for character in phone_number.strip() if character.isdigit())
+        if phone_number.startswith('0'):
+            phone_number = '254' + phone_number[1:]
+        elif len(phone_number) == 9 and phone_number[0] in ('1', '7'):
+            phone_number = '254' + phone_number
         paid_amount = int(request.POST.get('payment_amount', 300))
 
         if form.is_valid():
             user = form.save()
             profile, _ = MemberProfile.objects.get_or_create(user=user)
             profile.wing = wing
-            profile.phone = phone
+            profile.phone = phone or phone_number
             
             # Fee calculation: 300 mandatory registration, remaining amount goes to 200 scarf fee
             scarf_contribution = max(0, paid_amount - 300)
-            profile.total_paid = paid_amount
-            profile.registration_paid = (paid_amount >= 300)
+            profile.total_paid = 0
+            profile.registration_paid = False
             profile.scarf_balance = max(0, 200 - scarf_contribution)
             profile.save()
 
             # Trigger M-Pesa STK Push
-            try:
-                stk_response = initiate_stk_push(phone_number, paid_amount, f"PLASTOUT-{user.username}")
-                if stk_response.get('ResponseCode') == '0':
-                    messages.success(request, 'STK Push sent to your phone! Please enter your M-Pesa PIN to complete registration.')
-                else:
-                    messages.warning(request, 'Account created, but M-Pesa prompt failed to trigger. You can retry from the waiting screen.')
-            except Exception:
-                messages.warning(request, 'Account created, but payment gateway encountered an issue.')
+            if not phone_number:
+                messages.warning(request, 'Enter your M-Pesa phone number and click resend on the payment waiting page.')
+            else:
+                try:
+                    # Dynamic account reference based on amount and wing
+                    if paid_amount == 300:
+                        account_reference = "Green Eagles" if wing == 'GE' else "Messengers"
+                    else:
+                        account_reference = "Plastout Acct"
+
+                    cl = MpesaClient()
+                    stk_response = cl.stk_push(
+                        phone_number,
+                        paid_amount,
+                        account_reference[:12],
+                        "PLASTOUT Fee",
+                        settings.MPESA_CALLBACK_URL,
+                    )
+                    if stk_response.response_code == '0':
+                        messages.success(request, 'STK Push sent to your phone! Please enter your M-Pesa PIN to complete registration.')
+                    else:
+                        messages.error(
+                            request,
+                            stk_response.error_message or stk_response.response_description or 'Daraja STK push failed.',
+                        )
+                except Exception as e:
+                    messages.error(request, f'Payment gateway error: {e}')
             
             # Explicitly set the backend attribute for axes/multiple backends compatibility
             user.backend = 'axes.backends.AxesBackend'
             
             login(request, user)
-            messages.success(request, 'Welcome to PLASTOUT! Your account was created successfully.')
             return redirect('green_eagles:payment_waiting')
     else:
         form = UserCreationForm()
@@ -499,17 +522,41 @@ def payment_waiting(request):
     
     if request.method == 'POST':
         # Allow user to retry STK push if they missed it
-        phone_number = request.POST.get('phone_number', profile.phone)
+        phone_number = request.POST.get('phone_number') or request.POST.get('phone') or profile.phone or ''
+        phone_number = ''.join(character for character in phone_number.strip() if character.isdigit())
+        if phone_number.startswith('0'):
+            phone_number = '254' + phone_number[1:]
+        elif len(phone_number) == 9 and phone_number[0] in ('1', '7'):
+            phone_number = '254' + phone_number
         amount = 500 if profile.scarf_balance > 0 else 300
         
-        try:
-            stk_response = initiate_stk_push(phone_number, amount, f"PLASTOUT-{request.user.username}")
-            if stk_response.get('ResponseCode') == '0':
-                messages.success(request, 'New STK Push sent to your phone! Please check your screen.')
-            else:
-                messages.error(request, 'Failed to trigger M-Pesa prompt. Please try again.')
-        except Exception:
-            messages.error(request, 'Payment gateway error. Please try again later.')
+        if not phone_number:
+            messages.error(request, 'Enter a valid M-Pesa phone number to resend the payment prompt.')
+        else:
+            try:
+                # Dynamic account reference based on amount and profile wing
+                if amount == 300:
+                    account_reference = "Green Eagles" if profile.wing == 'GE' else "Messengers"
+                else:
+                    account_reference = "Plastout Acct"
+
+                cl = MpesaClient()
+                stk_response = cl.stk_push(
+                    phone_number,
+                    amount,
+                    account_reference[:12],
+                    "PLASTOUT Fee",
+                    settings.MPESA_CALLBACK_URL,
+                )
+                if stk_response.response_code == '0':
+                    messages.success(request, 'STK Push sent to your phone! Please enter your M-Pesa PIN to complete registration.')
+                else:
+                    messages.error(
+                        request,
+                        stk_response.error_message or stk_response.response_description or 'Daraja STK push failed.',
+                    )
+            except Exception as e:
+                messages.error(request, f'Payment gateway error: {e}')
             
         return redirect('green_eagles:payment_waiting')
 

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_daraja',
     'green_eagles',
     'axes'
 ]
@@ -178,8 +179,11 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 
 # M-Pesa Daraja API Settings (Sandbox)
-MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY', default='VYGL1n6IzlReziAYqheeOz9cKUrPkkV9FOKWAo14IW51RN3z') #[cite: 3]
-MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET', default='IMRzkDZFNbqBwdv1IAeEhrG30ZySyioHrAueT2kAfrcyfDztNjoeEqSC2DYY3oi') #[cite: 3]
+MPESA_ENVIRONMENT = config('MPESA_ENVIRONMENT', default='sandbox')
+MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY')
+MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET')
 MPESA_SHORTCODE = config('MPESA_SHORTCODE', default='174379')
-MPESA_PASSKEY = config('MPESA_PASSKEY', default='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919')
-MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL', default='https://yourdomain.com/api/mpesa/callback/')
+MPESA_EXPRESS_SHORTCODE = config('MPESA_EXPRESS_SHORTCODE', default='174379')
+MPESA_SHORTCODE_TYPE = 'paybill'
+MPESA_PASSKEY = config('MPESA_PASSKEY')
+MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL', default='https://api.darajambili.com/express-payment')
