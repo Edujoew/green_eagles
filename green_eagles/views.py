@@ -14,6 +14,7 @@ from .forms import AnnouncementForm
 
 from .models import MemberProfile, GalleryItem
 from .forms import ContactForm, GalleryItemForm, UserUpdateForm, MemberProfileUpdateForm
+from django.db.models import Q, Sum
 
 
 # --- WING ACCESS CONTROL DECORATOR ---
@@ -561,3 +562,65 @@ def payment_waiting(request):
         return redirect('green_eagles:payment_waiting')
 
     return render(request, 'green_eagles/payment_waiting.html', {'profile': profile})
+
+@user_passes_test(is_wing_admin)
+def payment_ledger(request):
+    user_profile = getattr(request.user, 'profile', None)
+    
+    # Base queryset depending on admin role
+    if request.user.is_superuser or (user_profile and user_profile.role == 'EXEC'):
+        profiles = MemberProfile.objects.select_related('user').all()
+    elif user_profile and user_profile.role == 'COORDINATOR':
+        if user_profile.wing == 'BOTH':
+            profiles = MemberProfile.objects.select_related('user').all()
+        else:
+            profiles = MemberProfile.objects.select_related('user').filter(wing=user_profile.wing)
+    else:
+        profiles = MemberProfile.objects.none()
+
+    # Search filter (by username or phone)
+    query = request.GET.get('q', '')
+    if query:
+        profiles = profiles.filter(
+            Q(user__username__icontains=query) | Q(phone__icontains=query)
+        )
+
+    # Wing filter
+    wing_filter = request.GET.get('wing', '')
+    if wing_filter in ['GE', 'MOP', 'BOTH']:
+        profiles = profiles.filter(wing=wing_filter)
+
+    # Payment Status filter
+    status_filter = request.GET.get('status', '')
+    if status_filter == 'paid':
+        profiles = profiles.filter(registration_paid=True)
+    elif status_filter == 'unpaid':
+        profiles = profiles.filter(registration_paid=False)
+
+    # Calculate summary metrics
+    total_members = profiles.count()
+    paid_members_count = profiles.filter(registration_paid=True).count()
+    pending_scarves_count = profiles.filter(scarf_balance__gt=0).count()
+    total_revenue = profiles.aggregate(Sum('total_paid'))['total_paid__sum'] or 0
+
+    context = {
+        'profiles': profiles.order_by('-user__date_joined'),
+        'query': query,
+        'wing_filter': wing_filter,
+        'status_filter': status_filter,
+        'total_members': total_members,
+        'paid_members_count': paid_members_count,
+        'pending_scarves_count': pending_scarves_count,
+        'total_revenue': total_revenue,
+    }
+    return render(request, 'green_eagles/admin_payment_ledger.html', context)
+
+
+@user_passes_test(is_wing_admin)
+def toggle_scarf_status(request, pk):
+    profile = get_object_or_404(MemberProfile, pk=pk)
+    profile.scarf_issued = not profile.scarf_issued
+    profile.save()
+    status_msg = "issued" if profile.scarf_issued else "marked as pending"
+    messages.success(request, f"Scarf status for '{profile.user.username}' {status_msg}.")
+    return redirect('green_eagles:payment_ledger')

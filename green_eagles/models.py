@@ -44,7 +44,7 @@ class ScoutProfile(models.Model):
     rank = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.role}"
+        return f"{self.user.username} {self.role}"
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
@@ -57,7 +57,7 @@ class ContactMessage(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.name} - {self.subject}"    
+        return f"{self.name} {self.subject}"    
 
 class MemberProfile(models.Model):
     WING_CHOICES = [
@@ -84,9 +84,12 @@ class MemberProfile(models.Model):
     scarf_balance = models.DecimalField(max_digits=6, decimal_places=2, default=200.00)
     total_paid = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
     mpesa_receipt = models.CharField(max_length=50, blank=True, null=True)
+    
+    # Scarf Physical Issuance Tracking
+    scarf_issued = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.get_full_name() or self.user.username} - {self.get_wing_display()}"
+        return f"{self.user.get_full_name() or self.user.username} {self.get_wing_display()}"
     
 class GalleryItem(models.Model):
     title = models.CharField(max_length=150)

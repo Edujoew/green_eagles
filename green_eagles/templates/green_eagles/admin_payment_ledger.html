@@ -1,0 +1,374 @@
+{% extends "green_eagles/base.html" %}
+
+{% block content %}
+<div class="ledger-wrap">
+
+    <!-- Banner -->
+    <div class="ledger-banner">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <h3 class="ledger-title"><i class="bi bi-journal-check me-2"></i>Payment Ledger &amp; Scarf Verification</h3>
+                    <span class="ledger-sub">Financial records and scarf distribution tracking</span>
+                </div>
+                <a href="{% url 'green_eagles:manage_members' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-people me-1"></i> Manage Members
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Stats Strip -->
+        <div class="ledger-stats">
+            <div class="ledger-stat">
+                <div class="ledger-stat-icon" style="background:#e8f2ea;color:#14532d;">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+                <div>
+                    <span class="ledger-stat-label">Total Revenue</span>
+                    <span class="ledger-stat-val">KES {{ total_revenue }}</span>
+                </div>
+            </div>
+            <div class="ledger-stat">
+                <div class="ledger-stat-icon" style="background:#dcfce7;color:#16a34a;">
+                    <i class="bi bi-person-check"></i>
+                </div>
+                <div>
+                    <span class="ledger-stat-label">Paid Members</span>
+                    <span class="ledger-stat-val">{{ paid_members_count }} / {{ total_members }}</span>
+                </div>
+            </div>
+            <div class="ledger-stat">
+                <div class="ledger-stat-icon" style="background:#fef9c3;color:#ca8a04;">
+                    <i class="bi bi-tag"></i>
+                </div>
+                <div>
+                    <span class="ledger-stat-label">Pending Scarf Fee</span>
+                    <span class="ledger-stat-val">{{ pending_scarves_count }}</span>
+                </div>
+            </div>
+            <div class="ledger-stat">
+                <div class="ledger-stat-icon" style="background:#e0f2fe;color:#0284c7;">
+                    <i class="bi bi-funnel"></i>
+                </div>
+                <div>
+                    <span class="ledger-stat-label">Filtered Records</span>
+                    <span class="ledger-stat-val">{{ profiles|length }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="ledger-filter-card">
+            <form method="GET" class="ledger-filter-form">
+                <div class="ledger-filter-field">
+                    <label>Search</label>
+                    <input type="text" name="q" value="{{ query }}" class="ledger-input" placeholder="Username or phone...">
+                </div>
+                <div class="ledger-filter-field">
+                    <label>Wing</label>
+                    <select name="wing" class="ledger-input">
+                        <option value="">All Wings</option>
+                        <option value="GE" {% if wing_filter == 'GE' %}selected{% endif %}>Green Eagles Crew</option>
+                        <option value="MOP" {% if wing_filter == 'MOP' %}selected{% endif %}>Messengers of Peace</option>
+                        <option value="BOTH" {% if wing_filter == 'BOTH' %}selected{% endif %}>Both Wings</option>
+                    </select>
+                </div>
+                <div class="ledger-filter-field">
+                    <label>Status</label>
+                    <select name="status" class="ledger-input">
+                        <option value="">All Statuses</option>
+                        <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Paid</option>
+                        <option value="unpaid" {% if status_filter == 'unpaid' %}selected{% endif %}>Unpaid</option>
+                    </select>
+                </div>
+                <div class="ledger-filter-actions">
+                    <button type="submit" class="ledger-filter-btn">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+                    <a href="{% url 'green_eagles:payment_ledger' %}" class="ledger-reset-btn">Reset</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Ledger Table -->
+        <div class="ledger-panel">
+            <div class="ledger-panel-head">
+                <h5 class="ledger-panel-title"><i class="bi bi-table me-2"></i>Member Payment Records</h5>
+                <span class="ledger-panel-count">{{ profiles|length }} record{{ profiles|length|pluralize }}</span>
+            </div>
+            <div class="table-responsive">
+                <table class="ledger-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Member</th>
+                            <th>Wing</th>
+                            <th>Phone</th>
+                            <th>Total Paid</th>
+                            <th>Reg. Status</th>
+                            <th>Scarf Balance</th>
+                            <th>Physical Scarf</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in profiles %}
+                        <tr>
+                            <td class="ledger-num">{{ forloop.counter }}</td>
+                            <td>
+                                <div class="ledger-member">
+                                    <div class="ledger-avatar">{{ profile.user.username|slice:":1" }}</div>
+                                    <div>
+                                        <strong>{{ profile.user.username }}</strong>
+                                        <span class="ledger-email">{{ profile.user.email|default:"No email" }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if profile.wing == 'GE' %}
+                                    <span class="ledger-badge ledger-badge-ge">GE Crew</span>
+                                {% elif profile.wing == 'MOP' %}
+                                    <span class="ledger-badge ledger-badge-mop">Messengers</span>
+                                {% else %}
+                                    <span class="ledger-badge ledger-badge-both">Both Wings</span>
+                                {% endif %}
+                            </td>
+                            <td class="ledger-phone">{{ profile.phone|default:"-" }}</td>
+                            <td class="ledger-amount">KES {{ profile.total_paid }}</td>
+                            <td>
+                                {% if profile.registration_paid %}
+                                    <span class="ledger-status ledger-status-paid">
+                                        <i class="bi bi-check-circle-fill"></i> Paid
+                                    </span>
+                                {% else %}
+                                    <span class="ledger-status ledger-status-unpaid">
+                                        <i class="bi bi-x-circle-fill"></i> Unpaid
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if profile.scarf_balance == 0 %}
+                                    <span class="ledger-scarf-clear">
+                                        <i class="bi bi-check2-circle"></i> Cleared
+                                    </span>
+                                {% else %}
+                                    <span class="ledger-scarf-pending">KES {{ profile.scarf_balance }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if profile.scarf_issued %}
+                                    <span class="ledger-badge ledger-badge-issued">Issued</span>
+                                {% else %}
+                                    <span class="ledger-badge ledger-badge-pending-issue">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'green_eagles:toggle_scarf_status' profile.pk %}" class="ledger-toggle-btn {% if profile.scarf_issued %}ledger-toggle-revoke{% else %}ledger-toggle-issue{% endif %}">
+                                    {% if profile.scarf_issued %}Mark Pending{% else %}Mark Issued{% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="ledger-empty">
+                                <i class="bi bi-inbox"></i>
+                                <p>No membership records match your search filter.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.ledger-wrap{
+    background:#f4f8f5;
+    min-height: calc(100vh - 200px);
+    padding-bottom:3rem;
+}
+
+/* Banner */
+.ledger-banner{
+    background:#0c3a1f;
+    background-image:
+        linear-gradient(150deg,#14532d 0%,#0c3a1f 100%),
+        repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 34px);
+    padding:2.2rem 0;
+    margin-bottom:2rem;
+    border-bottom:4px solid #d4af37;
+}
+.ledger-title{ color:#fff; font-weight:800; font-size:1.3rem; margin-bottom:0.3rem; }
+.ledger-sub{ color:#c9ddce; font-size:0.85rem; }
+.ledger-back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,0.08);
+    border:1.5px solid rgba(255,255,255,0.25);
+    color:#fff; font-weight:700; font-size:0.85rem;
+    padding:0.5rem 1.1rem; border-radius:50px;
+    text-decoration:none; transition:all .2s ease;
+}
+.ledger-back-btn:hover{ background:#d4af37; border-color:#d4af37; color:#0c3a1f; }
+
+/* Stats */
+.ledger-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1rem;
+    margin-bottom:1.4rem;
+}
+@media (max-width:900px){ .ledger-stats{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:500px){ .ledger-stats{ grid-template-columns:1fr; } }
+.ledger-stat{
+    background:#fff;
+    border-radius:14px;
+    padding:1.1rem 1.2rem;
+    display:flex; align-items:center; gap:0.85rem;
+    box-shadow:0 6px 18px rgba(20,83,45,0.07);
+    transition:transform .2s ease;
+}
+.ledger-stat:hover{ transform:translateY(-3px); }
+.ledger-stat-icon{
+    width:44px; height:44px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.15rem; flex-shrink:0;
+}
+.ledger-stat-label{
+    display:block; font-size:0.7rem; font-weight:700;
+    color:#9aa89f; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;
+}
+.ledger-stat-val{ display:block; font-weight:800; color:#14532d; font-size:1.15rem; }
+
+/* Filter */
+.ledger-filter-card{
+    background:#fff;
+    border-radius:14px;
+    padding:1.4rem 1.6rem;
+    box-shadow:0 6px 18px rgba(20,83,45,0.07);
+    margin-bottom:1.4rem;
+}
+.ledger-filter-form{
+    display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end;
+}
+.ledger-filter-field{ display:flex; flex-direction:column; gap:5px; flex:1 1 180px; }
+.ledger-filter-field label{
+    font-weight:700; font-size:0.78rem; color:#14532d;
+    text-transform:uppercase; letter-spacing:0.3px;
+}
+.ledger-input{
+    border:1.5px solid #e0e6e2; border-radius:9px;
+    padding:10px 13px; font-size:0.9rem;
+    transition:border-color .2s ease, box-shadow .2s ease;
+}
+.ledger-input:focus{
+    outline:none; border-color:#14532d;
+    box-shadow:0 0 0 4px rgba(20,83,45,0.1);
+}
+.ledger-filter-actions{ display:flex; gap:0.6rem; align-items:flex-end; }
+.ledger-filter-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:#14532d; color:#fff; border:none;
+    padding:10px 1.3rem; border-radius:9px;
+    font-weight:700; font-size:0.88rem; cursor:pointer;
+    transition:background .2s ease;
+}
+.ledger-filter-btn:hover{ background:#0c3a1f; }
+.ledger-reset-btn{
+    padding:10px 1rem; border-radius:9px;
+    border:1.5px solid #d8e3da; color:#5c6b63;
+    font-weight:700; font-size:0.88rem;
+    text-decoration:none; white-space:nowrap;
+    transition:background .2s ease;
+}
+.ledger-reset-btn:hover{ background:#f4f8f5; color:#14532d; }
+
+/* Panel */
+.ledger-panel{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 6px 18px rgba(20,83,45,0.07);
+    overflow:hidden;
+}
+.ledger-panel-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.2rem 1.5rem; border-bottom:1px solid #edf2ee;
+}
+.ledger-panel-title{ font-weight:800; color:#14532d; font-size:0.98rem; margin-bottom:0; }
+.ledger-panel-count{
+    background:#e8f2ea; color:#14532d;
+    font-weight:800; font-size:0.75rem;
+    padding:0.3rem 0.75rem; border-radius:50px;
+}
+
+/* Table */
+.ledger-table{ width:100%; border-collapse:collapse; }
+.ledger-table thead tr{ background:#f4f8f5; border-bottom:1px solid #edf2ee; }
+.ledger-table th{
+    padding:0.85rem 1.1rem; font-size:0.73rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.5px; color:#9aa89f;
+}
+.ledger-table td{
+    padding:0.9rem 1.1rem; border-bottom:1px solid #f4f8f5;
+    font-size:0.88rem; vertical-align:middle;
+}
+.ledger-table tbody tr:last-child td{ border-bottom:none; }
+.ledger-table tbody tr:hover td{ background:#fafcfb; }
+
+.ledger-num{ font-weight:700; color:#9aa89f; font-size:0.82rem; }
+.ledger-member{ display:flex; align-items:center; gap:0.7rem; }
+.ledger-avatar{
+    width:34px; height:34px; border-radius:50%;
+    background:linear-gradient(160deg,#14532d,#0c3a1f);
+    color:#d4af37; font-weight:800; font-size:0.85rem;
+    display:flex; align-items:center; justify-content:center;
+    text-transform:uppercase; flex-shrink:0;
+}
+.ledger-member strong{ display:block; color:#14532d; font-size:0.9rem; }
+.ledger-email{ display:block; font-size:0.75rem; color:#9aa89f; }
+.ledger-phone{ color:#5c6b63; font-size:0.85rem; }
+.ledger-amount{ font-weight:800; color:#14532d; }
+
+/* Badges */
+.ledger-badge{
+    display:inline-block; font-size:0.7rem; font-weight:800;
+    padding:0.25rem 0.7rem; border-radius:50px; text-transform:uppercase; letter-spacing:0.3px;
+}
+.ledger-badge-ge{ background:#e8f2ea; color:#14532d; }
+.ledger-badge-mop{ background:#e0f2fe; color:#0369a1; }
+.ledger-badge-both{ background:#f1f4f2; color:#5c6b63; }
+.ledger-badge-issued{ background:#dcfce7; color:#166534; }
+.ledger-badge-pending-issue{ background:#fef9c3; color:#854d0e; }
+
+.ledger-status{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:0.75rem; font-weight:700; padding:0.25rem 0.7rem; border-radius:50px;
+}
+.ledger-status-paid{ background:#dcfce7; color:#166534; }
+.ledger-status-unpaid{ background:#fee2e2; color:#991b1b; }
+
+.ledger-scarf-clear{ color:#14532d; font-weight:700; font-size:0.85rem; display:inline-flex; align-items:center; gap:5px; }
+.ledger-scarf-pending{ color:#ca8a04; font-weight:700; font-size:0.85rem; }
+
+.ledger-toggle-btn{
+    display:inline-block; font-size:0.78rem; font-weight:700;
+    padding:0.32rem 0.8rem; border-radius:7px; text-decoration:none;
+    white-space:nowrap; transition:all .15s ease;
+}
+.ledger-toggle-issue{ background:#e8f2ea; color:#14532d; }
+.ledger-toggle-issue:hover{ background:#14532d; color:#fff; }
+.ledger-toggle-revoke{ background:#fee2e2; color:#dc2626; }
+.ledger-toggle-revoke:hover{ background:#dc2626; color:#fff; }
+
+.ledger-empty{
+    text-align:center; padding:3rem 1rem; color:#9aa89f;
+}
+.ledger-empty i{ font-size:2rem; display:block; margin-bottom:0.7rem; }
+.ledger-empty p{ margin-bottom:0; font-size:0.9rem; }
+</style>
+{% endblock %}

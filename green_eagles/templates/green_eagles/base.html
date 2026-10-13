@@ -6,163 +6,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PLASTOUT{% endblock %}</title>
 
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root{
-            --pl-green: #14532d;
-            --pl-green-dark: #0c3a1f;
-            --pl-green-light: #e8f2ea;
-            --pl-gold: #d4af37;
-            --pl-teal: #155e63;
+            --pl-green:#14532d;
+            --pl-green-dark:#0c3a1f;
+            --pl-green-light:#e8f2ea;
+            --pl-gold:#d4af37;
+            --pl-teal:#155e63;
+            --pl-surface:#f4f8f5;
+            --pl-border:#e2ebe4;
+            --pl-muted:#5c6b63;
         }
-        html, body { height: 100%; }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            font-family: 'Manrope', sans-serif;
-            color: #1c2420;
+        html, body{ height:100%; }
+        body{
+            display:flex; flex-direction:column; min-height:100vh;
+            font-family:'Manrope',sans-serif; color:#1c2420;
+            background:#fff;
         }
-        main { flex: 1 0 auto; }
-        h1, h2, h3, h4, h5 { font-family: 'Sora', sans-serif; }
+        main{ flex:1 0 auto; }
+        h1,h2,h3,h4,h5{ font-family:'Sora',sans-serif; }
 
-        /* ===== MAIN NAVBAR ===== */
-        .main-nav {
-            background: #ffffff;
-            border-bottom: 1px solid #e7ede9;
-            padding: 0.8rem 0;
+        /* ===== NAVBAR ===== */
+        .main-nav{
+            background:#ffffff;
+            border-bottom:2px solid var(--pl-border);
+            padding:0;
+            position:sticky; top:0; z-index:200;
+            box-shadow:0 2px 12px rgba(20,83,45,0.07);
         }
-        .main-nav .navbar-brand img {
-            height: 46px;
-            border-radius: 6px;
+        .nav-inner{
+            max-width:1200px; margin:0 auto;
+            padding:0 1.5rem;
+            display:flex; align-items:center; justify-content:space-between;
+            height:68px;
         }
-        .nav-pills-custom {
-            background: var(--pl-green-light);
-            border-radius: 50px;
-            padding: 0.3rem;
-            gap: 0.2rem;
+        .nav-brand{
+            display:flex; align-items:center; gap:10px;
+            text-decoration:none; flex-shrink:0;
         }
-        .nav-pills-custom .nav-link {
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--pl-green-dark);
-            padding: 0.5rem 1rem !important;
-            border-radius: 50px;
-            transition: all .2s ease;
+        .nav-brand img{ height:46px; border-radius:8px; }
+        .nav-brand-badge{
+            font-size:0.68rem; font-weight:800;
+            padding:0.25rem 0.7rem; border-radius:50px;
         }
-        .nav-pills-custom .nav-link:hover {
-            background: #ffffff;
-            color: var(--pl-green);
-        }
-        .nav-pills-custom .nav-link.active {
-            background: var(--pl-green);
-            color: #ffffff !important;
-        }
-        .nav-pills-custom .dropdown-toggle::after { vertical-align: 0.15em; }
+        .badge-admin{ background:#fef9c3; color:#854d0e; }
+        .badge-wing{ background:var(--pl-green-light); color:var(--pl-green); }
 
-        .cta-btn {
-            background: var(--pl-green);
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.85rem;
-            padding: 0.55rem 1.3rem;
-            border-radius: 50px;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: background .2s ease;
+        .nav-pills{
+            display:flex; align-items:center;
+            background:var(--pl-green-light);
+            border-radius:50px; padding:0.28rem; gap:2px;
         }
-        .cta-btn:hover { background: var(--pl-green-dark); color: #fff; }
+        .nav-pills .nav-link{
+            font-weight:700; font-size:0.84rem;
+            color:var(--pl-green-dark);
+            padding:0.48rem 1rem !important;
+            border-radius:50px;
+            transition:all .2s ease;
+            white-space:nowrap;
+        }
+        .nav-pills .nav-link:hover{ background:#fff; color:var(--pl-green); }
+        .nav-pills .nav-link.active{ background:var(--pl-green); color:#fff !important; }
+        .nav-pills .dropdown-toggle::after{ vertical-align:0.15em; }
 
-        .dropdown-menu {
-            border: none;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 18px 40px rgba(20,83,45,0.18);
-            padding: 0.6rem;
-            margin-top: 0.8rem !important;
-            min-width: 280px;
+        .nav-cta{
+            display:inline-flex; align-items:center; gap:6px;
+            background:var(--pl-green); color:#fff;
+            font-weight:800; font-size:0.84rem;
+            padding:0.55rem 1.3rem; border-radius:50px;
+            text-decoration:none; white-space:nowrap;
+            transition:background .2s ease, transform .2s ease;
+            flex-shrink:0;
         }
-        .dropdown-item {
-            border-radius: 9px;
-            padding: 0.7rem 0.9rem;
-            display: flex;
-            gap: 0.7rem;
-            align-items: flex-start;
-        }
-        .dropdown-item .wing-icon {
-            width: 34px; height: 34px; border-radius: 8px;
-            background: var(--pl-green-light);
-            color: var(--pl-green);
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .dropdown-item .wing-name { font-weight: 800; font-size: 0.88rem; color: var(--pl-green-dark); }
-        .dropdown-item .wing-desc { font-size: 0.76rem; color: #6b7a70; display: block; }
-        .dropdown-item:hover { background: var(--pl-green-light); }
+        .nav-cta:hover{ background:var(--pl-green-dark); color:#fff; transform:translateY(-1px); }
 
-        .navbar-toggler { border: 1px solid var(--pl-green); }
+        /* Dropdown */
+        .dropdown-menu{
+            border:none; border-radius:16px; overflow:hidden;
+            box-shadow:0 20px 44px rgba(20,83,45,0.16);
+            padding:0.5rem; margin-top:0.9rem !important;
+            min-width:280px; border-top:3px solid var(--pl-gold);
+        }
+        .dropdown-item{
+            border-radius:10px; padding:0.7rem 0.8rem;
+            display:flex; gap:0.75rem; align-items:flex-start;
+            transition:background .15s ease;
+        }
+        .dropdown-item:hover{ background:var(--pl-green-light); }
+        .dropdown-item.active{ background:var(--pl-green-light); }
+        .wing-icon{
+            width:34px; height:34px; border-radius:9px;
+            background:var(--pl-green-light); color:var(--pl-green);
+            display:flex; align-items:center; justify-content:center;
+            flex-shrink:0; font-size:0.95rem;
+        }
+        .wing-name{ font-weight:800; font-size:0.87rem; color:var(--pl-green-dark); display:block; }
+        .wing-desc{ font-size:0.74rem; color:var(--pl-muted); display:block; margin-top:1px; }
+        .dropdown-divider{ border-color:var(--pl-border); }
+
+        /* Mobile toggler */
+        .navbar-toggler{ border:1.5px solid var(--pl-green); border-radius:8px; padding:0.3rem 0.5rem; }
+        .navbar-toggler:focus{ box-shadow:0 0 0 3px rgba(20,83,45,0.12); }
+
+        @media (max-width:991px){
+            .nav-inner{ height:62px; }
+            .nav-pills{ background:transparent; border-radius:0; padding:0; flex-direction:column; align-items:stretch; }
+            .nav-pills .nav-link{ border-radius:10px; }
+            .nav-cta{ width:100%; justify-content:center; margin-top:0.6rem; }
+        }
 
         /* ===== ALERTS ===== */
-        .alert { border: none; border-left: 4px solid var(--pl-green); border-radius: 8px; }
+        .alert{
+            border:none;
+            border-left:4px solid var(--pl-green);
+            border-radius:10px;
+            background:var(--pl-green-light);
+        }
 
-        /* ===== FOOTER ===== */
-        .footer-cta {
-            background: var(--pl-green);
+        /* ===== FOOTER CTA ===== */
+        .footer-cta{
+            background:var(--pl-green);
             background-image:
                 linear-gradient(160deg, var(--pl-green) 0%, var(--pl-green-dark) 100%),
                 repeating-linear-gradient(115deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 30px);
-            color: #fff;
-            padding: 2.4rem 0;
-            text-align: center;
+            color:#fff; padding:3rem 0; text-align:center;
         }
-        .footer-cta h3 { font-weight: 800; margin-bottom: 0.6rem; }
-        .footer-cta p { color: #dce9df; max-width: 480px; margin: 0 auto 1.2rem; font-size: 0.92rem; }
-        .footer-cta .cta-btn-light {
-            background: var(--pl-gold);
-            color: var(--pl-green-dark);
-            font-weight: 800;
-            padding: 0.6rem 1.6rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 0.88rem;
+        .footer-cta h3{ font-weight:900; font-size:1.6rem; margin-bottom:0.6rem; }
+        .footer-cta p{ color:#dce9df; max-width:480px; margin:0 auto 1.4rem; font-size:0.92rem; }
+        .footer-cta .cta-btn-light{
+            background:var(--pl-gold); color:var(--pl-green-dark);
+            font-weight:800; padding:0.7rem 1.8rem;
+            border-radius:50px; text-decoration:none;
+            font-size:0.9rem;
+            transition:background .2s ease, transform .2s ease;
+            display:inline-block;
         }
+        .footer-cta .cta-btn-light:hover{ background:#e0bc4a; transform:translateY(-2px); }
 
-        footer.site-footer {
-            flex-shrink: 0;
-            background: var(--pl-green-dark);
-            color: #a9c2ae;
-            padding: 1.6rem 0;
-            font-size: 0.82rem;
+        /* ===== SITE FOOTER ===== */
+        footer.site-footer{
+            flex-shrink:0;
+            background:var(--pl-green-dark);
+            color:#a9c2ae;
+            padding:2.4rem 0 1.6rem;
+            font-size:0.83rem;
         }
-        .footer-cols h6 {
-            color: var(--pl-gold);
-            font-weight: 800;
-            font-size: 0.72rem;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-bottom: 0.7rem;
+        .footer-brand-row{
+            display:flex; align-items:center; gap:10px;
+            margin-bottom:1.6rem;
+            padding-bottom:1.4rem;
+            border-bottom:1px solid rgba(255,255,255,0.1);
         }
-        .footer-cols a {
-            color: #cfe0d3;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.4rem;
-            font-weight: 600;
+        .footer-brand-icon{
+            width:36px; height:36px; border-radius:10px;
+            background:rgba(212,175,55,0.15);
+            border:1.5px solid rgba(212,175,55,0.4);
+            color:var(--pl-gold);
+            display:flex; align-items:center; justify-content:center;
+            font-size:1rem;
         }
-        .footer-cols a:hover { color: var(--pl-gold); }
-        .footer-bottom-bar {
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 1.4rem;
-            padding-top: 1rem;
-            font-size: 0.75rem;
-            color: #7d9683;
+        .footer-brand-name{
+            font-family:'Sora',sans-serif;
+            font-weight:900; color:#fff; font-size:1rem; letter-spacing:0.3px;
+        }
+        .footer-brand-tagline{ font-size:0.72rem; color:rgba(255,255,255,0.45); }
+        .footer-cols h6{
+            color:var(--pl-gold); font-weight:800;
+            font-size:0.7rem; letter-spacing:1px;
+            text-transform:uppercase; margin-bottom:0.8rem;
+        }
+        .footer-cols a{
+            color:#cfe0d3; text-decoration:none;
+            display:flex; align-items:center; gap:6px;
+            margin-bottom:0.45rem; font-weight:600;
+            font-size:0.82rem;
+            transition:color .15s ease;
+        }
+        .footer-cols a:hover{ color:var(--pl-gold); }
+        .footer-bottom-bar{
+            border-top:1px solid rgba(255,255,255,0.08);
+            margin-top:1.8rem; padding-top:1rem;
+            font-size:0.75rem; color:#7d9683;
         }
     </style>
 
@@ -170,27 +199,25 @@
 </head>
 <body>
 
-    <!-- Main navbar wrapped in a block so specific pages/wings can completely redefine it -->
     {% block navbar %}
-    <nav class="navbar navbar-expand-lg main-nav sticky-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'green_eagles:home' %}">
-                <!-- Dynamically change logo based on the active wing/page if needed -->
+    <nav class="main-nav navbar navbar-expand-lg">
+        <div class="nav-inner container-fluid" style="max-width:1200px;margin:0 auto;padding:0 1.5rem;">
+            <a class="nav-brand navbar-brand" href="{% url 'green_eagles:home' %}">
                 {% if request.resolver_match.url_name == 'green_eagles_crew' or 'crew_' in request.resolver_match.url_name %}
-                    <img src="{% static 'green_eagles/images/crew_logo.jpeg' %}" alt="Green Eagles Crew Logo" class="d-inline-block">
+                    <img src="{% static 'green_eagles/images/crew_logo.jpeg' %}" alt="Green Eagles Crew Logo">
                 {% elif request.resolver_match.url_name == 'messengers_of_peace' or 'mop_' in request.resolver_match.url_name %}
-                    <img src="{% static 'green_eagles/images/mop_logo.jpeg' %}" alt="Messengers of Peace Logo" class="d-inline-block">
+                    <img src="{% static 'green_eagles/images/mop_logo.jpeg' %}" alt="Messengers of Peace Logo">
                 {% else %}
-                    <img src="{% static 'green_eagles/images/logo.jpeg' %}" alt="PLASTOUT Logo" class="d-inline-block">
+                    <img src="{% static 'green_eagles/images/logo.jpeg' %}" alt="PLASTOUT Logo">
                 {% endif %}
 
                 {% if user.is_authenticated and user.is_superuser %}
-                    <span class="badge bg-warning text-dark fs-7 d-none d-sm-inline">Central Superadmin</span>
+                    <span class="nav-brand-badge badge-admin d-none d-sm-inline">Central Superadmin</span>
                 {% elif user.is_authenticated and user.profile %}
-                    <span class="badge bg-success-subtle text-success fs-7 d-none d-sm-inline">{{ user.profile.get_wing_display }}</span>
+                    <span class="nav-brand-badge badge-wing d-none d-sm-inline">{{ user.profile.get_wing_display }}</span>
                 {% endif %}
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -198,7 +225,7 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
-                <ul class="navbar-nav nav-pills-custom mb-2 mb-lg-0 align-items-lg-center me-lg-3">
+                <ul class="navbar-nav nav-pills mb-2 mb-lg-0 align-items-lg-center me-lg-3">
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'green_eagles:home' %}">Home</a>
                     </li>
@@ -209,7 +236,6 @@
                         <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'green_eagles:services' %}">Activities</a>
                     </li>
 
-                    <!-- Wings / Branches dropdown - Hidden if user is not logged in -->
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {% if 'green_eagles_crew' in request.resolver_match.url_name or 'crew_' in request.resolver_match.url_name or 'messengers_of_peace' in request.resolver_match.url_name or 'mop_' in request.resolver_match.url_name %}active{% endif %}" href="#" id="wingsDropdown"
@@ -222,7 +248,7 @@
                                 <a class="dropdown-item {% if request.resolver_match.url_name == 'green_eagles_crew' or 'crew_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'green_eagles:green_eagles_crew' %}">
                                     <span class="wing-icon"><i class="bi bi-shield-check"></i></span>
                                     <span>
-                                        <span class="wing-name d-block">Green Eagles Crew</span>
+                                        <span class="wing-name">Green Eagles Crew</span>
                                         <span class="wing-desc">Scouting, patrols &amp; outdoor leadership</span>
                                     </span>
                                 </a>
@@ -233,7 +259,7 @@
                                 <a class="dropdown-item {% if request.resolver_match.url_name == 'messengers_of_peace' or 'mop_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'green_eagles:messengers_of_peace' %}">
                                     <span class="wing-icon"><i class="bi bi-flag"></i></span>
                                     <span>
-                                        <span class="wing-name d-block">Messengers of Peace</span>
+                                        <span class="wing-name">Messengers of Peace</span>
                                         <span class="wing-desc">Community outreach &amp; peace building</span>
                                     </span>
                                 </a>
@@ -244,16 +270,12 @@
                     {% endif %}
 
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}"
-                           href="{% url 'green_eagles:gallery' %}">
-                            Gallery
-                        </a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" href="{% url 'green_eagles:gallery' %}">Gallery</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'faq' %}active{% endif %}" href="{% url 'green_eagles:faq' %}">FAQ</a>
                     </li>
 
-                    <!-- Member Auth Links & Tasks Menu -->
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="#" id="memberTasksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -264,8 +286,8 @@
                                     <a class="dropdown-item" href="{% url 'green_eagles:dashboard' %}">
                                         <span class="wing-icon"><i class="bi bi-speedometer2"></i></span>
                                         <span>
-                                            <span class="wing-name d-block">Dashboard</span>
-                                            <span class="wing-desc">Overview & updates</span>
+                                            <span class="wing-name">Dashboard</span>
+                                            <span class="wing-desc">Overview &amp; updates</span>
                                         </span>
                                     </a>
                                 </li>
@@ -273,20 +295,38 @@
                                 {% if user.is_superuser %}
                                     <li>
                                         <a class="dropdown-item" href="{% url 'green_eagles:admin_manage_members' %}">
-                                            <span class="wing-icon text-warning" style="background: #fef9c3;"><i class="bi bi-shield-shaded"></i></span>
+                                            <span class="wing-icon text-warning" style="background:#fef9c3;"><i class="bi bi-shield-shaded"></i></span>
                                             <span>
                                                 <span class="wing-name d-block text-warning">Superadmin Controls</span>
-                                                <span class="wing-desc">Manage all wings & members</span>
+                                                <span class="wing-desc">Manage all wings &amp; members</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item {% if request.resolver_match.url_name == 'payment_ledger' %}active{% endif %}" href="{% url 'green_eagles:payment_ledger' %}">
+                                            <span class="wing-icon text-success" style="background:#dcfce7;"><i class="bi bi-journal-check"></i></span>
+                                            <span>
+                                                <span class="wing-name d-block text-success">Payment Ledger</span>
+                                                <span class="wing-desc">Track payments &amp; scarves</span>
                                             </span>
                                         </a>
                                     </li>
                                 {% elif user.profile.role == 'COORDINATOR' or user.profile.role == 'EXEC' %}
                                     <li>
                                         <a class="dropdown-item" href="#">
-                                            <span class="wing-icon text-info" style="background: #e0f2fe;"><i class="bi bi-sliders"></i></span>
+                                            <span class="wing-icon text-info" style="background:#e0f2fe;"><i class="bi bi-sliders"></i></span>
                                             <span>
                                                 <span class="wing-name d-block">{{ user.profile.get_wing_display }} Admin</span>
                                                 <span class="wing-desc">Manage wing members</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item {% if request.resolver_match.url_name == 'payment_ledger' %}active{% endif %}" href="{% url 'green_eagles:payment_ledger' %}">
+                                            <span class="wing-icon text-success" style="background:#dcfce7;"><i class="bi bi-journal-check"></i></span>
+                                            <span>
+                                                <span class="wing-name d-block text-success">Payment Ledger</span>
+                                                <span class="wing-desc">Track payments &amp; scarves</span>
                                             </span>
                                         </a>
                                     </li>
@@ -296,7 +336,7 @@
                                     <a class="dropdown-item {% if request.resolver_match.url_name == 'activity_reports' %}active{% endif %}" href="{% url 'green_eagles:activity_reports' %}">
                                         <span class="wing-icon"><i class="bi bi-journal-plus"></i></span>
                                         <span>
-                                            <span class="wing-name d-block">Activity Reports</span>
+                                            <span class="wing-name">Activity Reports</span>
                                             <span class="wing-desc">Submit &amp; view cleanup logs</span>
                                         </span>
                                     </a>
@@ -305,7 +345,7 @@
                                     <a class="dropdown-item {% if request.resolver_match.url_name == 'patrol_roster' %}active{% endif %}" href="{% url 'green_eagles:patrol_roster' %}">
                                         <span class="wing-icon"><i class="bi bi-people-fill"></i></span>
                                         <span>
-                                            <span class="wing-name d-block">Patrol Roster</span>
+                                            <span class="wing-name">Patrol Roster</span>
                                             <span class="wing-desc">Check wing assignments</span>
                                         </span>
                                     </a>
@@ -313,7 +353,7 @@
                                 <li><hr class="dropdown-divider my-1"></li>
                                 <li>
                                     <a class="dropdown-item" href="{% url 'green_eagles:logout' %}">
-                                        <span class="wing-icon text-danger" style="background: #fef2f2;"><i class="bi bi-box-arrow-right"></i></span>
+                                        <span class="wing-icon text-danger" style="background:#fef2f2;"><i class="bi bi-box-arrow-right"></i></span>
                                         <span>
                                             <span class="wing-name d-block text-danger">Logout</span>
                                             <span class="wing-desc">Exit portal</span>
@@ -333,9 +373,13 @@
                 </ul>
 
                 {% if user.is_authenticated %}
-                    <a href="{% url 'green_eagles:dashboard' %}" class="cta-btn">Member Hub</a>
+                    <a href="{% url 'green_eagles:dashboard' %}" class="nav-cta">
+                        <i class="bi bi-speedometer2"></i> Member Hub
+                    </a>
                 {% else %}
-                    <a href="{% url 'green_eagles:contact' %}" class="cta-btn">Get Involved</a>
+                    <a href="{% url 'green_eagles:contact' %}" class="nav-cta">
+                        <i class="bi bi-hand-index-thumb"></i> Get Involved
+                    </a>
                 {% endif %}
             </div>
         </div>
@@ -362,7 +406,7 @@
         {% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Footer CTA -->
     <div class="footer-cta">
         <div class="container">
             <h3>Ready to make an impact?</h3>
@@ -371,31 +415,40 @@
         </div>
     </div>
 
+    <!-- Site Footer -->
     <footer class="site-footer">
         <div class="container">
+            <div class="footer-brand-row">
+                <div class="footer-brand-icon"><i class="bi bi-recycle"></i></div>
+                <div>
+                    <div class="footer-brand-name">PLASTOUT</div>
+                    <div class="footer-brand-tagline">Kericho County · Fighting Plastic Pollution</div>
+                </div>
+            </div>
+
             <div class="row gy-3 footer-cols">
                 <div class="col-6 col-md-3">
                     <h6>Explore</h6>
-                    <a href="{% url 'green_eagles:home' %}">Home</a>
-                    <a href="{% url 'green_eagles:about' %}">About</a>
-                    <a href="{% url 'green_eagles:services' %}">Activities</a>
+                    <a href="{% url 'green_eagles:home' %}"><i class="bi bi-house"></i> Home</a>
+                    <a href="{% url 'green_eagles:about' %}"><i class="bi bi-info-circle"></i> About</a>
+                    <a href="{% url 'green_eagles:services' %}"><i class="bi bi-lightning"></i> Activities</a>
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>Our Wings</h6>
-                    <a href="{% url 'green_eagles:green_eagles_crew' %}">Green Eagles Crew</a>
-                    <a href="{% url 'green_eagles:messengers_of_peace' %}">Messengers of Peace</a>
+                    <a href="{% url 'green_eagles:green_eagles_crew' %}"><i class="bi bi-shield-check"></i> Green Eagles Crew</a>
+                    <a href="{% url 'green_eagles:messengers_of_peace' %}"><i class="bi bi-flag"></i> Messengers of Peace</a>
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>More</h6>
-                    <a href="{% url 'green_eagles:gallery' %}">Gallery</a>
-                    <a href="{% url 'green_eagles:faq' %}">FAQ</a>
+                    <a href="{% url 'green_eagles:gallery' %}"><i class="bi bi-images"></i> Gallery</a>
+                    <a href="{% url 'green_eagles:faq' %}"><i class="bi bi-question-circle"></i> FAQ</a>
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>Contact</h6>
-                    <a href="mailto:plastout.org@gmail.com"><i class="bi bi-envelope me-1"></i>plastout.org@gmail.com</a>
-                    <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone me-1"></i>+254791245090</a>
-                    <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone me-1"></i>+254 740 170338</a>
-                    <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone me-1"></i>+254 722 318000</a>
+                    <a href="mailto:plastout.org@gmail.com"><i class="bi bi-envelope"></i> plastout.org@gmail.com</a>
+                    <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone"></i> +254791245090</a>
+                    <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone"></i> +254 740 170338</a>
+                    <a href="{% url 'green_eagles:contact' %}"><i class="bi bi-telephone"></i> +254 722 318000</a>
                 </div>
             </div>
 
@@ -406,9 +459,7 @@
         </div>
     </footer>
 
-    <!-- Bootstrap 5 JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     {% block extra_js %}{% endblock %}
 </body>
 </html>

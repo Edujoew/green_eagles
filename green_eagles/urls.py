@@ -46,4 +46,7 @@ urlpatterns = [
     path('reports/', views.activity_reports, name='activity_reports'),
     path('roster/', views.patrol_roster, name='patrol_roster'),
     path('payment/waiting/', views.payment_waiting, name='payment_waiting'),
+    path('admin-panel/members/', views.manage_members, name='manage_members'),
+    path('admin-panel/ledger/', views.payment_ledger, name='payment_ledger'),
+    path('admin-panel/ledger/toggle-scarf/<int:pk>/', views.toggle_scarf_status, name='toggle_scarf_status'),
 ]
