@@ -460,6 +460,40 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Universal Password Toggle Eye Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInputs = document.querySelectorAll('input[type="password"]');
+        
+        passwordInputs.forEach(input => {
+            if (input.parentNode.classList.contains('position-relative')) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'position-relative d-flex align-items-center w-100';
+            
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(input);
+
+            input.style.paddingRight = '40px';
+
+            const toggleBtn = document.createElement('button');
+            toggleBtn.type = 'button';
+            toggleBtn.className = 'btn btn-link text-decoration-none text-muted position-absolute end-0 me-2 p-1 border-0';
+            toggleBtn.style.zIndex = '5';
+            toggleBtn.innerHTML = '<i class="bi bi-eye-slash fs-5"></i>';
+
+            toggleBtn.addEventListener('click', function () {
+                const isPassword = input.getAttribute('type') === 'password';
+                input.setAttribute('type', isPassword ? 'text' : 'password');
+                this.innerHTML = isPassword ? '<i class="bi bi-eye fs-5 text-success"></i>' : '<i class="bi bi-eye-slash fs-5"></i>';
+            });
+
+            wrapper.appendChild(toggleBtn);
+        });
+    });
+    </script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

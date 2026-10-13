@@ -2,36 +2,49 @@
 
 {% block content %}
 <div class="reg-page">
-    <!-- LEFT: Info rail -->
+
+    <!-- LEFT RAIL -->
     <div class="reg-rail">
         <div class="rail-lines"></div>
         <div class="rail-content">
             <div class="rail-logo"><i class="bi bi-recycle"></i></div>
             <h2>One form.<br>Two wings.</h2>
             <p class="rail-sub">Join the movement cutting plastic pollution across Kericho County.</p>
-
             <div class="rail-steps">
-                <div class="rail-step">
-                    <span class="step-num">1</span>
-                    <div><strong>Create your account</strong><span>Basic details and a secure password</span></div>
+                <div class="rail-step" data-target="1">
+                    <span class="step-num active-step" id="dot1">1</span>
+                    <div>
+                        <strong>Create your account</strong>
+                        <span>Basic details and a secure password</span>
+                    </div>
                 </div>
-                <div class="rail-step">
-                    <span class="step-num">2</span>
-                    <div><strong>Pick your wing</strong><span>Green Eagles, Messengers of Peace, or both</span></div>
+                <div class="rail-step" data-target="2">
+                    <span class="step-num" id="dot2">2</span>
+                    <div>
+                        <strong>Pick your wing</strong>
+                        <span>Green Eagles, Messengers of Peace, or both</span>
+                    </div>
                 </div>
-                <div class="rail-step">
-                    <span class="step-num">3</span>
-                    <div><strong>M-Pesa Payment</strong><span>300 KES mandatory + optional scarf fee</span></div>
+                <div class="rail-step" data-target="3">
+                    <span class="step-num" id="dot3">3</span>
+                    <div>
+                        <strong>M-Pesa Payment</strong>
+                        <span>300 KES mandatory + optional scarf fee</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- RIGHT: Form -->
+    <!-- RIGHT FORM -->
     <div class="reg-form-side">
         <div class="reg-box">
-            <h2 class="reg-title">Create Your Account</h2>
-            <p class="reg-sub">Register as a PLASTOUT member</p>
+
+            <!-- Progress bar -->
+            <div class="reg-progress-wrap">
+                <div class="reg-progress-bar" id="regProgress" style="width:33.3%"></div>
+            </div>
+            <p class="reg-step-label" id="regStepLabel">Step 1 of 3 — Account Details</p>
 
             {% if form.errors %}
                 <div class="reg-errors">
@@ -51,57 +64,88 @@
 
             <form method="POST" class="reg-form" id="regForm">
                 {% csrf_token %}
-                
-                {{ form.as_p }}
 
-                <div class="reg-field">
-                    <label for="wing">Wing</label>
-                    <select name="wing" id="wing" class="reg-input">
-                        <option value="GE">Green Eagles Crew</option>
-                        <option value="MOP">Messengers of Peace</option>
-                        <option value="BOTH">Both Wings</option>
-                    </select>
-                </div>
-
-                <div class="reg-field">
-                    <label for="phone">Phone Number (Account/Profile)</label>
-                    <input type="text" name="phone" id="phone" class="reg-input" placeholder="+254 700 000000" required>
-                </div>
-
-                <!-- M-Pesa STK Push Integration Fields -->
-                <div class="reg-field" style="background: #f0f7f2; padding: 1rem; border-radius: 11px; border: 1.5px dashed #14532d; margin-bottom: 1.2rem;">
-                    <label for="phone_number" style="color: #14532d; display: flex; align-items: center; gap: 6px;">
-                        <i class="bi bi-phone-fill text-success"></i> M-Pesa STK Push Number
-                    </label>
-                    <input type="text" name="phone_number" id="phone_number" class="reg-input mb-2" placeholder="2547XXXXXXXX or 07XXXXXXXX" required>
-                    
-                    <label for="payment_amount" style="color: #14532d; margin-top: 0.5rem;">Registration Fee Option</label>
-                    <select name="payment_amount" id="payment_amount" class="reg-input" required>
-                        <option value="300">300 KES (Mandatory Reg Fee only — 200 KES scarf balance)</option>
-                        <option value="500" selected>500 KES (Full Payment: 300 Reg Fee + 200 Scarf)</option>
-                    </select>
-                    <small class="text-muted d-block mt-1" style="font-size: 0.76rem;">An M-Pesa prompt will be sent to your phone to authorize payment.</small>
-                </div>
-
-                <!-- Live password checklist -->
-                <div class="pw-panel">
-                    <div class="pw-panel-head">
-                        <i class="bi bi-shield-lock"></i> Password Requirements
+                <!-- STEP 1: Account Details -->
+                <div class="reg-step" id="step1">
+                    <h3 class="step-title">Account Details</h3>
+                    {{ form.as_p }}
+                    <!-- Password checklist (hidden until pw field is typed) -->
+                    <div class="pw-panel" id="pwPanel">
+                        <div class="pw-panel-head"><i class="bi bi-shield-lock"></i> Password Strength</div>
+                        <div class="pw-meter"><div class="pw-meter-fill" id="pwFill"></div></div>
+                        <ul class="pw-list">
+                            <li data-rule="length"><i class="bi bi-circle"></i> At least <strong>8 characters</strong></li>
+                            <li data-rule="upper"><i class="bi bi-circle"></i> One <strong>uppercase</strong> letter</li>
+                            <li data-rule="lower"><i class="bi bi-circle"></i> One <strong>lowercase</strong> letter</li>
+                            <li data-rule="number"><i class="bi bi-circle"></i> One <strong>number</strong></li>
+                            <li data-rule="special"><i class="bi bi-circle"></i> One <strong>special character</strong></li>
+                        </ul>
                     </div>
-                    <div class="pw-meter"><div class="pw-meter-fill" id="pwFill"></div></div>
-                    <ul class="pw-list">
-                        <li data-rule="length"><i class="bi bi-circle"></i> At least <strong>8 characters</strong></li>
-                        <li data-rule="upper"><i class="bi bi-circle"></i> One <strong>uppercase</strong> letter (A–Z)</li>
-                        <li data-rule="lower"><i class="bi bi-circle"></i> One <strong>lowercase</strong> letter (a–z)</li>
-                        <li data-rule="number"><i class="bi bi-circle"></i> One <strong>number</strong> (0–9)</li>
-                        <li data-rule="special"><i class="bi bi-circle"></i> One <strong>special character</strong> (@, #, $, !)</li>
-                    </ul>
+                    <button type="button" class="reg-next-btn" onclick="goStep(2)">
+                        Next <i class="bi bi-arrow-right"></i>
+                    </button>
                 </div>
 
-                <button type="submit" class="reg-btn">
-                    <span>Pay &amp; Create Account</span>
-                    <i class="bi bi-arrow-right"></i>
-                </button>
+                <!-- STEP 2: Wing & Phone -->
+                <div class="reg-step" id="step2" style="display:none;">
+                    <h3 class="step-title">Wing &amp; Contact</h3>
+                    <div class="reg-field">
+                        <label for="wing">Select Your Wing</label>
+                        <select name="wing" id="wing" class="reg-input">
+                            <option value="GE">🦅 Green Eagles Crew</option>
+                            <option value="MOP">🕊️ Messengers of Peace</option>
+                            <option value="BOTH">⚡ Both Wings</option>
+                        </select>
+                    </div>
+                    <div class="reg-field">
+                        <label for="phone">Phone Number (Profile)</label>
+                        <input type="text" name="phone" id="phone" class="reg-input" placeholder="+254 700 000000" required>
+                    </div>
+                    <div class="reg-step-nav">
+                        <button type="button" class="reg-back-btn" onclick="goStep(1)">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="reg-next-btn" onclick="goStep(3)">
+                            Next <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: M-Pesa Payment -->
+                <div class="reg-step" id="step3" style="display:none;">
+                    <h3 class="step-title">M-Pesa Payment</h3>
+                    <div class="mpesa-box">
+                        <div class="mpesa-icon"><i class="bi bi-phone-fill"></i></div>
+                        <div>
+                            <div class="mpesa-label">M-Pesa STK Push</div>
+                            <div class="mpesa-desc">We'll send a prompt to authorize your payment.</div>
+                        </div>
+                    </div>
+                    <div class="reg-field">
+                        <label for="phone_number">M-Pesa Number</label>
+                        <input type="text" name="phone_number" id="phone_number" class="reg-input" placeholder="2547XXXXXXXX or 07XXXXXXXX" required>
+                    </div>
+                    <div class="reg-field">
+                        <label for="payment_amount">Registration Fee Option</label>
+                        <select name="payment_amount" id="payment_amount" class="reg-input" required>
+                            <option value="300">300 KES — Reg Fee only (200 KES scarf balance)</option>
+                            <option value="500" selected>500 KES — Full: Reg Fee + Scarf</option>
+                        </select>
+                    </div>
+                    <div class="mpesa-note">
+                        <i class="bi bi-info-circle"></i>
+                        An M-Pesa prompt will be sent to authorize payment.
+                    </div>
+                    <div class="reg-step-nav">
+                        <button type="button" class="reg-back-btn" onclick="goStep(2)">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="reg-submit-btn">
+                            <i class="bi bi-check2-circle"></i> Pay &amp; Create Account
+                        </button>
+                    </div>
+                </div>
+
             </form>
 
             <p class="reg-footer">Already a member? <a href="{% url 'green_eagles:login' %}">Login</a></p>
@@ -112,175 +156,205 @@
 <style>
 .reg-page{ display:flex; min-height:calc(100vh - 200px); flex-wrap:wrap; }
 
-/* LEFT RAIL */
+/* RAIL */
 .reg-rail{
-    flex:1 1 40%;
-    position:relative;
-    overflow:hidden;
+    flex:1 1 38%;
+    position:relative; overflow:hidden;
     background:#0c3a1f;
     background-image:linear-gradient(165deg,#14532d 0%,#0a2a17 100%);
     padding:3.5rem 2.5rem;
-    display:flex;
-    align-items:center;
-    min-height:360px;
+    display:flex; align-items:center; min-height:360px;
 }
 .rail-lines{
     position:absolute; inset:0;
-    background-image:repeating-linear-gradient(125deg, rgba(212,175,55,0.07) 0px, rgba(212,175,55,0.07) 1px, transparent 1px, transparent 26px);
+    background-image:repeating-linear-gradient(125deg,rgba(212,175,55,0.07) 0px,rgba(212,175,55,0.07) 1px,transparent 1px,transparent 26px);
     animation:railSlide 22s linear infinite;
 }
-@keyframes railSlide{ from{ background-position:0 0; } to{ background-position:120px 0; } }
-.rail-content{ position:relative; z-index:1; max-width:340px; }
+@keyframes railSlide{ from{background-position:0 0;} to{background-position:120px 0;} }
+.rail-content{ position:relative; z-index:1; max-width:320px; }
 .rail-logo{
-    width:56px; height:56px;
-    border-radius:16px;
-    background:rgba(212,175,55,0.15);
-    border:1.5px solid rgba(212,175,55,0.5);
-    color:#d4af37;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.5rem;
-    margin-bottom:1.6rem;
+    width:52px; height:52px; border-radius:14px;
+    background:rgba(212,175,55,0.15); border:1.5px solid rgba(212,175,55,0.5);
+    color:#d4af37; display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem; margin-bottom:1.4rem;
 }
 .rail-content h2{
-    color:#fff;
-    font-family:'Sora',sans-serif;
-    font-weight:900;
-    font-size:1.9rem;
-    line-height:1.25;
-    margin-bottom:0.8rem;
+    color:#fff; font-family:'Sora',sans-serif; font-weight:900;
+    font-size:1.8rem; line-height:1.2; margin-bottom:0.7rem;
 }
-.rail-sub{ color:#b9d2c0; font-size:0.92rem; margin-bottom:2.2rem; }
-
-.rail-steps{ display:flex; flex-direction:column; gap:1.3rem; }
-.rail-step{ display:flex; gap:0.9rem; align-items:flex-start; }
+.rail-sub{ color:#b9d2c0; font-size:0.9rem; margin-bottom:2rem; }
+.rail-steps{ display:flex; flex-direction:column; gap:1.2rem; }
+.rail-step{ display:flex; gap:0.85rem; align-items:flex-start; cursor:pointer; }
 .step-num{
-    flex-shrink:0;
-    width:30px; height:30px;
-    border-radius:50%;
-    background:#d4af37;
-    color:#0c3a1f;
-    font-weight:900;
-    font-size:0.85rem;
+    flex-shrink:0; width:28px; height:28px; border-radius:50%;
+    background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.5);
+    font-weight:900; font-size:0.8rem;
     display:flex; align-items:center; justify-content:center;
+    transition:all .3s ease;
 }
-.rail-step strong{ display:block; color:#fff; font-size:0.9rem; margin-bottom:2px; }
-.rail-step span{ color:#9ab8a3; font-size:0.8rem; }
+.step-num.active-step{ background:#d4af37; color:#0c3a1f; }
+.step-num.done-step{ background:#22c55e; color:#fff; }
+.rail-step strong{ display:block; color:#fff; font-size:0.88rem; margin-bottom:1px; }
+.rail-step span{ color:#9ab8a3; font-size:0.78rem; }
 
-/* RIGHT FORM */
+/* FORM SIDE */
 .reg-form-side{
-    flex:1 1 60%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#f4f8f5;
-    padding:3rem 1.5rem;
+    flex:1 1 62%;
+    display:flex; align-items:center; justify-content:center;
+    background:#f4f8f5; padding:2.5rem 1.5rem;
 }
 .reg-box{
-    width:100%;
-    max-width:460px;
-    background:#fff;
-    border-radius:18px;
-    padding:2.6rem 2.4rem;
+    width:100%; max-width:440px;
+    background:#fff; border-radius:18px;
+    padding:2.2rem 2rem;
     box-shadow:0 20px 50px rgba(20,83,45,0.1);
     animation:regIn .5s ease both;
 }
-@keyframes regIn{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
-.reg-title{ font-family:'Sora',sans-serif; font-weight:900; color:#14532d; font-size:1.5rem; margin-bottom:0.2rem; }
-.reg-sub{ color:#6b7a70; font-size:0.88rem; margin-bottom:1.6rem; }
+@keyframes regIn{ from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
 
+/* Progress */
+.reg-progress-wrap{
+    height:5px; background:#e8f2ea; border-radius:50px;
+    overflow:hidden; margin-bottom:0.6rem;
+}
+.reg-progress-bar{
+    height:100%; background:linear-gradient(90deg,#14532d,#d4af37);
+    border-radius:50px; transition:width .4s ease;
+}
+.reg-step-label{
+    font-size:0.75rem; font-weight:700; color:#9aa89f;
+    text-transform:uppercase; letter-spacing:0.5px;
+    margin-bottom:1.4rem;
+}
+
+/* Errors */
 .reg-errors{
-    background:#fdecea;
-    border:1px solid #f5c2c7;
-    border-radius:10px;
-    padding:0.9rem 1rem;
-    margin-bottom:1.3rem;
-    font-size:0.83rem;
-    color:#842029;
+    background:#fdecea; border:1px solid #f5c2c7; border-radius:10px;
+    padding:0.9rem 1rem; margin-bottom:1.2rem;
+    font-size:0.82rem; color:#842029;
 }
 .reg-errors-head{ font-weight:800; margin-bottom:0.4rem; display:flex; align-items:center; gap:6px; }
 .reg-errors ul{ margin:0; padding-left:1.3rem; }
 .reg-errors li{ margin-bottom:2px; }
 
-.reg-form p{ margin-bottom:1rem; }
-.reg-field{ margin-bottom:1rem; }
+/* Step */
+.step-title{
+    font-weight:800; color:#14532d; font-size:1.15rem; margin-bottom:1.3rem;
+}
+.reg-form p{ margin-bottom:0.95rem; }
+.reg-field{ margin-bottom:0.95rem; }
 .reg-form label, .reg-field label{
-    display:block; font-weight:700; font-size:0.8rem; color:#14532d; margin-bottom:6px;
+    display:block; font-weight:700; font-size:0.79rem;
+    color:#14532d; margin-bottom:5px;
 }
 .reg-input, .reg-form input, .reg-form select{
-    width:100%;
-    border:1.5px solid #e0e6e2;
-    border-radius:9px;
-    padding:11px 14px;
-    font-size:0.94rem;
+    width:100%; border:1.5px solid #e0e6e2; border-radius:9px;
+    padding:11px 14px; font-size:0.93rem;
     transition:border-color .2s ease, box-shadow .2s ease;
 }
 .reg-input:focus, .reg-form input:focus, .reg-form select:focus{
     outline:none; border-color:#14532d; box-shadow:0 0 0 4px rgba(20,83,45,0.1);
 }
 
-/* Password panel */
+/* Password */
 .pw-panel{
-    background:#f4f8f5;
-    border:1px solid #d9e6dd;
-    border-radius:11px;
-    padding:0.9rem 1rem;
-    margin-bottom:1.3rem;
+    background:#f4f8f5; border:1px solid #d9e6dd;
+    border-radius:10px; padding:0.85rem 1rem; margin-bottom:1.2rem;
 }
 .pw-panel-head{
-    font-weight:800; color:#14532d; font-size:0.8rem;
-    display:flex; align-items:center; gap:6px; margin-bottom:0.7rem;
+    font-weight:800; color:#14532d; font-size:0.78rem;
+    display:flex; align-items:center; gap:6px; margin-bottom:0.6rem;
 }
-.pw-meter{
-    height:5px; background:#e0e6e2; border-radius:50px; overflow:hidden; margin-bottom:0.8rem;
-}
+.pw-meter{ height:5px; background:#e0e6e2; border-radius:50px; overflow:hidden; margin-bottom:0.7rem; }
 .pw-meter-fill{
     height:100%; width:0%; background:#dc3545; border-radius:50px;
     transition:width .3s ease, background .3s ease;
 }
-.pw-list{ list-style:none; margin:0; padding:0; }
-.pw-list li{
-    display:flex; align-items:center; gap:7px;
-    font-size:0.79rem; color:#6b7a70; margin-bottom:5px;
-    transition:color .2s ease;
-}
-.pw-list li i{ font-size:0.7rem; color:#c3cfc7; transition:color .2s ease; }
+.pw-list{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; }
+.pw-list li{ display:flex; align-items:center; gap:6px; font-size:0.77rem; color:#6b7a70; transition:color .2s; }
+.pw-list li i{ font-size:0.68rem; color:#c3cfc7; transition:color .2s; }
 .pw-list li.met{ color:#14532d; }
 .pw-list li.met i{ color:#2e8b57; }
 
-.reg-btn{
-    width:100%;
-    background:#14532d; color:#fff; border:none;
-    border-radius:9px; padding:13px;
-    font-weight:800; font-size:0.93rem;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    cursor:pointer;
-    transition:background .2s ease, transform .2s ease;
+/* M-Pesa box */
+.mpesa-box{
+    display:flex; align-items:center; gap:0.9rem;
+    background:#f0f7f2; border:1.5px dashed #14532d;
+    border-radius:11px; padding:0.9rem 1rem; margin-bottom:1.1rem;
 }
-.reg-btn:hover{ background:#0c3a1f; transform:translateY(-2px); }
-.reg-btn i{ transition:transform .2s ease; }
-.reg-btn:hover i{ transform:translateX(4px); }
+.mpesa-icon{
+    width:40px; height:40px; border-radius:10px;
+    background:#14532d; color:#d4af37;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; flex-shrink:0;
+}
+.mpesa-label{ font-weight:800; color:#14532d; font-size:0.88rem; }
+.mpesa-desc{ font-size:0.77rem; color:#5c6b63; }
+.mpesa-note{
+    display:flex; align-items:center; gap:6px;
+    background:#e8f2ea; border-radius:8px;
+    padding:0.6rem 0.8rem; margin-bottom:1.2rem;
+    font-size:0.78rem; color:#14532d; font-weight:600;
+}
 
-.reg-footer{ text-align:center; margin-top:1.4rem; font-size:0.87rem; color:#6b7a70; }
+/* Buttons */
+.reg-next-btn, .reg-submit-btn{
+    width:100%; background:#14532d; color:#fff; border:none;
+    border-radius:9px; padding:12px;
+    font-weight:800; font-size:0.9rem;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    cursor:pointer; transition:background .2s ease, transform .2s ease;
+}
+.reg-next-btn:hover, .reg-submit-btn:hover{ background:#0c3a1f; transform:translateY(-1px); }
+.reg-next-btn i, .reg-submit-btn i{ transition:transform .2s ease; }
+.reg-next-btn:hover i, .reg-submit-btn:hover i{ transform:translateX(3px); }
+.reg-step-nav{ display:flex; gap:0.7rem; align-items:center; }
+.reg-back-btn{
+    flex-shrink:0;
+    display:inline-flex; align-items:center; gap:5px;
+    background:none; border:1.5px solid #d8e3da;
+    color:#5c6b63; font-weight:700; font-size:0.88rem;
+    padding:12px 1rem; border-radius:9px; cursor:pointer;
+    transition:background .15s ease;
+}
+.reg-back-btn:hover{ background:#f4f8f5; color:#14532d; }
+.reg-step-nav .reg-next-btn, .reg-step-nav .reg-submit-btn{ flex:1; }
+
+.reg-footer{ text-align:center; margin-top:1.2rem; font-size:0.86rem; color:#6b7a70; }
 .reg-footer a{ color:#14532d; font-weight:700; text-decoration:none; }
 .reg-footer a:hover{ color:#d4af37; }
 
 @media (max-width:900px){
     .reg-rail{ flex:1 1 100%; padding:2.5rem 2rem; }
-    .rail-content h2{ font-size:1.6rem; }
 }
 </style>
 
 <script>
+function goStep(n){
+    document.querySelectorAll('.reg-step').forEach(s => s.style.display = 'none');
+    document.getElementById('step'+n).style.display = 'block';
+
+    const pct = {1:'33.3%', 2:'66.6%', 3:'100%'}[n];
+    const labels = {1:'Step 1 of 3 — Account Details', 2:'Step 2 of 3 — Wing & Contact', 3:'Step 3 of 3 — M-Pesa Payment'};
+    document.getElementById('regProgress').style.width = pct;
+    document.getElementById('regStepLabel').textContent = labels[n];
+
+    ['dot1','dot2','dot3'].forEach((id,i) => {
+        const el = document.getElementById(id);
+        el.classList.remove('active-step','done-step');
+        if(i+1 < n) el.classList.add('done-step');
+        if(i+1 === n) el.classList.add('active-step');
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('regForm');
     if (!form) return;
     const pwInputs = form.querySelectorAll('input[type="password"]');
     if (!pwInputs.length) return;
     const pw = pwInputs[0];
-
     const fill = document.getElementById('pwFill');
     const items = document.querySelectorAll('.pw-list li');
-
     const rules = {
         length: v => v.length >= 8,
         upper:  v => /[A-Z]/.test(v),
@@ -288,7 +362,6 @@ document.addEventListener("DOMContentLoaded", function () {
         number: v => /[0-9]/.test(v),
         special:v => /[^A-Za-z0-9]/.test(v)
     };
-
     pw.addEventListener('input', function () {
         const v = pw.value;
         let passed = 0;
@@ -296,13 +369,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const rule = li.getAttribute('data-rule');
             const ok = rules[rule] ? rules[rule](v) : false;
             li.classList.toggle('met', ok);
-            const icon = li.querySelector('i');
-            icon.className = ok ? 'bi bi-check-circle-fill' : 'bi bi-circle';
-            if (ok) passed++;
+            li.querySelector('i').className = ok ? 'bi bi-check-circle-fill' : 'bi bi-circle';
+            if(ok) passed++;
         });
-        const pct = (passed / 5) * 100;
-        fill.style.width = pct + '%';
-        fill.style.background = pct < 40 ? '#dc3545' : pct < 80 ? '#e0a82e' : '#2e8b57';
+        const pct = (passed/5)*100;
+        fill.style.width = pct+'%';
+        fill.style.background = pct<40?'#dc3545':pct<80?'#e0a82e':'#2e8b57';
     });
 });
 </script>
