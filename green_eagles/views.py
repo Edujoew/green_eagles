@@ -11,6 +11,7 @@ from functools import wraps
 from django_daraja.views import MpesaClient
 from .models import Announcement
 from .forms import AnnouncementForm
+from django.utils import timezone
 
 from .models import MemberProfile, GalleryItem
 from .forms import ContactForm, GalleryItemForm, UserUpdateForm, MemberProfileUpdateForm
@@ -421,6 +422,11 @@ def admin_delete_member(request, pk):
 def dashboard(request):
     profile, _ = MemberProfile.objects.get_or_create(user=request.user)
     
+    # Enforce Constitution Agreement before accessing the dashboard
+    if not profile.agreed_to_constitution:
+        messages.info(request, "Please review and accept the PLASTOUT Constitution to proceed.")
+        return redirect('green_eagles:constitution')
+
     # Filter announcements based on user's wing or central announcements
     if request.user.is_superuser or (profile and profile.role == 'EXEC'):
         announcements = Announcement.objects.all()[:5]
@@ -624,3 +630,16 @@ def toggle_scarf_status(request, pk):
     status_msg = "issued" if profile.scarf_issued else "marked as pending"
     messages.success(request, f"Scarf status for '{profile.user.username}' {status_msg}.")
     return redirect('green_eagles:payment_ledger')
+
+@login_required
+def constitution_view(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        profile.agreed_to_constitution = True
+        profile.constitution_agreed_at = timezone.now()
+        profile.save()
+        messages.success(request, "Thank you! You have accepted the PLASTOUT Constitution.")
+        return redirect('green_eagles:dashboard')
+
+    return render(request, 'green_eagles/constitution.html', {'profile': profile})
