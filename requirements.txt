@@ -5,3 +5,8 @@ pillow
 psycopg2-binary
 python-dotenv
 sqlparse
+django
+python-decouple
+dj-database-url
+psycopg2-binary
+django-axes
