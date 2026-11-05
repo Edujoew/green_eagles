@@ -50,4 +50,5 @@ urlpatterns = [
     path('admin-panel/ledger/', views.payment_ledger, name='payment_ledger'),
     path('admin-panel/ledger/toggle-scarf/<int:pk>/', views.toggle_scarf_status, name='toggle_scarf_status'),
     path('constitution/', views.constitution_view, name='constitution'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
 ]

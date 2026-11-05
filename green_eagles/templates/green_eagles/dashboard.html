@@ -1,390 +1,464 @@
 {% extends 'green_eagles/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard | PLASTOUT{% endblock %}
 
 {% block content %}
-<div class="dash-wrap">
-    <!-- Profile Banner -->
-    <div class="dash-banner">
+<div class="hub-wrap">
+
+    <!-- Header Banner -->
+    <div class="hub-banner">
+        <div class="hub-orbs"><span class="hub-orb o1"></span><span class="hub-orb o2"></span></div>
         <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="dash-avatar">
-                        {{ user.username|slice:":1" }}
-                    </div>
-                    <div>
-                        <h3 class="dash-name">{{ user.get_full_name|default:user.username }}</h3>
-                        <div class="dash-tags">
-                            {% if user.is_superuser %}
-                                <span class="dash-tag">Superadmin</span>
-                            {% else %}
-                                <span class="dash-tag">{{ profile.get_wing_display }}</span>
-                            {% endif %}
-                            <span class="dash-tag dash-tag-outline">{{ profile.get_role_display|default:"Administrator" }}</span>
-                        </div>
-                    </div>
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <div>
+                    <p class="hub-eyebrow">MEMBER HUB &amp; EXECUTIVE OVERVIEW</p>
+                    <h3 class="hub-name">Welcome back, {{ request.user.first_name|default:request.user.username }}!</h3>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <a href="{% url 'green_eagles:edit_profile' %}" class="dash-btn-action">
+                <div class="d-flex gap-2 flex-wrap">
+                    <!-- Edit Profile Button Added Here -->
+                    <a href="{% url 'green_eagles:edit_profile' %}" class="hub-btn">
                         <i class="bi bi-pencil-square"></i> Edit Profile
                     </a>
-                    <a href="{% url 'green_eagles:logout' %}" class="dash-logout">
-                        <i class="bi bi-box-arrow-right"></i> Logout
+                    
+                    <a href="{% url 'green_eagles:constitution' %}" class="hub-btn">
+                        <i class="bi bi-file-earmark-text"></i> Constitution
                     </a>
+                    {% if user.is_superuser or profile.role == 'EXEC' or profile.role == 'COORDINATOR' %}
+                    <a href="{% url 'green_eagles:admin_manage_members' %}" class="hub-btn hub-btn-gold">
+                        <i class="bi bi-shield-lock"></i> Admin Portal
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- Info Strip -->
-        <div class="dash-info-strip">
-            <div class="dash-info-item">
-                <i class="bi bi-envelope"></i>
+
+        <!-- Status Strip -->
+        <div class="hub-strip">
+            <div class="hub-chip">
+                <span class="hub-chip-icon"><i class="bi bi-person-check"></i></span>
                 <div>
-                    <span class="label">Email</span>
-                    <span class="value">{{ user.email }}</span>
+                    <span class="hub-chip-label">Registration</span>
+                    {% if profile.registration_paid %}
+                        <span class="hub-chip-val ok">Paid</span>
+                    {% else %}
+                        <span class="hub-chip-val bad">Unpaid</span>
+                    {% endif %}
                 </div>
             </div>
-            {% if profile.patrol_name %}
-            <div class="dash-info-item">
-                <i class="bi bi-people"></i>
+            <div class="hub-chip">
+                <span class="hub-chip-icon"><i class="bi bi-cash-stack"></i></span>
                 <div>
-                    <span class="label">Patrol</span>
-                    <span class="value">{{ profile.patrol_name }}</span>
+                    <span class="hub-chip-label">Total Paid</span>
+                    <span class="hub-chip-val">KES {{ profile.total_paid }}</span>
                 </div>
             </div>
-            {% endif %}
-            <div class="dash-info-item">
-                <i class="bi bi-shield-check"></i>
+            <div class="hub-chip">
+                <span class="hub-chip-icon"><i class="bi bi-tag"></i></span>
                 <div>
-                    <span class="label">Active Wing</span>
-                    <span class="value">
-                        {% if user.is_superuser %}
-                            All Wings (PLASTOUT Central)
-                        {% else %}
-                            {{ profile.get_wing_display }}
-                        {% endif %}
-                    </span>
+                    <span class="hub-chip-label">Scarf</span>
+                    {% if profile.scarf_issued %}
+                        <span class="hub-chip-val ok">Issued</span>
+                    {% else %}
+                        <span class="hub-chip-val warn">Pending</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="hub-chip">
+                <span class="hub-chip-icon"><i class="bi bi-file-earmark-check"></i></span>
+                <div>
+                    <span class="hub-chip-label">Constitution</span>
+                    {% if profile.agreed_to_constitution %}
+                        <span class="hub-chip-val ok">Accepted</span>
+                    {% else %}
+                        <span class="hub-chip-val warn">Pending</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <!-- Superuser Specific Control Panel -->
-        {% if user.is_superuser %}
-        <h5 class="dash-section-title">PLASTOUT Central Admin</h5>
-        <div class="dash-grid mb-4">
-            <div class="dash-tile">
-                <div class="dash-tile-icon"><i class="bi bi-shield-lock"></i></div>
-                <h5>Django Admin Panel</h5>
-                <p>Access full backend management, user roles, database models, and permissions.</p>
-                <a href="/admin/" class="btn btn-sm btn-outline-success mt-2 font-weight-bold" target="_blank">Open Admin</a>
-            </div>
-            <div class="dash-tile">
-                <div class="dash-tile-icon"><i class="bi bi-people-fill"></i></div>
-                <h5>Manage Members</h5>
-                <p>Review Green Eagles Crew and Messengers of Peace registrations and assign roles.</p>
-                <a href="{% url 'green_eagles:admin_manage_members' %}" class="btn btn-sm btn-outline-success mt-2 font-weight-bold">View Members</a>
-            </div>
-            <div class="dash-tile">
-                <div class="dash-tile-icon"><i class="bi bi-journal-plus"></i></div>
-                <h5>Publish Notices & Events</h5>
-                <p>Create global announcements and schedule cleanups across all active wings.</p>
-                <a href="{% url 'green_eagles:post_announcement' %}" class="btn btn-sm btn-outline-success mt-2 font-weight-bold">Post Announcement</a>
-            </div>
-        </div>
-        {% endif %}
+        <div class="row g-4">
 
-        <!-- Dashboard Grid -->
-        <h5 class="dash-section-title">
-            {% if user.is_superuser %}Member View Dashboard{% else %}Your Dashboard{% endif %}
-        </h5>
-        <div class="dash-grid mb-4">
-            <!-- First Tile: Upcoming Cleanups carrying the Announcements feed -->
-            <div class="dash-tile">
-                <div class="dash-tile-icon"><i class="bi bi-calendar-event"></i></div>
-                <h5>Upcoming Cleanups</h5>
-                <p class="mb-3">Check scheduled community drives and record your participation.</p>
+            <!-- Left Column -->
+            <div class="col-lg-4">
 
-                <!-- Embedded Announcements Feed -->
-                <div class="dash-notice-wrap">
-                    {% for notice in announcements %}
-                        <div class="dash-notice-card {% if notice.is_pinned %}pinned{% endif %} mb-3">
-                            <div class="dash-notice-header">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="dash-notice-badge badge-{{ notice.category|lower }}">
-                                        {{ notice.get_category_display }}
-                                    </span>
-                                    {% if notice.is_pinned %}
-                                        <span class="dash-notice-badge badge-pinned"><i class="bi bi-pin-angle-fill"></i> Pinned</span>
-                                    {% endif %}
-                                </div>
-                                <span class="dash-notice-time">{{ notice.created_at|date:"M d, Y • H:i" }}</span>
-                            </div>
+                <!-- Member Profile -->
+                <div class="hub-card mb-4">
+                    <div class="hub-profile-top">
+                        <div class="hub-avatar">
+                            {% if profile.avatar %}
+                                <img src="{{ profile.avatar.url }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                                <i class="bi bi-person-fill"></i>
+                            {% endif %}
+                        </div>
+                        <h5 class="hub-profile-name">{{ request.user.get_full_name|default:request.user.username }}</h5>
+                        <span class="hub-wing-pill">{{ profile.get_wing_display }}</span>
+                    </div>
 
-                            <h6 class="dash-notice-title">{{ notice.title }}</h6>
-                            <p class="dash-notice-body">{{ notice.content }}</p>
-
-                            <div class="dash-notice-footer">
-                                <small class="text-muted">Posted by <strong>{{ notice.author.get_full_name|default:notice.author.username }}</strong></small>
-                                {% if user.is_superuser %}
-                                    <a href="{% url 'green_eagles:delete_announcement' notice.pk %}" class="dash-notice-delete" onclick="return confirm('Delete this announcement?');">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </a>
+                    <div class="hub-card-title"><i class="bi bi-person-badge"></i> Member Profile Details</div>
+                    <ul class="hub-list">
+                        <li>
+                            <span class="k"><i class="bi bi-person"></i> Username</span>
+                            <span class="v">{{ request.user.username }}</span>
+                        </li>
+                        <li>
+                            <span class="k"><i class="bi bi-envelope"></i> Email</span>
+                            <span class="v">{{ request.user.email|default:"Not specified" }}</span>
+                        </li>
+                        <li>
+                            <span class="k"><i class="bi bi-telephone"></i> Phone</span>
+                            <span class="v">{{ profile.phone|default:"Not added" }}</span>
+                        </li>
+                        <li>
+                            <span class="k"><i class="bi bi-award"></i> Role</span>
+                            <span class="v"><span class="hub-tag">{{ profile.get_role_display }}</span></span>
+                        </li>
+                        <li>
+                            <span class="k"><i class="bi bi-shield"></i> Patrol Unit</span>
+                            <span class="v">{{ profile.patrol_name|default:"Unassigned" }}</span>
+                        </li>
+                        <li>
+                            <span class="k"><i class="bi bi-check-circle"></i> Constitution</span>
+                            <span class="v">
+                                {% if profile.agreed_to_constitution %}
+                                    <span class="hub-badge hub-badge-ok"><i class="bi bi-check-lg"></i> Accepted</span>
+                                {% else %}
+                                    <span class="hub-badge hub-badge-warn"><i class="bi bi-clock"></i> Pending</span>
                                 {% endif %}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dues & Scarf Ledger -->
+                <div class="hub-card hub-receipt">
+                    <div class="hub-receipt-head">
+                        <span><i class="bi bi-wallet2"></i> Dues &amp; Scarf Ledger</span>
+                        <i class="bi bi-currency-exchange"></i>
+                    </div>
+
+                    <div class="hub-receipt-body">
+                        {% if profile.scarf_balance == 0 and profile.registration_paid %}
+                            <div class="hub-alert hub-alert-ok">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <div>
+                                    <strong>Fully Settled!</strong>
+                                    <span>You have no pending balances or outstanding dues.</span>
+                                </div>
                             </div>
-                        </div>
-                    {% empty %}
-                        <div class="text-center py-3 bg-light rounded-3">
-                            <i class="bi bi-inbox fs-4 text-muted d-block mb-1"></i>
-                            <p class="mb-0 text-muted small">No announcements posted yet.</p>
-                        </div>
-                    {% endfor %}
+                        {% else %}
+                            <div class="hub-alert hub-alert-warn">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <div>
+                                    <strong>Pending Clearance</strong>
+                                    <span>Please clear outstanding balance via M-Pesa.</span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <ul class="hub-ledger">
+                            <li>
+                                <span class="k">Registration Status</span>
+                                {% if profile.registration_paid %}
+                                    <span class="hub-badge hub-badge-ok">PAID</span>
+                                {% else %}
+                                    <span class="hub-badge hub-badge-bad">UNPAID</span>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <span class="k">Scarf Issuance</span>
+                                {% if profile.scarf_issued %}
+                                    <span class="hub-badge hub-badge-ok"><i class="bi bi-check-all"></i> Issued</span>
+                                {% else %}
+                                    <span class="hub-badge hub-badge-mute">Pending Handout</span>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <span class="k">Total Amount Paid</span>
+                                <span class="amt ok">KES {{ profile.total_paid }}</span>
+                            </li>
+                            <li>
+                                <span class="k">Outstanding Scarf Balance</span>
+                                {% if profile.scarf_balance == 0 %}
+                                    <span class="amt ok">KES 0.00</span>
+                                {% else %}
+                                    <span class="amt bad">KES {{ profile.scarf_balance }}</span>
+                                {% endif %}
+                            </li>
+                            <li class="receipt-line">
+                                <span class="k">Latest M-Pesa Receipt</span>
+                                <span class="mono">{{ profile.mpesa_receipt|default:"N/A" }}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <!-- Second Tile: Wing Pages Card Header (body left empty for upcoming pages) -->
-            <div class="dash-tile">
-                <div class="dash-tile-icon"><i class="bi bi-compass"></i></div>
-                <h5>Wing Pages</h5>
-                <p>Explore specialized wing initiatives, updates, and materials.</p>
-                <!-- Left empty inside for future wing page content/links -->
+            <!-- Right Column -->
+            <div class="col-lg-8">
+                <div class="hub-card">
+                    <div class="hub-feed-head">
+                        <h6><i class="bi bi-megaphone"></i> Official Announcements Feed</h6>
+                        {% if user.is_superuser or profile.role == 'EXEC' or profile.role == 'COORDINATOR' %}
+                        <a href="{% url 'green_eagles:post_announcement' %}" class="hub-post-btn">
+                            <i class="bi bi-plus-circle"></i> Post Circular
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="hub-feed-body">
+                        {% if announcements %}
+                            <div class="hub-timeline">
+                                {% for item in announcements %}
+                                <div class="hub-note {% if item.is_pinned %}pinned{% endif %}">
+                                    <span class="hub-note-dot"></span>
+                                    <div class="hub-note-card">
+                                        <div class="hub-note-top">
+                                            <span class="hub-note-cat">{{ item.get_category_display }}</span>
+                                            {% if item.is_pinned %}
+                                                <span class="hub-note-pin"><i class="bi bi-pin-angle-fill"></i> Pinned</span>
+                                            {% endif %}
+                                            <small class="hub-note-date"><i class="bi bi-clock"></i> {{ item.created_at|date:"M d, Y" }}</small>
+                                        </div>
+                                        <h6 class="hub-note-title">{{ item.title }}</h6>
+                                        <p class="hub-note-text">{{ item.content|truncatewords:30 }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="hub-empty">
+                                <i class="bi bi-inbox"></i>
+                                <p>No active notices or circulars posted yet.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
 
 <style>
-.dash-wrap{
-    background:#f4f8f5;
-    min-height:calc(100vh - 200px);
-    padding-bottom:3rem;
-}
+.hub-wrap{ background:#f4f8f5; min-height:calc(100vh - 200px); padding-bottom:3rem; }
 
 /* Banner */
-.dash-banner{
-    background:#14532d;
+.hub-banner{
+    position:relative; overflow:hidden;
+    background:#0c3a1f;
     background-image:
-        linear-gradient(160deg, #14532d 0%, #0c3a1f 100%),
-        repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 34px);
-    padding:2.4rem 0;
-    margin-bottom:2rem;
+        linear-gradient(150deg,#14532d 0%,#0c3a1f 100%),
+        repeating-linear-gradient(115deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 34px);
+    padding:2.4rem 0 3.6rem;
     border-bottom:4px solid #d4af37;
 }
-.dash-avatar{
-    width:70px; height:70px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.12);
-    border:2px solid #d4af37;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.7rem;
-    font-weight:800;
-    text-transform:uppercase;
-    flex-shrink:0;
-}
-.dash-name{
-    color:#fff;
-    font-weight:800;
-    margin-bottom:0.4rem;
-    font-size:1.4rem;
-}
-.dash-tags{
-    display:flex;
-    gap:0.5rem;
-    flex-wrap:wrap;
-}
-.dash-tag{
-    background:#d4af37;
-    color:#14532d;
-    font-weight:800;
-    font-size:0.72rem;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-    padding:0.3rem 0.8rem;
-    border-radius:50px;
-}
-.dash-tag-outline{
-    background:transparent;
-    border:1.5px solid rgba(255,255,255,0.4);
-    color:#e7f0e9;
-}
-.dash-btn-action,
-.dash-logout{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:rgba(255,255,255,0.08);
+.hub-orbs{ position:absolute; inset:0; }
+.hub-orb{ position:absolute; border-radius:50%; filter:blur(46px); opacity:0.3; animation:hubDrift 14s ease-in-out infinite; }
+.hub-orb.o1{ width:240px; height:240px; background:#d4af37; top:-90px; right:-50px; }
+.hub-orb.o2{ width:180px; height:180px; background:#2e8b57; bottom:-70px; left:10%; animation-delay:5s; }
+@keyframes hubDrift{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(24px,-18px); } }
+.hub-banner .container{ position:relative; z-index:1; }
+.hub-eyebrow{ letter-spacing:3px; font-size:0.7rem; font-weight:800; color:#d4af37; margin-bottom:0.5rem; }
+.hub-name{ color:#fff; font-weight:900; font-size:1.55rem; margin-bottom:0; }
+
+.hub-btn{
+    display:inline-flex; align-items:center; gap:7px;
+    background:rgba(255,255,255,0.1);
     border:1.5px solid rgba(255,255,255,0.3);
-    color:#fff;
-    font-weight:700;
-    font-size:0.85rem;
-    padding:0.55rem 1.1rem;
-    border-radius:50px;
-    text-decoration:none;
-    transition:all .2s ease;
+    color:#fff; font-weight:700; font-size:0.84rem;
+    padding:0.5rem 1.1rem; border-radius:50px;
+    text-decoration:none; transition:all .2s ease;
 }
-.dash-btn-action:hover{
-    background:#d4af37;
-    border-color:#d4af37;
-    color:#14532d;
-}
-.dash-logout:hover{
-    background:#c0392b;
-    border-color:#c0392b;
-    color:#fff;
-}
+.hub-btn:hover{ background:#fff; color:#14532d; }
+.hub-btn-gold{ background:#d4af37; border-color:#d4af37; color:#0c3a1f; }
+.hub-btn-gold:hover{ background:#e0bc4a; border-color:#e0bc4a; color:#0c3a1f; }
 
-/* Info strip */
-.dash-info-strip{
-    background:#fff;
-    border-radius:14px;
+/* Status strip */
+.hub-strip{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1rem;
+    margin-top:-2.2rem; margin-bottom:1.6rem; position:relative; z-index:2;
+}
+@media (max-width:900px){ .hub-strip{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px){ .hub-strip{ grid-template-columns:1fr; } }
+.hub-chip{
+    background:#fff; border-radius:14px; padding:1rem 1.1rem;
+    display:flex; align-items:center; gap:0.8rem;
+    box-shadow:0 10px 26px rgba(20,83,45,0.12);
+    transition:transform .2s ease;
+}
+.hub-chip:hover{ transform:translateY(-3px); }
+.hub-chip-icon{
+    width:40px; height:40px; flex-shrink:0; border-radius:11px;
+    background:linear-gradient(160deg,#14532d,#0c3a1f); color:#d4af37;
+    display:flex; align-items:center; justify-content:center; font-size:1.05rem;
+}
+.hub-chip-label{
+    display:block; font-size:0.66rem; font-weight:800; color:#9aa89f;
+    text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;
+}
+.hub-chip-val{ display:block; font-weight:800; color:#14532d; font-size:1rem; }
+.hub-chip-val.ok{ color:#16a34a; }
+.hub-chip-val.bad{ color:#dc2626; }
+.hub-chip-val.warn{ color:#ca8a04; }
+
+/* Cards */
+.hub-card{
+    background:#fff; border-radius:16px;
     box-shadow:0 8px 24px rgba(20,83,45,0.08);
-    padding:1.2rem 1.6rem;
-    display:flex;
-    flex-wrap:wrap;
-    gap:1.6rem;
-    margin-bottom:2.2rem;
+    overflow:hidden;
 }
-.dash-info-item{
-    display:flex;
-    align-items:center;
-    gap:0.7rem;
-    flex:1 1 200px;
+.hub-card-title{
+    display:flex; align-items:center; gap:7px;
+    font-weight:800; color:#14532d; font-size:0.8rem;
+    text-transform:uppercase; letter-spacing:0.5px;
+    padding:0 1.4rem 0.8rem; margin-top:0.4rem;
 }
-.dash-info-item i{
-    width:38px; height:38px;
-    border-radius:9px;
-    background:#e8f2ea;
-    color:#14532d;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.05rem;
-    flex-shrink:0;
+.hub-card-title i{ color:#d4af37; }
+
+/* Profile */
+.hub-profile-top{
+    text-align:center; padding:1.8rem 1.4rem 1.3rem;
+    background:linear-gradient(180deg,#e8f2ea 0%,#fff 100%);
 }
-.dash-info-item .label{
-    display:block;
-    font-size:0.72rem;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-    color:#9aa89f;
+.hub-avatar{
+    width:78px; height:78px; margin:0 auto 0.8rem;
+    border-radius:50%; background:#fff;
+    border:3px solid #d4af37; color:#14532d; font-size:2.3rem;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 6px rgba(212,175,55,0.15);
+    overflow: hidden;
 }
-.dash-info-item .value{
-    display:block;
-    font-weight:700;
-    color:#14532d;
-    font-size:0.92rem;
+.hub-profile-name{ font-weight:900; color:#14532d; margin-bottom:0.5rem; font-size:1.1rem; }
+.hub-wing-pill{
+    display:inline-block; background:#14532d; color:#d4af37;
+    font-weight:800; font-size:0.72rem; letter-spacing:0.3px;
+    padding:0.3rem 0.9rem; border-radius:50px;
 }
 
-/* Section title + grid */
-.dash-section-title{
-    font-weight:800;
-    color:#14532d;
-    margin-bottom:1rem;
+.hub-list{ list-style:none; margin:0; padding:0 1.4rem 1.2rem; }
+.hub-list li{
+    display:flex; justify-content:space-between; align-items:center; gap:0.8rem;
+    padding:0.7rem 0; border-bottom:1px solid #f1f5f2; font-size:0.84rem;
 }
-.dash-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
-    gap:1.5rem;
-}
-.dash-tile{
-    background:#fff;
-    border-radius:14px;
-    padding:1.6rem;
-    height: 100%;
-    box-shadow:0 8px 22px rgba(20,83,45,0.07);
-}
-.dash-tile-icon{
-    width:50px; height:50px;
-    border-radius:12px;
-    background:linear-gradient(160deg,#14532d,#0c3a1f);
-    color:#d4af37;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.3rem;
-    margin-bottom:1rem;
-}
-.dash-tile h5{
-    font-weight:800;
-    color:#14532d;
-    margin-bottom:0.5rem;
-}
-.dash-tile p{
-    color:#5c6b63;
-    font-size:0.9rem;
-    margin-bottom:0;
-}
+.hub-list li:last-child{ border-bottom:none; }
+.hub-list .k{ color:#9aa89f; font-weight:600; display:flex; align-items:center; gap:7px; white-space:nowrap; }
+.hub-list .k i{ color:#14532d; }
+.hub-list .v{ font-weight:800; color:#14532d; text-align:right; word-break:break-word; }
 
-/* Announcements feed styles embedded inside card */
-.dash-notice-wrap{
-    display:flex;
-    flex-direction:column;
-    gap:0.75rem;
-    margin-top:1rem;
+.hub-tag{ background:#f1f4f2; color:#5c6b63; font-weight:800; font-size:0.72rem; padding:0.22rem 0.65rem; border-radius:50px; }
+
+.hub-badge{
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:0.7rem; font-weight:800; padding:0.26rem 0.7rem; border-radius:50px;
 }
-.dash-notice-card{
-    background:#fcfdfc;
-    border: 1px solid #e2ece4;
-    border-radius:10px;
-    padding:1rem;
-    box-shadow:0 4px 12px rgba(20,83,45,0.04);
-    border-left:4px solid #14532d;
+.hub-badge-ok{ background:#dcfce7; color:#166534; }
+.hub-badge-warn{ background:#fef9c3; color:#854d0e; }
+.hub-badge-bad{ background:#fee2e2; color:#991b1b; }
+.hub-badge-mute{ background:#f1f4f2; color:#5c6b63; }
+
+/* Receipt */
+.hub-receipt-head{
+    display:flex; justify-content:space-between; align-items:center;
+    background:#0c3a1f; color:#fff; padding:0.95rem 1.4rem;
+    font-weight:800; font-size:0.9rem;
+    border-bottom:3px solid #d4af37;
 }
-.dash-notice-card.pinned{
-    border-left-color:#d4af37;
-    background:#fffdf6;
+.hub-receipt-head span{ display:flex; align-items:center; gap:8px; }
+.hub-receipt-head i:last-child{ color:#d4af37; font-size:1.1rem; }
+.hub-receipt-body{ padding:1.3rem 1.4rem 1.4rem; }
+
+.hub-alert{
+    display:flex; align-items:center; gap:0.9rem;
+    border-radius:12px; padding:0.9rem 1rem; margin-bottom:1.1rem;
 }
-.dash-notice-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:0.4rem;
+.hub-alert i{ font-size:1.6rem; flex-shrink:0; }
+.hub-alert strong{ display:block; font-size:0.9rem; }
+.hub-alert span{ font-size:0.78rem; }
+.hub-alert-ok{ background:#e8f6ec; color:#166534; }
+.hub-alert-warn{ background:#fef9e3; color:#854d0e; }
+
+.hub-ledger{ list-style:none; margin:0; padding:0; }
+.hub-ledger li{
+    display:flex; justify-content:space-between; align-items:center; gap:0.8rem;
+    padding:0.7rem 0; border-bottom:1px dashed #dfe8e1; font-size:0.84rem;
 }
-.dash-notice-badge{
-    font-size:0.65rem;
-    font-weight:800;
-    text-transform:uppercase;
-    padding:0.2rem 0.5rem;
-    border-radius:50px;
+.hub-ledger li:last-child{ border-bottom:none; }
+.hub-ledger .k{ color:#7b8a80; font-weight:600; }
+.hub-ledger .amt{ font-weight:900; font-size:0.95rem; }
+.hub-ledger .amt.ok{ color:#16a34a; }
+.hub-ledger .amt.bad{ color:#dc2626; }
+.hub-ledger .mono{
+    font-family:'Courier New',monospace; font-weight:800; font-size:0.82rem;
+    color:#14532d; background:#f4f8f5; padding:0.2rem 0.55rem; border-radius:6px;
 }
-.badge-general{ background:#e8f2ea; color:#14532d; }
-.badge-urgent{ background:#fde8e8; color:#c0392b; }
-.badge-meeting{ background:#e3f2fd; color:#0d6efd; }
-.badge-event{ background:#fff3cd; color:#856404; }
-.badge-pinned{ background:#d4af37; color:#14532d; }
-.dash-notice-time{
-    font-size:0.7rem;
-    color:#9aa89f;
-    font-weight:600;
+.hub-ledger .receipt-line{ border-top:2px solid #14532d; margin-top:0.4rem; padding-top:0.9rem; border-bottom:none; }
+
+/* Feed */
+.hub-feed-head{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem;
+    padding:1.1rem 1.5rem; border-bottom:1px solid #edf2ee;
 }
-.dash-notice-title{
-    font-weight:800;
-    color:#14532d;
-    font-size:0.95rem;
-    margin-bottom:0.3rem;
+.hub-feed-head h6{
+    margin:0; font-weight:800; color:#14532d; font-size:0.95rem;
+    display:flex; align-items:center; gap:8px;
 }
-.dash-notice-body{
-    color:#4a5568;
-    font-size:0.86rem;
-    white-space:pre-line;
-    margin-bottom:0.6rem;
+.hub-feed-head h6 i{ color:#d4af37; }
+.hub-post-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:#14532d; color:#fff; font-weight:800; font-size:0.8rem;
+    padding:0.45rem 1.1rem; border-radius:50px; text-decoration:none;
+    transition:background .2s ease, transform .2s ease;
 }
-.dash-notice-footer{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-top:1px solid #edf2ee;
-    padding-top:0.5rem;
+.hub-post-btn:hover{ background:#0c3a1f; color:#fff; transform:translateY(-1px); }
+.hub-feed-body{ padding:1.6rem 1.5rem; }
+
+.hub-timeline{ position:relative; padding-left:1.6rem; }
+.hub-timeline::before{
+    content:""; position:absolute; left:6px; top:6px; bottom:6px;
+    width:2px; background:#e0e8e2;
 }
-.dash-notice-delete{
-    color:#c0392b;
-    font-size:0.75rem;
-    font-weight:700;
-    text-decoration:none;
+.hub-note{ position:relative; margin-bottom:1.1rem; }
+.hub-note:last-child{ margin-bottom:0; }
+.hub-note-dot{
+    position:absolute; left:-1.6rem; top:1.15rem;
+    width:14px; height:14px; border-radius:50%;
+    background:#14532d; border:3px solid #fff;
+    box-shadow:0 0 0 2px #14532d;
 }
-.dash-notice-delete:hover{ text-decoration:underline; }
+.hub-note.pinned .hub-note-dot{ background:#d4af37; box-shadow:0 0 0 2px #d4af37; }
+.hub-note-card{
+    background:#f9fbf9; border:1px solid #e6eee8; border-left:4px solid #14532d;
+    border-radius:12px; padding:1rem 1.2rem;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+.hub-note-card:hover{ transform:translateX(4px); box-shadow:0 8px 20px rgba(20,83,45,0.09); }
+.hub-note.pinned .hub-note-card{ background:#fffbeb; border-left-color:#d4af37; border-color:#f3e6b5; }
+
+.hub-note-top{ display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:0.5rem; }
+.hub-note-cat{
+    background:#e8f2ea; color:#14532d; font-weight:800; font-size:0.68rem;
+    text-transform:uppercase; letter-spacing:0.3px; padding:0.22rem 0.7rem; border-radius:50px;
+}
+.hub-note-pin{
+    background:#d4af37; color:#0c3a1f; font-weight:800; font-size:0.66rem;
+    padding:0.22rem 0.65rem; border-radius:50px; display:inline-flex; align-items:center; gap:4px;
+}
+.hub-note-date{ margin-left:auto; color:#9aa89f; font-size:0.74rem; display:flex; align-items:center; gap:4px; }
+.hub-note-title{ font-weight:800; color:#14532d; font-size:0.98rem; margin-bottom:0.35rem; }
+.hub-note-text{ color:#5c6b63; font-size:0.86rem; line-height:1.6; margin-bottom:0; }
+
+.hub-empty{ text-align:center; padding:2.6rem 1rem; color:#9aa89f; }
+.hub-empty i{ font-size:2.2rem; display:block; margin-bottom:0.7rem; }
+.hub-empty p{ margin-bottom:0; font-size:0.9rem; }
+
+@media (max-width:576px){
+    .hub-name{ font-size:1.25rem; }
+    .hub-note-date{ margin-left:0; }
+}
 </style>
 {% endblock %}

@@ -643,3 +643,36 @@ def constitution_view(request):
         return redirect('green_eagles:dashboard')
 
     return render(request, 'green_eagles/constitution.html', {'profile': profile})
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile  # Assumes OneToOneField with related_name='profile'
+    
+    if request.method == 'POST':
+        # Get form inputs
+        new_username = request.POST.get('username', '').strip()
+        new_email = request.POST.get('email', '').strip()
+        new_phone = request.POST.get('phone', '').strip()
+        new_avatar = request.FILES.get('avatar')
+
+        # Basic username uniqueness validation
+        if new_username and new_username != request.user.username:
+            if User.objects.filter(username=new_username).exists():
+                messages.error(request, "That username is already taken. Please choose another.")
+                return redirect('green_eagles:edit_profile')
+            request.user.username = new_username
+
+        # Update User model fields
+        request.user.email = new_email
+        request.user.save()
+
+        # Update MemberProfile model fields
+        profile.phone = new_phone
+        if new_avatar:
+            profile.avatar = new_avatar
+        profile.save()
+
+        messages.success(request, "Your profile has been updated successfully!")
+        return redirect('green_eagles:dashboard')
+
+    return render(request, 'green_eagles/edit_profile.html', {'profile': profile})
