@@ -12,3 +12,4 @@ psycopg2-binary
 django-axes
 cloudinary
 dj3-cloudinary-storage
+whitenoise
